@@ -1477,18 +1477,22 @@
     }
   }
 
-  async function loadXerPreview() {
+   window.lastXerText = "";
+
+   async function loadXerPreview() {
     try {
-      lastXerText = await getXerPreviewText();
-      renderXerPreview(lastXerText);
+      window.lastXerText = await getXerPreviewText();
+      renderXerPreview(window.lastXerText);
     } catch (err) {
-      document.getElementById("xer-preview").textContent = "Failed to load preview: " + err.message;
+      console.error("XER preview error:", err);
+      const pre = document.getElementById("xer-preview");
+      if (pre) pre.textContent = "Failed to load preview: " + err.message;
     }
   }
-
-  function renderXerPreview(text) {
+ function renderXerPreview(text) {
     const pre = document.getElementById("xer-preview");
-    const lines = text.split("\n").map(function (line) {
+    if (!pre) return;
+    const lines = (text || "").split("\n").map(function (line) {
       const escaped = escapeHtml(line);
       if (line.indexOf("ERMHDR") === 0) return '<span class="pb-xer-header">' + escaped + "</span>";
       if (line.indexOf("%T") === 0 || line.indexOf("%F") === 0 || line.indexOf("%E") === 0) return '<span class="pb-xer-marker">' + escaped + "</span>";
@@ -1498,27 +1502,31 @@
     pre.innerHTML = lines.join("\n");
   }
 
-  function wireXerTab() {
-    document.getElementById("xer-refresh").addEventListener("click", function () { loadXerPreview(); });
-    document.getElementById("xer-download").addEventListener("click", async function () {
-      try {
-        const text = lastXerText || await getXerPreviewText();
-        const blob = new Blob([text], { type: "text/plain" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "OIL_P6_DELTA_2026.XER";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-        showToast("Download started: OIL_P6_DELTA_2026.XER", "success");
-      } catch (err) {
-        showToast("Download failed: " + err.message, "error");
-      }
-    });
-  }
+   function wireXerTab() {
+    const refreshBtn = document.getElementById("xer-refresh");
+    if (refreshBtn) refreshBtn.addEventListener("click", function () { loadXerPreview(); });
 
+    const downloadBtn = document.getElementById("xer-download");
+    if (downloadBtn) {
+      downloadBtn.addEventListener("click", async function () {
+        try {
+          const text = window.lastXerText || await getXerPreviewText();
+          const blob = new Blob([text], { type: "text/plain" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "OIL_P6_DELTA_2026.XER";
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          URL.revokeObjectURL(url);
+          showToast("Download started: OIL_P6_DELTA_2026.XER", "success");
+        } catch (err) {
+          showToast("Download failed: " + err.message, "error");
+        }
+      });
+    }
+  }
   function setConnectionUI(online) {
     const pill = document.getElementById("connection-pill");
     const dot = document.getElementById("connection-dot");
