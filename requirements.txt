@@ -1,0 +1,27 @@
+# PlanBridge — Intelligent Planning-to-Execution Reconciliation Middleware
+# Phase 1: core dependency set. Pinned to major-version-safe ranges so the
+# hackathon environment stays reproducible without fighting exact patch pins.
+
+# --- API / Web layer ---
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+
+# --- NLP / entity extraction ---
+spacy==3.8.3
+
+# --- Semantic matching (schedule <-> DPR reconciliation) ---
+sentence-transformers==3.3.1
+torch==2.5.1
+
+# --- Numerics / ML utilities ---
+numpy==1.26.4
+scikit-learn==1.5.2
+
+# --- Templating (reviewer queue UI / report rendering) ---
+jinja2==3.1.5
+
+# --- Testing ---
+pytest==8.3.4
+httpx==0.28.1
+python-multipart

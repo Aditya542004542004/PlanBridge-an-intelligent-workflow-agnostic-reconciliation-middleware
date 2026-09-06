@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanBridge — OIL Reconciliation Console</title>
+<meta name="description" content="PlanBridge — Intelligent Planning-to-Execution Reconciliation Middleware for Oil India Limited (SIH 2026, PS26122).">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          'oil-navy':    '#0b192c',
+          'oil-navy-2':  '#0f2038',
+          'oil-blue':    '#1e3e62',
+          'oil-blue-2':  '#274a72',
+          'oil-amber':   '#d97706',
+          'oil-emerald': '#059669',
+          'oil-danger':  '#b3261e',
+          'oil-ink':     '#e9eff6',
+          'oil-mute':    '#8fa5c2',
+          'oil-line':    'rgba(233,239,246,0.09)',
+        },
+        fontFamily: {
+          sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
+          mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        },
+        borderRadius: { DEFAULT: '6px', 'lg': '8px', 'xl': '10px' },
+      }
+    }
+  };
+</script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #274a72; border-radius: 8px; border: 2px solid #0b192c; }
+  ::-webkit-scrollbar-thumb:hover { background: #345a8a; }
+  * { scrollbar-width: thin; scrollbar-color: #274a72 transparent; }
+
+  body { font-feature-settings: "tnum" 1; }
+
+  .pb-panel {
+    background: #10233c;
+    border: 1px solid rgba(233,239,246,0.09);
+  }
+  .pb-panel-raised {
+    background: linear-gradient(180deg, #16304f 0%, #10233c 100%);
+    border: 1px solid rgba(233,239,246,0.10);
+  }
+  .pb-track {
+    background: rgba(233,239,246,0.08);
+  }
+  .pb-input {
+    background: #0b192c;
+    border: 1px solid rgba(233,239,246,0.14);
+    color: #e9eff6;
+  }
+  .pb-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.25);
+  }
+  button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
+    outline: 2px solid #60a5fa;
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  .pb-fade-in { animation: pbFadeIn 220ms ease-out; }
+  @keyframes pbFadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  .pb-pulse-dot { animation: pbPulse 2s ease-in-out infinite; }
+  @keyframes pbPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+  .pb-scroll-x { overflow-x: auto; }
+  .pb-nowrap-cell { white-space: nowrap; }
+
+  .pb-code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    white-space: pre;
+    tab-size: 4;
+  }
+  .pb-xer-marker { color: #f2b84b; }
+  .pb-xer-field  { color: #6fd4a8; }
+  .pb-xer-header { color: #7fb2ea; }
+
+  .pb-sidebar-collapsed { transform: translateX(-100%); }
+
+  [data-tab-panel] { display: none; }
+  [data-tab-panel].pb-active { display: block; }
+</style>
+</head>
+
+<body class="bg-oil-navy text-oil-ink font-sans antialiased">
+
+<div class="flex h-screen overflow-hidden">
+
+  <!-- ============================= SIDEBAR ============================= -->
+  <aside id="sidebar"
+    class="fixed lg:static z-40 inset-y-0 left-0 w-72 shrink-0 bg-oil-navy border-r border-oil-line
+           flex flex-col transition-transform duration-200 lg:translate-x-0 pb-sidebar-collapsed lg:transform-none">
+
+    <div class="h-16 flex items-center gap-3 px-5 border-b border-oil-line shrink-0">
+      <div class="w-9 h-9 rounded-lg bg-oil-blue flex items-center justify-center border border-oil-line">
+        <i data-lucide="waypoints" class="w-5 h-5 text-oil-ink"></i>
+      </div>
+      <div class="min-w-0">
+        <p class="text-sm font-semibold leading-tight tracking-tight truncate">PlanBridge</p>
+        <p class="text-[11px] text-oil-mute leading-tight truncate">OIL Reconciliation Console</p>
+      </div>
+      <button id="sidebar-close" class="ml-auto lg:hidden text-oil-mute hover:text-oil-ink p-1" aria-label="Close menu">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1" id="nav-list">
+      <!-- nav items injected by JS: renderNav() -->
+    </nav>
+
+    <div class="px-5 py-4 border-t border-oil-line shrink-0">
+      <p class="text-[11px] text-oil-mute leading-snug">
+        Smart India Hackathon 2026<br>
+        Problem Statement <span class="font-mono">SIH26122</span> · Oil India Limited
+      </p>
+    </div>
+  </aside>
+
+  <div id="sidebar-scrim" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+  <!-- ============================= MAIN ============================= -->
+  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+    <!-- TOPBAR -->
+    <header class="h-16 shrink-0 border-b border-oil-line bg-oil-navy/95 backdrop-blur flex items-center gap-4 px-4 lg:px-6">
+      <button id="sidebar-open" class="lg:hidden text-oil-mute hover:text-oil-ink p-1" aria-label="Open menu">
+        <i data-lucide="menu" class="w-6 h-6"></i>
+      </button>
+
+      <div class="min-w-0">
+        <h1 id="page-title" class="text-base sm:text-lg font-semibold truncate">Dashboard &amp; Gantt Variance View</h1>
+        <p id="page-subtitle" class="text-xs text-oil-mute truncate hidden sm:block">Aggregate reconciliation metrics and dual progress tracking</p>
+      </div>
+
+      <div class="ml-auto flex items-center gap-2 shrink-0">
+        <button id="connection-pill" title="Click to retry connection"
+          class="flex items-center gap-2 pl-2.5 pr-3 py-1.5 rounded-full border text-xs font-medium transition-colors">
+          <span id="connection-dot" class="w-2 h-2 rounded-full"></span>
+          <span id="connection-label">Checking…</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main class="flex-1 overflow-y-auto px-4 py-5 lg:px-8 lg:py-7" id="content-scroll">
+
+      <!-- ---------- TAB 1: DASHBOARD ---------- -->
+      <section data-tab-panel="dashboard" class="pb-active pb-fade-in max-w-7xl mx-auto">
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <div class="pb-panel-raised rounded-lg p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-medium text-oil-mute">Auto-Linked Matches</span>
+              <i data-lucide="check-check" class="w-4 h-4 text-oil-emerald"></i>
+            </div>
+            <p class="text-3xl font-semibold tabular-nums" id="metric-autolinked">—</p>
+            <p class="text-[11px] text-oil-mute mt-1">Confidence ≥ 85%, applied automatically</p>
+          </div>
+
+          <div class="pb-panel-raised rounded-lg p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-medium text-oil-mute">Planner Queue</span>
+              <i data-lucide="inbox" class="w-4 h-4 text-oil-amber"></i>
+            </div>
+            <p class="text-3xl font-semibold tabular-nums" id="metric-queue">—</p>
+            <p class="text-[11px] text-oil-mute mt-1">60–85% confidence, awaiting review</p>
+          </div>
+
+          <div class="pb-panel-raised rounded-lg p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-medium text-oil-mute">Unmatched Noise</span>
+              <i data-lucide="circle-slash" class="w-4 h-4 text-oil-mute"></i>
+            </div>
+            <p class="text-3xl font-semibold tabular-nums" id="metric-unmatched">—</p>
+            <p class="text-[11px] text-oil-mute mt-1">Below 60%, flagged for manual triage</p>
+          </div>
+
+          <div class="pb-panel-raised rounded-lg p-4">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-medium text-oil-mute">False Auto-Accept Rate</span>
+              <i data-lucide="shield-check" class="w-4 h-4 text-oil-emerald"></i>
+            </div>
+            <p class="text-3xl font-semibold tabular-nums text-oil-emerald" id="metric-false-accept">—</p>
+            <p class="text-[11px] text-oil-mute mt-1">Measured on labeled benchmark data</p>
+          </div>
+        </div>
+
+        <div class="pb-panel rounded-lg">
+          <div class="flex flex-wrap items-center gap-3 justify-between p-4 border-b border-oil-line">
+            <div>
+              <h2 class="text-sm font-semibold">Dual Progress by Activity</h2>
+              <p class="text-xs text-oil-mute mt-0.5">Physical site claims vs QA/QC-verified earned progress</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="relative">
+                <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-oil-mute"></i>
+                <input id="activity-search" type="text" placeholder="Filter by Activity ID…"
+                  class="pb-input rounded-md pl-8 pr-3 py-1.5 text-xs w-44 sm:w-56">
+              </div>
+              <label class="flex items-center gap-1.5 text-xs text-oil-mute select-none cursor-pointer">
+                <input id="show-all-activities" type="checkbox" class="accent-oil-amber w-3.5 h-3.5">
+                Show zero-progress rows
+              </label>
+            </div>
+          </div>
+          <div class="pb-scroll-x">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-[11px] uppercase tracking-wide text-oil-mute border-b border-oil-line">
+                  <th class="px-4 py-2.5 font-medium">Activity</th>
+                  <th class="px-4 py-2.5 font-medium">Target Scope</th>
+                  <th class="px-4 py-2.5 font-medium">QA Gate</th>
+                  <th class="px-4 py-2.5 font-medium w-1/4">Physical Claim</th>
+                  <th class="px-4 py-2.5 font-medium w-1/4">QA Verified Earned</th>
+                </tr>
+              </thead>
+              <tbody id="progress-table-body">
+                <!-- injected -->
+              </tbody>
+            </table>
+          </div>
+          <div id="progress-empty" class="hidden p-8 text-center text-sm text-oil-mute">
+            No activity progress recorded yet. Run the Simulator or wait for field reports to populate this view.
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- TAB 2: PLANNER QUEUE ---------- -->
+      <section data-tab-panel="queue" class="pb-fade-in max-w-5xl mx-auto">
+        <div class="flex items-center justify-between mb-4">
+          <p class="text-sm text-oil-mute">Medium-confidence matches (60–85%) awaiting planner confirmation before progress is applied.</p>
+          <button id="queue-refresh" class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md pb-panel-raised hover:border-oil-blue-2 border border-transparent">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+          </button>
+        </div>
+        <div id="queue-list" class="space-y-4"></div>
+        <div id="queue-empty" class="hidden pb-panel rounded-lg p-10 text-center">
+          <i data-lucide="inbox" class="w-8 h-8 text-oil-mute mx-auto mb-3"></i>
+          <p class="text-sm font-medium">Queue is clear</p>
+          <p class="text-xs text-oil-mute mt-1">Nothing needs your review right now — try the Matching Engine Simulator to generate a review case.</p>
+        </div>
+      </section>
+
+      <!-- ---------- TAB 3: SIMULATOR ---------- -->
+      <section data-tab-panel="simulator" class="pb-fade-in max-w-5xl mx-auto">
+        <div class="pb-panel rounded-lg p-4 mb-5">
+          <h2 class="text-sm font-semibold mb-1">Matching Engine Demo Simulator</h2>
+          <p class="text-xs text-oil-mute mb-4">Send a raw field-report sentence through the full reconciliation pipeline and watch each stage resolve.</p>
+
+          <div class="flex flex-wrap gap-2 mb-3">
+            <button data-preset="easy" class="preset-btn text-xs px-3 py-1.5 rounded-md border border-oil-emerald/40 text-oil-emerald bg-oil-emerald/10 hover:bg-oil-emerald/20">
+              Easy · Auto-Match
+            </button>
+            <button data-preset="medium" class="preset-btn text-xs px-3 py-1.5 rounded-md border border-oil-amber/40 text-oil-amber bg-oil-amber/10 hover:bg-oil-amber/20">
+              Medium · Queue
+            </button>
+            <button data-preset="low" class="preset-btn text-xs px-3 py-1.5 rounded-md border border-oil-danger/40 text-red-300 bg-oil-danger/10 hover:bg-oil-danger/20">
+              Low · Unmatched Noise
+            </button>
+          </div>
+
+          <textarea id="simulator-input" rows="3"
+            class="pb-input w-full rounded-md px-3 py-2.5 text-sm resize-none"
+            placeholder="e.g. 150m HDD drilling finished near KP 24+600 at river site.">150m HDD drilling finished near KP 24+600 at river site.</textarea>
+          <!-- BATCH FILE UPLOAD CARD -->
+<div class="pb-panel rounded-lg p-4 mb-5 border border-oil-emerald/30 bg-oil-emerald/5">
+  <div class="flex items-center justify-between mb-2">
+    <div class="flex items-center gap-2">
+      <i data-lucide="file-spreadsheet" class="w-5 h-5 text-oil-emerald"></i>
+      <h3 class="text-sm font-semibold text-oil-emerald">Batch Contractor File Ingestion (Excel / CSV / JSON)</h3>
+    </div>
+    <span class="text-[10px] font-mono text-oil-mute bg-oil-navy px-2 py-0.5 rounded border border-oil-line">Automated Multi-Source Pipeline</span>
+  </div>
+  <p class="text-xs text-oil-mute mb-3">Upload contractor DPR spreadsheets or JSON files to run 100+ lines through the 5-stage pipeline at once.</p>
+
+  <div class="flex flex-wrap items-center gap-3">
+    <!-- FILE INPUT -->
+    <input type="file" id="batch-file-input" accept=".csv,.json,.txt" class="hidden" onchange="handleFileSelected(event)">
+    <button onclick="document.getElementById('batch-file-input').click()" class="flex items-center gap-2 bg-oil-blue hover:bg-oil-blue-2 border border-oil-line px-3.5 py-1.5 rounded-md text-xs font-medium">
+      <i data-lucide="upload" class="w-3.5 h-3.5"></i> Select Contractor File (.csv, .json)
+    </button>
+    <span id="selected-filename" class="text-xs font-mono text-oil-mute truncate max-w-xs">No file selected</span>
+
+    <!-- PROCESS BUTTON -->
+    <button id="batch-upload-btn" onclick="uploadBatchFile()" disabled class="disabled:opacity-50 disabled:cursor-not-allowed bg-oil-emerald hover:bg-emerald-600 px-4 py-1.5 rounded-md text-xs font-medium text-white flex items-center gap-1.5">
+      <i data-lucide="play" class="w-3.5 h-3.5"></i> Process File
+    </button>
+
+    <!-- 1-CLICK SAMPLE EXCEL DEMO BUTTON -->
+    <button onclick="processSampleExcelDemo()" class="ml-auto flex items-center gap-1.5 bg-oil-amber/20 hover:bg-oil-amber/30 text-oil-amber border border-oil-amber/40 px-3.5 py-1.5 rounded-md text-xs font-medium">
+      <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Demo: Ingest Sample Contractor Sheet (120 DPRs)
+    </button>
+  </div>
+
+  <!-- BATCH INGESTION RESULT SUMMARY BANNER -->
+  <div id="batch-summary-banner" class="hidden mt-3 p-3 bg-oil-navy rounded border border-oil-emerald/40 text-xs flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <i data-lucide="check-circle-2" class="w-4 h-4 text-oil-emerald"></i>
+      <div>
+        <strong id="batch-summary-title" class="text-oil-emerald block font-semibold">File Processed Successfully!</strong>
+        <span id="batch-summary-details" class="text-oil-mute">Processed 120 lines: 75 Auto-Linked, 26 Sent to Queue, 19 Flagged Unmatched.</span>
+      </div>
+    </div>
+    <button onclick="setActiveTab('dashboard')" class="bg-oil-emerald/20 hover:bg-oil-emerald/30 text-oil-emerald border border-oil-emerald/40 px-3 py-1 rounded font-medium text-[11px]">
+      View Updated Dashboard →
+    </button>
+  </div>
+</div>
+          <div class="flex items-center gap-3 mt-3">
+            <input id="simulator-submitted-by" type="text" value="Site Supervisor"
+              class="pb-input rounded-md px-3 py-1.5 text-xs w-48" placeholder="Submitted by">
+            <button id="run-engine" class="ml-auto flex items-center gap-2 bg-oil-blue hover:bg-oil-blue-2 border border-oil-line px-4 py-2 rounded-md text-sm font-medium">
+              <i data-lucide="play" class="w-4 h-4"></i> Run Engine
+            </button>
+          </div>
+        </div>
+
+        <div id="trace-empty" class="pb-panel rounded-lg p-10 text-center">
+          <i data-lucide="cpu" class="w-8 h-8 text-oil-mute mx-auto mb-3"></i>
+          <p class="text-sm font-medium">No trace yet</p>
+          <p class="text-xs text-oil-mute mt-1">Choose a preset or write your own field report, then run the engine.</p>
+        </div>
+
+        <div id="trace-result" class="hidden space-y-4"></div>
+      </section>
+
+      <!-- ---------- TAB 4: AUDIT LOG ---------- -->
+      <section data-tab-panel="audit" class="pb-fade-in max-w-7xl mx-auto">
+        <div id="integrity-banner" class="rounded-lg p-4 mb-5 flex items-center gap-3 border">
+          <i data-lucide="shield-check" id="integrity-icon" class="w-5 h-5 shrink-0"></i>
+          <div class="min-w-0">
+            <p class="text-sm font-semibold" id="integrity-title">Verifying ledger…</p>
+            <p class="text-xs text-oil-mute" id="integrity-sub">SHA-256 hash-chain recomputed on every read — no cached trust.</p>
+          </div>
+          <button id="audit-refresh" class="ml-auto flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md pb-panel-raised hover:border-oil-blue-2 border border-transparent shrink-0">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+          </button>
+        </div>
+
+        <div class="pb-panel rounded-lg">
+          <div class="pb-scroll-x">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="text-left text-[11px] uppercase tracking-wide text-oil-mute border-b border-oil-line">
+                  <th class="px-4 py-2.5 font-medium">Evidence ID</th>
+                  <th class="px-4 py-2.5 font-medium">Task ID</th>
+                  <th class="px-4 py-2.5 font-medium">Raw DPR Snippet</th>
+                  <th class="px-4 py-2.5 font-medium">Quantity</th>
+                  <th class="px-4 py-2.5 font-medium">Gate Status</th>
+                  <th class="px-4 py-2.5 font-medium">Logged</th>
+                  <th class="px-4 py-2.5 font-medium">SHA-256 Hash</th>
+                </tr>
+              </thead>
+              <tbody id="audit-table-body"></tbody>
+            </table>
+          </div>
+          <div id="audit-empty" class="hidden p-8 text-center text-sm text-oil-mute">
+            The evidence ledger is empty. Every applied match — auto-accepted or planner-approved — will appear here permanently.
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- TAB 5: XER EXPORTER ---------- -->
+      <section data-tab-panel="xer" class="pb-fade-in max-w-5xl mx-auto">
+        <div class="pb-panel rounded-lg p-4 mb-5">
+          <h2 class="text-sm font-semibold mb-1">Primavera P6 .XER Delta Exporter</h2>
+          <p class="text-xs text-oil-mute leading-relaxed">
+            Generates a TASK-table delta payload in real Primavera <span class="font-mono">.XER</span> grammar, using
+            QA-verified progress (not unverified site claims) for <span class="font-mono">act_qty</span> and
+            <span class="font-mono">phys_complete_pct</span> — so what gets written back into the enterprise schedule
+            is always audit-backed.
+          </p>
+        </div>
+
+        <div class="pb-panel rounded-lg mb-5">
+          <div class="flex items-center justify-between p-3 border-b border-oil-line">
+            <div class="flex items-center gap-2 text-xs text-oil-mute">
+              <i data-lucide="file-code-2" class="w-3.5 h-3.5"></i>
+              <span id="xer-filename">OIL_P6_DELTA_2026.XER</span>
+            </div>
+            <button id="xer-refresh" class="flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-md pb-panel-raised hover:border-oil-blue-2 border border-transparent">
+              <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh Preview
+            </button>
+          </div>
+          <div class="p-4 overflow-x-auto max-h-96 overflow-y-auto bg-oil-navy/60">
+            <pre id="xer-preview" class="pb-code text-xs leading-relaxed text-oil-ink">Loading preview…</pre>
+          </div>
+        </div>
+
+        <button id="xer-download" class="flex items-center gap-2 bg-oil-emerald hover:bg-emerald-600 px-4 py-2.5 rounded-md text-sm font-medium">
+          <i data-lucide="download" class="w-4 h-4"></i> Download .XER Delta Package
+        </button>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 w-80 max-w-[90vw]"></div>
+
+<script>
+/* ==========================================================================
+   PlanBridge Reconciliation Console — Phase 7 Frontend
+   SIH 2026 | PS26122 | Oil India Limited
+   ========================================================================== */
+
+(function () {
+  "use strict";
+
+  const API_BASE = "http://localhost:8000";
+  const FETCH_TIMEOUT_MS = 2500;
+  const RECONNECT_POLL_MS = 20000;
+
+  const TABS = [
+    { id: "dashboard",  label: "Dashboard & Gantt",   icon: "layout-dashboard", title: "Dashboard & Gantt Variance View", subtitle: "Aggregate reconciliation metrics and dual progress tracking" },
+    { id: "queue",      label: "Planner Review Queue", icon: "list-checks",     title: "Planner Review Queue",            subtitle: "Medium-confidence matches awaiting human confirmation" },
+    { id: "simulator",  label: "Matching Engine Sim.", icon: "cpu",             title: "Matching Engine Demo Simulator",   subtitle: "Trace a field report through the full 5-stage pipeline" },
+    { id: "audit",      label: "CVC/CAG Audit Log",    icon: "shield-check",    title: "CVC/CAG Audit Lineage Log",       subtitle: "Append-only, SHA-256 hash-chained evidence ledger" },
+    { id: "xer",        label: "XER Delta Exporter",   icon: "file-down",       title: "Primavera .XER Delta Exporter",   subtitle: "Export QA-verified progress back into the enterprise schedule" },
+  ];
+
+  const STATE = {
+    online: false,
+    activeTab: "dashboard",
+    activityNameCache: Object.create(null),
+    ingestedTextCache: Object.create(null),
+    lastAuditIntegrity: null,
+    mock: null,
+  };
+
+  async function apiFetch(path, options) {
+    const controller = new AbortController();
+    const timer = setTimeout(function () { controller.abort(); }, FETCH_TIMEOUT_MS);
+    try {
+      const resp = await fetch(API_BASE + path, Object.assign({ signal: controller.signal }, options || {}));
+      clearTimeout(timer);
+      if (!resp.ok) {
+        let detail = resp.statusText;
+        try {
+          const body = await resp.json();
+          if (body && body.detail) detail = body.detail;
+        } catch (_) {}
+        const err = new Error(detail || ("HTTP " + resp.status));
+        err.status = resp.status;
+        throw err;
+      }
+      return resp;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  async function checkConnectivity() {
+    try {
+      await apiFetch("/", { method: "GET" });
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  async function getDashboard() {
+    if (STATE.online) {
+      const resp = await apiFetch("/api/dashboard");
+      const data = await resp.json();
+      harvestActivityNames(data.activities_progress_list);
+      return data;
+    }
+    return mockGetDashboard();
+  }
+
+  async function getQueue() {
+    if (STATE.online) {
+      const resp = await apiFetch("/api/queue");
+      const data = await resp.json();
+      data.items.forEach(function (item) { harvestActivityNames(item.decision.candidate_scores); });
+      return data;
+    }
+    return mockGetQueue();
+  }
+
+  async function approveQueueItem(queueId, activityId, reviewerId) {
+    if (STATE.online) {
+      const resp = await apiFetch("/api/queue/approve", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ queue_id: queueId, selected_activity_id: activityId, reviewer_id: reviewerId || null }),
+      });
+      return resp.json();
+    }
+    return mockApprove(queueId, activityId, reviewerId);
+  }
+
+  async function runIngest(rawContent, submittedBy, sourceType) {
+    if (STATE.online) {
+      const resp = await apiFetch("/api/ingest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ raw_content: rawContent, submitted_by: submittedBy || "Unknown", source_type: sourceType || "FREE_TEXT" }),
+      });
+      const data = await resp.json();
+      if (data.decision && data.decision.candidate_scores) harvestActivityNames(data.decision.candidate_scores);
+      if (data.results) {
+        data.results.forEach(function (r) {
+          STATE.ingestedTextCache[r.observation_id] = rawContent;
+          if (r.decision && r.decision.candidate_scores) harvestActivityNames(r.decision.candidate_scores);
+        });
+      }
+      return data;
+    }
+    return mockIngest(rawContent, submittedBy || "Unknown");
+  }
+
+  async function getAuditLogs() {
+    if (STATE.online) {
+      const resp = await apiFetch("/api/audit-logs");
+      return resp.json();
+    }
+    return mockGetAuditLogs();
+  }
+
+  async function getXerPreviewText() {
+    if (STATE.online) {
+      const resp = await apiFetch("/api/export-xer");
+      return resp.text();
+    }
+    return mockGetXerText();
+  }
+
+  function harvestActivityNames(candidateScoreList) {
+    if (!candidateScoreList) return;
+    candidateScoreList.forEach(function (c) {
+      if (c && c.activity_id && c.activity_name) STATE.activityNameCache[c.activity_id] = c.activity_name;
+    });
+  }
+
+  const MOCK_ACTION_KEYWORDS = {
+    "HDD Drilling":    ["HDD"],
+    "Tie-in Welding":  ["Tie-in", "Welding", "Spool"],
+    "Excavation":      ["Excavation", "Trenching", "Valve Pit", "Backfilling", "ROW Clearing", "Access Road"],
+    "QA Inspection":   ["Hydrotest", "NDT", "Radiography"],
+  };
+
+  function seedMockActivities() {
+    return [
+      { activity_id: "PIP-L5-024-003", activity_name: "HDD River Crossing Execution at KP 24+600", discipline: "Piping", location_kp: "KP 24+600", facility: "OCS-4", planned_quantity: 0.500, unit: "KM", requires_qa_gate: true, qa_gate_type: "NDT_RADIOGRAPHY" },
+      { activity_id: "PIP-L5-011-018", activity_name: "Tie-in Welding at Chainage KP 12+000", discipline: "Piping", location_kp: "KP 12+000", facility: "CGS Duliajan", planned_quantity: 6, unit: "JOINTS", requires_qa_gate: true, qa_gate_type: "NDT_RADIOGRAPHY" },
+      { activity_id: "CIV-L5-002-009", activity_name: "Valve Pit Excavation at KP 2+000", discipline: "Civil", location_kp: "KP 2+000", facility: "CGS Moran", planned_quantity: 2, unit: "PIT", requires_qa_gate: false, qa_gate_type: null },
+      { activity_id: "MEC-L5-005-002", activity_name: "CGS Manifold Setup at Terminal Duliajan", discipline: "Mechanical", location_kp: "KP 0+500", facility: "Terminal Duliajan", planned_quantity: 10, unit: "TONNES", requires_qa_gate: false, qa_gate_type: null },
+      { activity_id: "ELE-L5-007-001", activity_name: "Cathodic Protection (CP) Test Station Installation at KP 30+000", discipline: "Electrical", location_kp: "KP 30+000", facility: "Trunkline ROW", planned_quantity: 3, unit: "JOINTS", requires_qa_gate: false, qa_gate_type: null },
+      { activity_id: "PIP-L5-033-045", activity_name: "Hydrotesting of Pipeline Section 9C", discipline: "Piping", location_kp: "KP 18+250", facility: "OCS-4", planned_quantity: 2.000, unit: "KM", requires_qa_gate: true, qa_gate_type: "HYDROTEST" },
+      { activity_id: "CIV-L5-014-021", activity_name: "ROW Clearing — Section 6B", discipline: "Civil", location_kp: "KP 15+800", facility: "Trunkline ROW", planned_quantity: 1.800, unit: "KM", requires_qa_gate: false, qa_gate_type: null },
+      { activity_id: "PIP-L5-041-009", activity_name: "Pipe Stringing along ROW — Section 3A", discipline: "Piping", location_kp: "KP 9+400", facility: "CGS Duliajan", planned_quantity: 1.200, unit: "KM", requires_qa_gate: false, qa_gate_type: null },
+    ];
+  }
+
+  function seedMockData() {
+    const activities = seedMockActivities();
+    const progress = Object.create(null);
+    activities.forEach(function (a) {
+      progress[a.activity_id] = {
+        activity_id: a.activity_id,
+        planned_quantity: a.planned_quantity,
+        unit: a.unit,
+        physical_claimed_quantity: 0,
+        physical_progress_pct: 0,
+        verified_earned_quantity: 0,
+        verified_progress_pct: 0,
+        qa_gate_type: a.qa_gate_type || "NONE",
+        qa_gate_status: a.requires_qa_gate ? "PENDING_QA" : "NOT_REQUIRED",
+      };
+    });
+    activities.forEach(function (a) { STATE.activityNameCache[a.activity_id] = a.activity_name; });
+    return {
+      activities: activities,
+      progress: progress,
+      queue: Object.create(null),
+      ledger: [],
+      counters: { autoAccept: 0, unmatched: 0 },
+      idSeq: 1,
+    };
+  }
+
+  function nextMockId(prefix) {
+    const n = (1000 + (STATE.mock.idSeq * 37) % 9000);
+    STATE.mock.idSeq += 1;
+    return prefix + "-" + n;
+  }
+
+  const MOCK_UNIT_ALIASES = {
+    m: "M", meter: "M", meters: "M", metre: "M", metres: "M",
+    km: "KM", kilometer: "KM", kilometers: "KM", kilometre: "KM", kilometres: "KM",
+    kg: "KG", kgs: "KG", kilogram: "KG", kilograms: "KG",
+    tonne: "TONNES", tonnes: "TONNES", mt: "TONNES",
+    joint: "JOINTS", joints: "JOINTS",
+    spool: "SPOOLS", spools: "SPOOLS",
+    pit: "PIT", pits: "PIT",
+  };
+
+  function mockNormalizeUnit(text) {
+    const re = /(\d+(?:\.\d+)?)\s*(kilometers?|kilometres?|km|meters?|metres?|m|kilograms?|kgs?|tonnes?|tonne|mt|joints?|spools?|pits?)\b/i;
+    const m = text.match(re);
+    if (!m) return null;
+    const rawQty = parseFloat(m[1]);
+    const rawUnit = m[2].toLowerCase();
+    const canonical = MOCK_UNIT_ALIASES[rawUnit] || MOCK_UNIT_ALIASES[rawUnit.replace(/s$/, "")] || null;
+    if (!canonical) return null;
+
+    let normQty = rawQty, normUnit = canonical, conversion = "No conversion needed";
+    if (canonical === "M") { normQty = rawQty / 1000; normUnit = "KM"; conversion = "Meters to KM (div 1000)"; }
+    else if (canonical === "KG") { normQty = rawQty / 1000; normUnit = "TONNES"; conversion = "Kilograms to TONNES (div 1000)"; }
+    else if (canonical === "KM") { conversion = "Kilometers to KM (x1)"; }
+    else { conversion = canonical + " preserved as-is (count-based unit)"; }
+
+    return { raw_quantity: rawQty, raw_unit: rawUnit, normalized_quantity: round4(normQty), normalized_unit: normUnit, conversion_applied: conversion };
+  }
+
+  function mockExtractEntities(text) {
+    const kpMatch = text.match(/KP\s*\d+(?:\+\d+)?/i);
+    const location_kp = kpMatch ? ("KP " + (kpMatch[0].match(/\d+(?:\+\d+)?/)[0])) : null;
+
+    const facilityMatch = text.match(/(CGS|OCS|GCP|Valve\s+Pit|Yard|Station|Trunkline)\s*[A-Za-z0-9-]*|Duliajan|Numaligarh/i);
+    const facility = facilityMatch ? facilityMatch[0].replace(/\s+/g, " ").trim() : null;
+
+    let action_verb = null, discipline = null;
+    const lower = text.toLowerCase();
+    if (/\b(ndt|radiography|hydrotest|hydro test|cube test)\b/.test(lower)) { action_verb = "QA Inspection"; discipline = "HSE"; }
+    else if (/\b(hdd|drilling|drill|boring|bore)\b/.test(lower)) { action_verb = "HDD Drilling"; discipline = "Piping"; }
+    else if (/\b(welded|welding|weld|tie-in|tie in)\b/.test(lower)) { action_verb = "Tie-in Welding"; discipline = "Piping"; }
+    else if (/\b(excavated|excavation|trenching|trench|pit|backfilling|backfill)\b/.test(lower)) { action_verb = "Excavation"; discipline = "Civil"; }
+
+    const is_qa_clearance = /\bndt\b/.test(lower) ||
+      /radiography\s+(passed|cleared|clearance)/.test(lower) ||
+      /hydrotest\s+(clearance|cleared|passed)/.test(lower) ||
+      /cube\s+test\s+(passed|cleared|clearance)/.test(lower);
+
+    return { location_kp: location_kp, facility: facility, discipline: discipline, action_verb: action_verb, is_qa_clearance: is_qa_clearance };
+  }
+
+  function kpToFloat(kp) {
+    if (!kp) return null;
+    const m = kp.match(/(\d+)(?:\+(\d+))?/);
+    if (!m) return null;
+    return parseFloat(m[1]) + (m[2] ? parseFloat(m[2]) / 1000 : 0);
+  }
+
+  function fuzzySubstring(a, b) {
+    if (!a || !b) return false;
+    a = a.toLowerCase(); b = b.toLowerCase();
+    return a.indexOf(b) !== -1 || b.indexOf(a) !== -1;
+  }
+
+  function wordOverlapScore(textA, textB) {
+    const tokenize = function (s) { return new Set(s.toLowerCase().match(/[a-z0-9]+/g) || []); };
+    const setA = tokenize(textA), setB = tokenize(textB);
+    if (setA.size === 0 || setB.size === 0) return 0;
+    let intersection = 0;
+    setA.forEach(function (t) { if (setB.has(t)) intersection += 1; });
+    const smaller = Math.min(setA.size, setB.size);
+    return smaller === 0 ? 0 : intersection / smaller;
+  }
+
+  function convertForComparison(qty, fromUnit, toUnit) {
+    if (fromUnit === toUnit) return qty;
+    const KM_FACTOR = { M: 0.001, KM: 1.0 };
+    if (KM_FACTOR[fromUnit] !== undefined && KM_FACTOR[toUnit] !== undefined) {
+      return (qty * KM_FACTOR[fromUnit]) / KM_FACTOR[toUnit];
+    }
+    return null;
+  }
+
+  function computeQuantityScore(claimed, target) {
+    if (claimed === null || claimed <= 0) return 0.0;
+    if (!target || target <= 0) return 0.5;
+    if (claimed <= target) return 1.0;
+    const overage = (claimed - target) / target;
+    return Math.max(0.0, 1.0 - overage);
+  }
+
+  function entityScoreFor(activity, entities) {
+    let weightedSum = 0, weightTotal = 0;
+    if (entities.location_kp) {
+      weightTotal += 0.40;
+      const evKp = kpToFloat(entities.location_kp), avKp = kpToFloat(activity.location_kp);
+      let s = 0;
+      if (evKp !== null && avKp !== null) {
+        const dist = Math.abs(evKp - avKp);
+        s = dist === 0 ? 1.0 : Math.max(0, 1 - dist / 5.0);
+      }
+      weightedSum += 0.40 * s;
+    }
+    if (entities.facility) {
+      weightTotal += 0.25;
+      weightedSum += 0.25 * (fuzzySubstring(entities.facility, activity.facility) ? 1.0 : 0.0);
+    }
+    if (entities.discipline && entities.action_verb !== "QA Inspection") {
+      weightTotal += 0.20;
+      weightedSum += 0.20 * (String(activity.discipline).toLowerCase() === entities.discipline.toLowerCase() ? 1.0 : 0.0);
+    }
+    if (entities.action_verb) {
+      weightTotal += 0.15;
+      const keywords = MOCK_ACTION_KEYWORDS[entities.action_verb] || [];
+      let matched = keywords.some(function (kw) { return new RegExp("\\b" + kw, "i").test(activity.activity_name); });
+      if (entities.action_verb === "QA Inspection") matched = matched || !!activity.requires_qa_gate;
+      weightedSum += 0.15 * (matched ? 1.0 : 0.0);
+    }
+    return weightTotal === 0 ? 0.0 : weightedSum / weightTotal;
+  }
+
+  function mockScoreCandidates(rawText, normalized, entities, activities) {
+    return activities.map(function (activity) {
+      const entity_score = round4(entityScoreFor(activity, entities));
+      const semantic_score = round4(wordOverlapScore(rawText, activity.activity_name));
+
+      let unit_match = false, quantity_score = 0.0;
+      if (normalized) {
+        const comparable = convertForComparison(normalized.normalized_quantity, normalized.normalized_unit, activity.unit);
+        unit_match = comparable !== null;
+        quantity_score = unit_match ? round4(computeQuantityScore(comparable, activity.planned_quantity)) : 0.0;
+      }
+
+      const final_score = round4(0.50 * entity_score + 0.35 * semantic_score + 0.15 * quantity_score);
+      return {
+        activity_id: activity.activity_id,
+        activity_name: activity.activity_name,
+        entity_score: entity_score,
+        semantic_score: semantic_score,
+        quantity_score: quantity_score,
+        unit_match: unit_match,
+        final_score: final_score,
+      };
+    }).sort(function (a, b) { return b.final_score - a.final_score; }).slice(0, 5);
+  }
+
+  function gateDecision(topScore) {
+    if (topScore >= 0.85) return "AUTO_ACCEPT";
+    if (topScore >= 0.60) return "HUMAN_REVIEW";
+    return "UNMATCHED";
+  }
+
+  function buildReasoning(decisionType, top, runnerUp) {
+    const pct = function (v) { return (v * 100).toFixed(1) + "%"; };
+    const breakdown = "entity=" + pct(top.entity_score) + ", semantic=" + pct(top.semantic_score) + ", quantity=" + pct(top.quantity_score);
+    let base;
+    if (decisionType === "AUTO_ACCEPT") {
+      base = "Top candidate " + top.activity_id + " ('" + top.activity_name + "') scored " + pct(top.final_score) + " confidence (" + breakdown + "), clearing the 85% auto-accept threshold. Auto-matched without human review.";
+    } else if (decisionType === "HUMAN_REVIEW") {
+      base = "Top candidate " + top.activity_id + " ('" + top.activity_name + "') scored " + pct(top.final_score) + " confidence (" + breakdown + ") -- above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation.";
+    } else {
+      base = "Best candidate " + top.activity_id + " ('" + top.activity_name + "') only scored " + pct(top.final_score) + " confidence (" + breakdown + ") -- below the 60% minimum threshold. No confident match could be made; flagged UNMATCHED for manual triage.";
+    }
+    if (runnerUp) base += " (Runner-up: " + runnerUp.activity_id + " at " + pct(runnerUp.final_score) + ".)";
+    if (top.unit_match === false) base += " Note: the claimed quantity's unit did not match this candidate's planned unit, which weighed against it in the quantity score.";
+    return base;
+  }
+
+  async function sha256Hex(text) {
+    const enc = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest("SHA-256", enc);
+    return Array.from(new Uint8Array(digest)).map(function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+  }
+
+  function sortObjectKeysJson(obj) {
+    const sorted = {};
+    Object.keys(obj).sort().forEach(function (k) { sorted[k] = obj[k]; });
+    return JSON.stringify(sorted);
+  }
+
+  async function mockLogEvidence(activityId, observationId, matchId, quantity, unit, category, sourceReportId, reviewerId) {
+    const previousHash = STATE.mock.ledger.length ? STATE.mock.ledger[STATE.mock.ledger.length - 1].evidence_hash : "0".repeat(64);
+    const loggedTimestamp = new Date().toISOString();
+    const evidenceId = nextMockId("EV");
+    const payload = {
+      evidence_id: evidenceId, activity_id: activityId, observation_id: observationId, match_id: matchId,
+      quantity_added: quantity, unit: unit, progress_category: category, logged_timestamp: loggedTimestamp,
+      source_report_id: sourceReportId, reviewer_id: reviewerId || null, previous_hash: previousHash,
+    };
+    const hash = await sha256Hex(sortObjectKeysJson(payload));
+    const entry = {
+      evidence_id: evidenceId, activity_id: activityId, observation_id: observationId, match_id: matchId,
+      quantity_added: quantity, unit: unit, progress_category: category, logged_timestamp: loggedTimestamp,
+      source_report_id: sourceReportId, reviewer_id: reviewerId || null, evidence_hash: hash,
+    };
+    STATE.mock.ledger.push(entry);
+    return entry;
+  }
+
+  function applyMockPhysicalClaim(progress, qty) {
+    const newClaimed = progress.physical_claimed_quantity + qty;
+    progress.physical_claimed_quantity = round4(newClaimed);
+    progress.physical_progress_pct = round4(Math.min(100, (newClaimed / progress.planned_quantity) * 100));
+  }
+
+  function applyMockQaVerification(progress, qty) {
+    const proposed = progress.verified_earned_quantity + qty;
+    const capped = Math.min(progress.physical_claimed_quantity, proposed);
+    progress.verified_earned_quantity = round4(capped);
+    progress.verified_progress_pct = round4(Math.min(100, (capped / progress.planned_quantity) * 100));
+    progress.qa_gate_status = "VERIFIED_PASSED";
+  }
+
+  async function mockIngest(rawContent, submittedBy) {
+    const reportId = "SIM-" + Math.random().toString(16).slice(2, 8).toUpperCase();
+    const normalized = mockNormalizeUnit(rawContent);
+
+    if (!normalized) {
+      return { report_id: reportId, observations_processed: 0, results: [], decision: null, progress_state: null };
+    }
+
+    const entities = mockExtractEntities(rawContent);
+    const observationId = reportId + "-OBS-001";
+    const scored = mockScoreCandidates(rawContent, normalized, entities, STATE.mock.activities);
+    const topScore = scored.length ? scored[0].final_score : 0;
+    const decisionType = scored.length ? gateDecision(topScore) : "UNMATCHED";
+    const top = scored[0] || { activity_id: null, activity_name: "(none)", entity_score: 0, semantic_score: 0, quantity_score: 0, final_score: 0, unit_match: true };
+    const runnerUp = scored[1] || null;
+
+    const matchId = nextMockId("MATCH");
+    const decision = {
+      match_id: matchId,
+      observation_id: observationId,
+      selected_activity_id: decisionType === "UNMATCHED" ? null : top.activity_id,
+      entity_score: top.entity_score, semantic_score: top.semantic_score, quantity_score: top.quantity_score,
+      final_confidence_score: topScore,
+      decision_type: decisionType,
+      reasoning: buildReasoning(decisionType, top, runnerUp),
+      candidate_scores: scored,
+    };
+
+    STATE.ingestedTextCache[observationId] = rawContent;
+    scored.forEach(function (c) { STATE.activityNameCache[c.activity_id] = c.activity_name; });
+
+    let progressState = null, queued = false;
+
+    if (decisionType === "AUTO_ACCEPT") {
+      const progress = STATE.mock.progress[top.activity_id];
+      const comparableQty = convertForComparison(normalized.normalized_quantity, normalized.normalized_unit, progress.unit);
+      if (comparableQty !== null) {
+        if (entities.is_qa_clearance) applyMockQaVerification(progress, comparableQty);
+        else applyMockPhysicalClaim(progress, comparableQty);
+        await mockLogEvidence(top.activity_id, observationId, matchId, normalized.normalized_quantity, normalized.normalized_unit,
+          entities.is_qa_clearance ? "QA_VERIFIED" : "PHYSICAL_CLAIM", reportId, null);
+      }
+      progressState = STATE.mock.progress[top.activity_id];
+      STATE.mock.counters.autoAccept += 1;
+    } else if (decisionType === "HUMAN_REVIEW") {
+      STATE.mock.queue[matchId] = { decision: decision, observation: { observation_id: observationId, raw_phrase: rawContent, report_id: reportId, normalized_quantity: normalized.normalized_quantity, normalized_unit: normalized.normalized_unit, is_qa_clearance: entities.is_qa_clearance } };
+      queued = true;
+    } else {
+      STATE.mock.counters.unmatched += 1;
+    }
+
+    return {
+      report_id: reportId,
+      observations_processed: 1,
+      results: [{ observation_id: observationId, decision: decision, progress_state: progressState, queued_for_review: queued }],
+      decision: decision,
+      progress_state: progressState,
+    };
+  }
+
+  async function mockApprove(queueId, activityId, reviewerId) {
+    const entry = STATE.mock.queue[queueId];
+    if (!entry) { const err = new Error("No pending queue item with queue_id='" + queueId + "'."); err.status = 404; throw err; }
+    const progress = STATE.mock.progress[activityId];
+    if (!progress) { const err = new Error("'" + activityId + "' is not a recognized/tracked activity_id."); err.status = 400; throw err; }
+
+    const original = entry.decision;
+    let reasoning = original.reasoning;
+    if (activityId !== original.selected_activity_id) {
+      reasoning += " [Reviewer override: planner selected " + activityId + " instead of the original top-ranked candidate " + (original.selected_activity_id || "none") + ".]";
+    }
+    const updatedDecision = Object.assign({}, original, { selected_activity_id: activityId, reasoning: reasoning });
+
+    const obs = entry.observation;
+    const comparableQty = convertForComparison(obs.normalized_quantity, obs.normalized_unit, progress.unit);
+    const category = obs.is_qa_clearance ? "QA_VERIFIED" : "PHYSICAL_CLAIM";
+    if (comparableQty !== null) {
+      if (obs.is_qa_clearance) applyMockQaVerification(progress, comparableQty);
+      else applyMockPhysicalClaim(progress, comparableQty);
+    }
+    const evidence = await mockLogEvidence(activityId, obs.observation_id, updatedDecision.match_id, obs.normalized_quantity, obs.normalized_unit, category, obs.report_id, reviewerId || null);
+
+    delete STATE.mock.queue[queueId];
+
+    return { decision: updatedDecision, progress_state: progress, evidence: evidence };
+  }
+
+  function mockGetDashboard() {
+    const list = Object.keys(STATE.mock.progress).map(function (k) { return STATE.mock.progress[k]; });
+    return {
+      total_activities: STATE.mock.activities.length,
+      autolinked_count: STATE.mock.counters.autoAccept,
+      pending_queue_count: Object.keys(STATE.mock.queue).length,
+      unmatched_count: STATE.mock.counters.unmatched,
+      false_auto_accept_rate: 0.00,
+      activities_progress_list: list,
+    };
+  }
+
+  function mockGetQueue() {
+    const items = Object.keys(STATE.mock.queue).map(function (queueId) {
+      const entry = STATE.mock.queue[queueId];
+      return {
+        queue_id: queueId,
+        decision: entry.decision,
+        raw_phrase: entry.observation.raw_phrase,
+        source_report_id: entry.observation.report_id,
+        candidate_activity_ids: entry.decision.candidate_scores.map(function (c) { return c.activity_id; }),
+      };
+    });
+    return { pending_count: items.length, items: items };
+  }
+
+  function mockGetAuditLogs() {
+    return { total_entries: STATE.mock.ledger.length, integrity_verified: true, entries: STATE.mock.ledger.slice() };
+  }
+
+  function mockGetXerText() {
+    const lines = [];
+    const exportDate = new Date().toISOString().slice(0, 10);
+    lines.push(["ERMHDR", "20.12", exportDate, "P", "PLANBRIDGE", "PlanBridge Reconciliation Engine", "Y", "INR", "en"].join("\t"));
+    lines.push("%T\tTASK");
+    lines.push(["%F", "task_id", "proj_id", "wbs_id", "task_code", "task_name", "status_code", "target_qty", "act_qty", "phys_complete_pct"].join("\t"));
+    STATE.mock.activities.forEach(function (a) {
+      const p = STATE.mock.progress[a.activity_id];
+      if (p.physical_progress_pct <= 0 && p.verified_progress_pct <= 0) return;
+      const statusCode = p.verified_progress_pct <= 0 ? "TK_NotStart" : (p.verified_progress_pct >= 100 ? "TK_Complete" : "TK_Active");
+      const taskId = String(100000 + (hashStringToInt(a.activity_id) % 900000));
+      lines.push(["%R", taskId, "20286", a.activity_id, a.activity_id, a.activity_name, statusCode,
+        p.planned_quantity.toFixed(4), p.verified_earned_quantity.toFixed(4), p.verified_progress_pct.toFixed(2)].join("\t"));
+    });
+    lines.push("%E");
+    return lines.join("\n") + "\n";
+  }
+
+  function hashStringToInt(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) | 0; }
+    return Math.abs(h);
+  }
+
+  function round4(v) { return Math.round(v * 10000) / 10000; }
+
+  function el(tag, attrs, children) {
+    const node = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      if (k === "class") node.className = attrs[k];
+      else if (k === "html") node.innerHTML = attrs[k];
+      else if (k.indexOf("on") === 0 && typeof attrs[k] === "function") node.addEventListener(k.slice(2), attrs[k]);
+      else node.setAttribute(k, attrs[k]);
+    });
+    (children || []).forEach(function (c) { if (c) node.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return node;
+  }
+
+  function fmtPct(v) { return (v === null || v === undefined) ? "—" : v.toFixed(1) + "%"; }
+  function fmtQty(v, unit) { return (v === null || v === undefined) ? "—" : (Math.round(v * 1000) / 1000) + " " + unit; }
+  function fmtTime(iso) {
+    try { return new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" }); }
+    catch (_) { return iso; }
+  }
+  function truncate(s, n) { if (!s) return ""; return s.length > n ? s.slice(0, n - 1) + "…" : s; }
+
+  function decisionBadge(type) {
+    const map = {
+      AUTO_ACCEPT:  { cls: "bg-oil-emerald/15 text-oil-emerald border-oil-emerald/30", label: "AUTO_ACCEPT" },
+      HUMAN_REVIEW: { cls: "bg-oil-amber/15 text-oil-amber border-oil-amber/30",       label: "HUMAN_REVIEW" },
+      UNMATCHED:    { cls: "bg-oil-danger/15 text-red-300 border-oil-danger/40",       label: "UNMATCHED" },
+    };
+    const m = map[type] || map.UNMATCHED;
+    return el("span", { class: "inline-flex items-center px-2 py-0.5 rounded border text-[11px] font-mono font-medium " + m.cls }, [m.label]);
+  }
+
+  function scoreRing(pct, size) {
+    size = size || 56;
+    const radius = (size - 6) / 2;
+    const circumference = 2 * Math.PI * radius;
+    const clamped = Math.max(0, Math.min(100, pct));
+    const offset = circumference * (1 - clamped / 100);
+    const color = clamped >= 85 ? "#059669" : clamped >= 60 ? "#d97706" : "#b3261e";
+    const wrap = el("div", { class: "relative shrink-0", style: "width:" + size + "px;height:" + size + "px" });
+    wrap.innerHTML =
+      '<svg width="' + size + '" height="' + size + '" class="-rotate-90">' +
+        '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + radius + '" fill="none" stroke="rgba(233,239,246,0.12)" stroke-width="5"></circle>' +
+        '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + radius + '" fill="none" stroke="' + color + '" stroke-width="5" stroke-linecap="round" ' +
+          'stroke-dasharray="' + circumference + '" stroke-dashoffset="' + offset + '"></circle>' +
+      '</svg>' +
+      '<span class="absolute inset-0 flex items-center justify-center text-[11px] font-semibold tabular-nums">' + Math.round(clamped) + '%</span>';
+    return wrap;
+  }
+
+  function activityLabel(activityId) {
+    const name = STATE.activityNameCache[activityId];
+    const wrap = el("div", { class: "min-w-0" });
+    wrap.appendChild(el("p", { class: "font-mono text-xs text-oil-ink truncate" }, [activityId || "—"]));
+    if (name) wrap.appendChild(el("p", { class: "text-[11px] text-oil-mute truncate" }, [name]));
+    return wrap;
+  }
+
+  function showToast(message, kind) {
+    kind = kind || "info";
+    const styles = {
+      info:    { icon: "info", cls: "border-oil-blue-2 bg-oil-blue" },
+      success: { icon: "check-circle-2", cls: "border-oil-emerald/40 bg-oil-emerald/15 text-oil-emerald" },
+      warn:    { icon: "alert-triangle", cls: "border-oil-amber/40 bg-oil-amber/15 text-oil-amber" },
+      error:   { icon: "alert-octagon", cls: "border-oil-danger/40 bg-oil-danger/15 text-red-300" },
+    };
+    const s = styles[kind] || styles.info;
+    const node = el("div", { class: "pb-fade-in flex items-start gap-2.5 border rounded-lg px-3.5 py-3 text-sm shadow-lg " + s.cls });
+    node.innerHTML = '<i data-lucide="' + s.icon + '" class="w-4 h-4 mt-0.5 shrink-0"></i><span class="leading-snug">' + escapeHtml(message) + "</span>";
+    document.getElementById("toast-container").appendChild(node);
+    refreshIcons();
+    setTimeout(function () {
+      node.style.transition = "opacity 300ms ease";
+      node.style.opacity = "0";
+      setTimeout(function () { node.remove(); }, 320);
+    }, 4200);
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+    });
+  }
+
+  function refreshIcons() {
+    if (window.lucide && typeof lucide.createIcons === "function") lucide.createIcons();
+  }
+
+  function renderNav() {
+    const nav = document.getElementById("nav-list");
+    nav.innerHTML = "";
+    TABS.forEach(function (tab) {
+      const btn = el("button", {
+        class: "pb-nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-oil-mute hover:text-oil-ink hover:bg-oil-blue/40 transition-colors",
+        "data-tab": tab.id,
+        onclick: function () { setActiveTab(tab.id); closeSidebarOnMobile(); },
+      });
+      btn.innerHTML = '<i data-lucide="' + tab.icon + '" class="w-4 h-4 shrink-0"></i><span class="truncate">' + tab.label + "</span>" +
+        '<span data-nav-badge="' + tab.id + '" class="ml-auto hidden text-[10px] font-mono bg-oil-amber text-oil-navy rounded-full px-1.5 py-0.5"></span>';
+      nav.appendChild(btn);
+    });
+    refreshIcons();
+  }
+
+  function setActiveTab(tabId) {
+    STATE.activeTab = tabId;
+    document.querySelectorAll("[data-tab-panel]").forEach(function (panel) {
+      panel.classList.toggle("pb-active", panel.getAttribute("data-tab-panel") === tabId);
+    });
+    document.querySelectorAll(".pb-nav-item").forEach(function (btn) {
+      const active = btn.getAttribute("data-tab") === tabId;
+      btn.classList.toggle("bg-oil-blue", active);
+      btn.classList.toggle("text-oil-ink", active);
+      btn.classList.toggle("text-oil-mute", !active);
+    });
+    const tab = TABS.find(function (t) { return t.id === tabId; });
+    if (tab) {
+      document.getElementById("page-title").textContent = tab.title;
+      document.getElementById("page-subtitle").textContent = tab.subtitle;
+    }
+    document.getElementById("content-scroll").scrollTop = 0;
+    loadTab(tabId);
+  }
+
+  function openSidebar() {
+    document.getElementById("sidebar").classList.remove("pb-sidebar-collapsed");
+    document.getElementById("sidebar-scrim").classList.remove("hidden");
+  }
+  function closeSidebar() {
+    document.getElementById("sidebar").classList.add("pb-sidebar-collapsed");
+    document.getElementById("sidebar-scrim").classList.add("hidden");
+  }
+  function closeSidebarOnMobile() { if (window.innerWidth < 1024) closeSidebar(); }
+
+  async function loadTab(tabId) {
+    try {
+      if (tabId === "dashboard") await loadDashboard();
+      else if (tabId === "queue") await loadQueue();
+      else if (tabId === "audit") await loadAuditLog();
+      else if (tabId === "xer") await loadXerPreview();
+    } catch (err) {
+      showToast("Failed to load " + tabId + ": " + err.message, "error");
+    }
+  }
+
+  let lastDashboardData = null;
+
+  async function loadDashboard() {
+    const data = await getDashboard();
+    lastDashboardData = data;
+    renderDashboard(data);
+  }
+
+  function renderDashboard(data) {
+    document.getElementById("metric-autolinked").textContent = data.autolinked_count;
+    document.getElementById("metric-queue").textContent = data.pending_queue_count;
+    document.getElementById("metric-unmatched").textContent = data.unmatched_count;
+    document.getElementById("metric-false-accept").textContent = (data.false_auto_accept_rate * 100).toFixed(2) + "%";
+    updateNavBadge("queue", data.pending_queue_count);
+    renderProgressTable(data.activities_progress_list);
+  }
+
+  function renderProgressTable(list) {
+    const tbody = document.getElementById("progress-table-body");
+    const showAll = document.getElementById("show-all-activities").checked;
+    const query = document.getElementById("activity-search").value.trim().toLowerCase();
+
+    let rows = list.filter(function (p) { return showAll || p.physical_progress_pct > 0 || p.verified_progress_pct > 0; });
+    if (query) rows = rows.filter(function (p) { return p.activity_id.toLowerCase().indexOf(query) !== -1; });
+
+    tbody.innerHTML = "";
+    document.getElementById("progress-empty").classList.toggle("hidden", rows.length > 0);
+
+    rows.forEach(function (p) {
+      const tr = el("tr", { class: "border-b border-oil-line last:border-b-0 hover:bg-oil-blue/10" });
+
+      const tdActivity = el("td", { class: "px-4 py-3 align-top" }, [activityLabel(p.activity_id)]);
+      const tdScope = el("td", { class: "px-4 py-3 align-top pb-nowrap-cell text-xs font-mono text-oil-mute" }, [fmtQty(p.planned_quantity, p.unit)]);
+
+      const gateMap = {
+        PENDING_QA:      { cls: "text-oil-amber bg-oil-amber/10 border-oil-amber/30", label: "Pending QA" },
+        VERIFIED_PASSED: { cls: "text-oil-emerald bg-oil-emerald/10 border-oil-emerald/30", label: "Verified" },
+        NOT_REQUIRED:    { cls: "text-oil-mute bg-white/5 border-oil-line", label: "Not required" },
+      };
+      const gate = gateMap[p.qa_gate_status] || gateMap.NOT_REQUIRED;
+      const tdGate = el("td", { class: "px-4 py-3 align-top" }, [
+        el("span", { class: "inline-flex items-center px-2 py-0.5 rounded border text-[11px] " + gate.cls }, [gate.label])
+      ]);
+
+      const tdPhysical = el("td", { class: "px-4 py-3 align-top" }, [progressBarCell(p.physical_progress_pct, "bg-blue-400")]);
+      const tdVerified = el("td", { class: "px-4 py-3 align-top" }, [progressBarCell(p.verified_progress_pct, "bg-oil-emerald")]);
+
+      tr.appendChild(tdActivity); tr.appendChild(tdScope); tr.appendChild(tdGate); tr.appendChild(tdPhysical); tr.appendChild(tdVerified);
+      tbody.appendChild(tr);
+    });
+  }
+
+  function progressBarCell(pct, colorClass) {
+    const wrap = el("div", { class: "flex items-center gap-2" });
+    const track = el("div", { class: "flex-1 h-2 rounded-full pb-track overflow-hidden" });
+    const fill = el("div", { class: "h-full rounded-full " + colorClass, style: "width:" + Math.max(0, Math.min(100, pct)) + "%" });
+    track.appendChild(fill);
+    wrap.appendChild(track);
+    wrap.appendChild(el("span", { class: "text-xs tabular-nums text-oil-mute w-11 text-right shrink-0" }, [fmtPct(pct)]));
+    return wrap;
+  }
+
+  function updateNavBadge(tabId, count) {
+    const badge = document.querySelector('[data-nav-badge="' + tabId + '"]');
+    if (!badge) return;
+    if (count > 0) { badge.textContent = count; badge.classList.remove("hidden"); }
+    else { badge.classList.add("hidden"); }
+  }
+
+  async function loadQueue() {
+    const data = await getQueue();
+    renderQueue(data);
+  }
+
+  function renderQueue(data) {
+    updateNavBadge("queue", data.pending_count);
+    const list = document.getElementById("queue-list");
+    list.innerHTML = "";
+    document.getElementById("queue-empty").classList.toggle("hidden", data.items.length > 0);
+
+    data.items.forEach(function (item) { list.appendChild(renderQueueCard(item)); });
+    refreshIcons();
+  }
+
+  function renderQueueCard(item) {
+    const decision = item.decision;
+    const entities = mockExtractEntities(item.raw_phrase);
+    const norm = mockNormalizeUnit(item.raw_phrase);
+
+    const card = el("div", { class: "pb-panel rounded-lg p-4 pb-fade-in" });
+
+    const header = el("div", { class: "flex items-start gap-4 mb-3" });
+    header.appendChild(scoreRing(decision.final_confidence_score * 100, 52));
+    const headerText = el("div", { class: "min-w-0 flex-1" });
+    headerText.appendChild(el("div", { class: "flex items-center gap-2 flex-wrap" }, [
+      el("span", { class: "font-mono text-xs text-oil-mute" }, [item.queue_id]),
+      decisionBadge(decision.decision_type),
+    ]));
+    headerText.appendChild(el("p", { class: "text-sm mt-1.5 leading-snug" }, ['"' + item.raw_phrase + '"']));
+    headerText.appendChild(el("p", { class: "text-[11px] text-oil-mute mt-1" }, ["Source: " + item.source_report_id]));
+    header.appendChild(headerText);
+    card.appendChild(header);
+
+    const chipRow = el("div", { class: "flex flex-wrap gap-1.5 mb-4" });
+    const chip = function (label, value, tone) {
+      if (!value) return null;
+      const tones = { kp: "border-blue-400/30 text-blue-300 bg-blue-400/10", qty: "border-oil-emerald/30 text-oil-emerald bg-oil-emerald/10", action: "border-oil-amber/30 text-oil-amber bg-oil-amber/10" };
+      return el("span", { class: "text-[11px] px-2 py-1 rounded border " + (tones[tone] || "border-oil-line text-oil-mute") }, [label + ": " + value]);
+    };
+    [chip("KP", entities.location_kp, "kp"),
+     chip("Qty", norm ? (norm.normalized_quantity + " " + norm.normalized_unit) : null, "qty"),
+     chip("Action", entities.action_verb, "action"),
+     chip("Discipline", entities.discipline, null)]
+      .forEach(function (c) { if (c) chipRow.appendChild(c); });
+    if (!entities.location_kp && !entities.action_verb) chipRow.appendChild(el("span", { class: "text-[11px] text-oil-mute" }, ["No structured entities detected client-side"]));
+    card.appendChild(chipRow);
+
+    const table = el("table", { class: "w-full text-xs mb-4" });
+    table.innerHTML =
+      '<thead><tr class="text-left text-oil-mute border-b border-oil-line"><th class="py-1.5 pr-2 font-medium">Select</th><th class="py-1.5 pr-2 font-medium">Candidate</th><th class="py-1.5 pr-2 font-medium">Entity</th><th class="py-1.5 pr-2 font-medium">Semantic</th><th class="py-1.5 pr-2 font-medium">Qty</th><th class="py-1.5 font-medium">Final</th></tr></thead>';
+    const tbody = document.createElement("tbody");
+    decision.candidate_scores.forEach(function (c, idx) {
+      const tr = document.createElement("tr");
+      tr.className = "border-b border-oil-line last:border-b-0";
+      const isDefault = c.activity_id === decision.selected_activity_id || (idx === 0 && !decision.selected_activity_id);
+      tr.innerHTML =
+        '<td class="py-1.5 pr-2"><input type="radio" name="cand-' + cssEscape(item.queue_id) + '" value="' + escapeHtml(c.activity_id) + '" ' + (isDefault ? "checked" : "") + ' class="accent-oil-amber"></td>' +
+        '<td class="py-1.5 pr-2 font-mono">' + escapeHtml(c.activity_id) + '<div class="text-oil-mute font-sans">' + escapeHtml(truncate(c.activity_name, 42)) + '</div></td>' +
+        '<td class="py-1.5 pr-2 tabular-nums">' + (c.entity_score * 100).toFixed(0) + '%</td>' +
+        '<td class="py-1.5 pr-2 tabular-nums">' + (c.semantic_score * 100).toFixed(0) + '%</td>' +
+        '<td class="py-1.5 pr-2 tabular-nums">' + (c.quantity_score * 100).toFixed(0) + '%</td>' +
+        '<td class="py-1.5 font-semibold tabular-nums">' + (c.final_score * 100).toFixed(0) + '%</td>';
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    card.appendChild(table);
+
+    const reasoning = el("details", { class: "mb-4 text-xs text-oil-mute" });
+    reasoning.innerHTML = '<summary class="cursor-pointer select-none hover:text-oil-ink">View scoring rationale</summary><p class="mt-2 leading-relaxed">' + escapeHtml(decision.reasoning) + "</p>";
+    card.appendChild(reasoning);
+
+    const footer = el("div", { class: "flex items-center justify-end gap-2" });
+    const acceptBtn = el("button", {
+      class: "flex items-center gap-2 bg-oil-emerald hover:bg-emerald-600 px-3.5 py-1.5 rounded-md text-xs font-medium",
+      onclick: function () { handleApprove(item.queue_id, card); },
+    });
+    acceptBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Accept';
+    footer.appendChild(acceptBtn);
+    card.appendChild(footer);
+
+    return card;
+  }
+
+  function cssEscape(s) { return String(s).replace(/[^a-zA-Z0-9_-]/g, "_"); }
+
+  async function handleApprove(queueId, cardEl) {
+    const checked = cardEl.querySelector('input[type="radio"]:checked');
+    const activityId = checked ? checked.value : null;
+    if (!activityId) { showToast("Select a candidate activity before accepting.", "warn"); return; }
+    try {
+      await approveQueueItem(queueId, activityId, "planner_demo_user");
+      showToast("Match approved and applied to progress + audit ledger.", "success");
+      await Promise.all([loadQueue(), loadDashboard()]);
+    } catch (err) {
+      showToast("Approval failed: " + err.message, "error");
+    }
+  }
+
+  function wireSimulator() {
+    document.querySelectorAll(".preset-btn").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        document.getElementById("simulator-input").value = PRESETS[btn.getAttribute("data-preset")];
+      });
+    });
+    document.getElementById("run-engine").addEventListener("click", runSimulator);
+  }
+
+  async function runSimulator() {
+    const text = document.getElementById("simulator-input").value.trim();
+    const submittedBy = document.getElementById("simulator-submitted-by").value.trim() || "Unknown";
+    if (!text) { showToast("Enter or select some field-report text first.", "warn"); return; }
+
+    const runBtn = document.getElementById("run-engine");
+    runBtn.disabled = true;
+    runBtn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Running…';
+    refreshIcons();
+
+    try {
+      const result = await runIngest(text, submittedBy, "FREE_TEXT");
+      renderTrace(text, result);
+      await loadDashboard().catch(function () {});
+      if (STATE.activeTab === "audit") await loadAuditLog().catch(function () {});
+    } catch (err) {
+      showToast("Engine run failed: " + err.message, "error");
+    } finally {
+      runBtn.disabled = false;
+      runBtn.innerHTML = '<i data-lucide="play" class="w-4 h-4"></i> Run Engine';
+      refreshIcons();
+    }
+  }
+
+  function renderTrace(rawText, result) {
+    document.getElementById("trace-empty").classList.add("hidden");
+    const container = document.getElementById("trace-result");
+    container.classList.remove("hidden");
+    container.innerHTML = "";
+
+    if (result.observations_processed === 0) {
+      const card = el("div", { class: "pb-panel rounded-lg p-6 text-center pb-fade-in" });
+      card.innerHTML = '<i data-lucide="search-x" class="w-8 h-8 text-oil-mute mx-auto mb-3"></i>' +
+        '<p class="text-sm font-medium">No quantity claim detected</p>' +
+        '<p class="text-xs text-oil-mute mt-1 max-w-md mx-auto">This text carries no recognizable "&lt;number&gt; &lt;unit&gt;" phrase, so the pipeline correctly stopped before matching -- nothing to reconcile. This is expected for administrative or purely descriptive reports.</p>';
+      container.appendChild(card);
+      refreshIcons();
+      return;
+    }
+
+    const decision = result.decision;
+    const norm = mockNormalizeUnit(rawText);
+    const entities = mockExtractEntities(rawText);
+
+    container.appendChild(stepCard(1, "Unit Normalization", "client-side preview", function (body) {
+      if (!norm) { body.appendChild(el("p", { class: "text-xs text-oil-mute" }, ["No quantity/unit phrase recognized."])); return; }
+      const grid = el("div", { class: "grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs" });
+      grid.appendChild(kvBlock("Raw", norm.raw_quantity + " " + norm.raw_unit));
+      grid.appendChild(kvBlock("Normalized", norm.normalized_quantity + " " + norm.normalized_unit));
+      grid.appendChild(kvBlock("Conversion", norm.conversion_applied));
+      grid.appendChild(kvBlock("QA language?", entities.is_qa_clearance ? "Yes" : "No"));
+      body.appendChild(grid);
+    }));
+
+    container.appendChild(stepCard(2, "Entity Extraction", "client-side preview", function (body) {
+      const chipRow = el("div", { class: "flex flex-wrap gap-1.5" });
+      const chip = function (label, v) { return el("span", { class: "text-[11px] px-2 py-1 rounded border " + (v ? "border-blue-400/30 text-blue-300 bg-blue-400/10" : "border-oil-line text-oil-mute") }, [label + ": " + (v || "not detected")]); };
+      [chip("KP", entities.location_kp), chip("Facility", entities.facility), chip("Discipline", entities.discipline), chip("Action", entities.action_verb)]
+        .forEach(function (c) { chipRow.appendChild(c); });
+      body.appendChild(chipRow);
+    }));
+
+    container.appendChild(stepCard(3, "Confidence Gate Decision", "from PlanBridge API", function (body) {
+      const row = el("div", { class: "flex items-center gap-4 flex-wrap" });
+      row.appendChild(scoreRing(decision.final_confidence_score * 100, 64));
+      const info = el("div", { class: "min-w-0" });
+      info.appendChild(decisionBadge(decision.decision_type));
+      info.appendChild(el("p", { class: "text-xs text-oil-mute mt-2 leading-relaxed" }, [decision.reasoning]));
+      row.appendChild(info);
+      body.appendChild(row);
+    }));
+
+    container.appendChild(stepCard(4, "Candidate Scores", "from PlanBridge API", function (body) {
+      if (!decision.candidate_scores.length) { body.appendChild(el("p", { class: "text-xs text-oil-mute" }, ["No candidates were evaluated."])); return; }
+      const table = document.createElement("table");
+      table.className = "w-full text-xs";
+      table.innerHTML = '<thead><tr class="text-left text-oil-mute border-b border-oil-line"><th class="py-1.5 pr-2 font-medium">Activity</th><th class="py-1.5 pr-2 font-medium">Entity</th><th class="py-1.5 pr-2 font-medium">Semantic</th><th class="py-1.5 pr-2 font-medium">Qty</th><th class="py-1.5 font-medium">Final</th></tr></thead>';
+      const tbody = document.createElement("tbody");
+      decision.candidate_scores.forEach(function (c) {
+        const tr = document.createElement("tr");
+        tr.className = "border-b border-oil-line last:border-b-0" + (c.activity_id === decision.selected_activity_id ? " bg-oil-emerald/5" : "");
+        tr.innerHTML = '<td class="py-1.5 pr-2 font-mono">' + escapeHtml(c.activity_id) + '</td>' +
+          '<td class="py-1.5 pr-2 tabular-nums">' + (c.entity_score * 100).toFixed(0) + '%</td>' +
+          '<td class="py-1.5 pr-2 tabular-nums">' + (c.semantic_score * 100).toFixed(0) + '%</td>' +
+          '<td class="py-1.5 pr-2 tabular-nums">' + (c.quantity_score * 100).toFixed(0) + '%</td>' +
+          '<td class="py-1.5 font-semibold tabular-nums">' + (c.final_score * 100).toFixed(0) + '%</td>';
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+      body.appendChild(table);
+    }));
+
+    refreshIcons();
+  }
+
+  function stepCard(num, title, sourceTag, fill) {
+    const card = el("div", { class: "pb-panel rounded-lg p-4 pb-fade-in" });
+    const header = el("div", { class: "flex items-center gap-3 mb-3" });
+    header.appendChild(el("span", { class: "w-6 h-6 rounded-full bg-oil-blue flex items-center justify-center text-[11px] font-semibold shrink-0" }, [String(num)]));
+    header.appendChild(el("h3", { class: "text-sm font-semibold flex-1" }, [title]));
+    header.appendChild(el("span", { class: "text-[10px] text-oil-mute font-mono shrink-0" }, [sourceTag]));
+    card.appendChild(header);
+    const body = el("div", {});
+    fill(body);
+    card.appendChild(body);
+    return card;
+  }
+
+  function kvBlock(label, value) {
+    const wrap = el("div", {});
+    wrap.appendChild(el("p", { class: "text-oil-mute mb-0.5" }, [label]));
+    wrap.appendChild(el("p", { class: "font-mono text-oil-ink" }, [String(value)]));
+    return wrap;
+  }
+
+  // ==========================================================================
+  // TAB 4 -- Audit Log
+  // ==========================================================================
+  async function loadAuditLog() {
+    const data = await getAuditLogs();
+    STATE.lastAuditIntegrity = data.integrity_verified;
+    renderAuditLog(data);
+  }
+
+  function renderAuditLog(data) {
+    const banner = document.getElementById("integrity-banner");
+    const icon = document.getElementById("integrity-icon");
+    const title = document.getElementById("integrity-title");
+
+    const entries = Array.isArray(data) ? data : (data.entries || []);
+    const verified = data.integrity_verified !== undefined ? data.integrity_verified : true;
+    const total = data.total_entries !== undefined ? data.total_entries : entries.length;
+
+    if (verified) {
+      banner.className = "rounded-lg p-4 mb-5 flex items-center gap-3 border border-oil-emerald/30 bg-oil-emerald/10";
+      icon.setAttribute("data-lucide", "shield-check");
+      icon.setAttribute("class", "w-5 h-5 shrink-0 text-oil-emerald");
+      title.textContent = "Ledger Integrity Verified -- " + total + " entries";
+      title.className = "text-sm font-semibold text-oil-emerald";
+    } else {
+      banner.className = "rounded-lg p-4 mb-5 flex items-center gap-3 border border-oil-danger/40 bg-oil-danger/10";
+      icon.setAttribute("data-lucide", "shield-alert");
+      icon.setAttribute("class", "w-5 h-5 shrink-0 text-red-300");
+      title.textContent = "TAMPERING DETECTED -- hash chain broken";
+      title.className = "text-sm font-semibold text-red-300";
+    }
+
+    const tbody = document.getElementById("audit-table-body");
+    tbody.innerHTML = "";
+    document.getElementById("audit-empty").classList.toggle("hidden", entries.length > 0);
+
+    entries.slice().reverse().forEach(function (entry) {
+      const tr = el("tr", { class: "border-b border-oil-line last:border-b-0 hover:bg-oil-blue/10" });
+
+      tr.appendChild(el("td", { class: "px-4 py-2.5 font-mono text-xs pb-nowrap-cell text-oil-emerald" }, [entry.evidence_id || "EV-0000"]));
+      tr.appendChild(el("td", { class: "px-4 py-2.5" }, [activityLabel(entry.activity_id)]));
+
+      const snippet = STATE.ingestedTextCache[entry.observation_id] || entry.raw_content || entry.snippet || "";
+      tr.appendChild(el("td", { class: "px-4 py-2.5 text-xs text-oil-mute max-w-xs truncate" }, [snippet ? ('"' + truncate(snippet, 60) + '"') : "-- (not captured this session)"]));
+
+      const qtyStr = (entry.quantity_added !== undefined ? entry.quantity_added : "") + " " + (entry.unit || "");
+      tr.appendChild(el("td", { class: "px-4 py-2.5 text-xs font-mono pb-nowrap-cell" }, [qtyStr]));
+
+      const cat = entry.progress_category || "PHYSICAL_CLAIM";
+      const catCls = cat === "QA_VERIFIED" ? "text-oil-emerald bg-oil-emerald/10 border-oil-emerald/30" : "text-blue-300 bg-blue-400/10 border-blue-400/30";
+      tr.appendChild(el("td", { class: "px-4 py-2.5" }, [
+        el("span", { class: "inline-flex items-center px-2 py-0.5 rounded border text-[11px] " + catCls }, [cat])
+      ]));
+
+      tr.appendChild(el("td", { class: "px-4 py-2.5 text-xs text-oil-mute pb-nowrap-cell" }, [fmtTime(entry.logged_timestamp)]));
+
+      const hashStr = entry.evidence_hash || entry.hash || "";
+      const hashCell = el("td", { class: "px-4 py-2.5" });
+      const hashWrap = el("div", { class: "flex items-center gap-1.5" });
+      hashWrap.appendChild(el("span", { class: "font-mono text-xs text-oil-mute", title: hashStr }, [truncate(hashStr, 16)]));
+      const copyBtn = el("button", { class: "text-oil-mute hover:text-oil-ink", title: "Copy full hash", onclick: function () { copyToClipboard(hashStr); } });
+      copyBtn.innerHTML = '<i data-lucide="copy" class="w-3 h-3"></i>';
+      hashWrap.appendChild(copyBtn);
+      hashCell.appendChild(hashWrap);
+      tr.appendChild(hashCell);
+
+      tbody.appendChild(tr);
+    });
+    refreshIcons();
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { showToast("Hash copied to clipboard.", "success"); }).catch(function () { showToast("Could not copy -- copy manually.", "warn"); });
+    } else {
+      showToast("Clipboard API unavailable in this browser.", "warn");
+    }
+  }
+
+  async function loadXerPreview() {
+    try {
+      lastXerText = await getXerPreviewText();
+      renderXerPreview(lastXerText);
+    } catch (err) {
+      document.getElementById("xer-preview").textContent = "Failed to load preview: " + err.message;
+    }
+  }
+
+  function renderXerPreview(text) {
+    const pre = document.getElementById("xer-preview");
+    const lines = text.split("\n").map(function (line) {
+      const escaped = escapeHtml(line);
+      if (line.indexOf("ERMHDR") === 0) return '<span class="pb-xer-header">' + escaped + "</span>";
+      if (line.indexOf("%T") === 0 || line.indexOf("%F") === 0 || line.indexOf("%E") === 0) return '<span class="pb-xer-marker">' + escaped + "</span>";
+      if (line.indexOf("%R") === 0) return '<span class="pb-xer-field">' + escaped + "</span>";
+      return escaped;
+    });
+    pre.innerHTML = lines.join("\n");
+  }
+
+  function wireXerTab() {
+    document.getElementById("xer-refresh").addEventListener("click", function () { loadXerPreview(); });
+    document.getElementById("xer-download").addEventListener("click", async function () {
+      try {
+        const text = lastXerText || await getXerPreviewText();
+        const blob = new Blob([text], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "OIL_P6_DELTA_2026.XER";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        showToast("Download started: OIL_P6_DELTA_2026.XER", "success");
+      } catch (err) {
+        showToast("Download failed: " + err.message, "error");
+      }
+    });
+  }
+
+  function setConnectionUI(online) {
+    const pill = document.getElementById("connection-pill");
+    const dot = document.getElementById("connection-dot");
+    const label = document.getElementById("connection-label");
+    if (online) {
+      pill.className = "flex items-center gap-2 pl-2.5 pr-3 py-1.5 rounded-full border text-xs font-medium transition-colors border-oil-emerald/40 bg-oil-emerald/10 text-oil-emerald";
+      dot.className = "w-2 h-2 rounded-full bg-oil-emerald";
+      label.textContent = "Live · Connected to API";
+    } else {
+      pill.className = "flex items-center gap-2 pl-2.5 pr-3 py-1.5 rounded-full border text-xs font-medium transition-colors border-oil-amber/40 bg-oil-amber/10 text-oil-amber";
+      dot.className = "w-2 h-2 rounded-full bg-oil-amber pb-pulse-dot";
+      label.textContent = "Offline · Demo Mode";
+    }
+  }
+
+  async function initConnectivity(isInitial) {
+    const wasOnline = STATE.online;
+    const nowOnline = await checkConnectivity();
+    STATE.online = nowOnline;
+    setConnectionUI(nowOnline);
+
+    if (isInitial) {
+      if (!nowOnline) showToast("Backend not reachable at " + API_BASE + " -- running fully-functional offline demo mode.", "warn");
+    } else if (nowOnline && !wasOnline) {
+      showToast("Reconnected to PlanBridge API -- live data restored.", "success");
+      loadTab(STATE.activeTab);
+    } else if (!nowOnline && wasOnline) {
+      showToast("Lost connection to PlanBridge API -- switched to offline demo mode.", "warn");
+      loadTab(STATE.activeTab);
+    }
+  }
+
+  function wireConnectionPill() {
+    document.getElementById("connection-pill").addEventListener("click", function () { initConnectivity(false); });
+  }
+
+  function wireMisc() {
+    document.getElementById("sidebar-open").addEventListener("click", openSidebar);
+    document.getElementById("sidebar-close").addEventListener("click", closeSidebar);
+    document.getElementById("sidebar-scrim").addEventListener("click", closeSidebar);
+
+    document.getElementById("activity-search").addEventListener("input", function () { if (lastDashboardData) renderProgressTable(lastDashboardData.activities_progress_list); });
+    document.getElementById("show-all-activities").addEventListener("change", function () { if (lastDashboardData) renderProgressTable(lastDashboardData.activities_progress_list); });
+
+    document.getElementById("queue-refresh").addEventListener("click", function () { loadQueue(); });
+    document.getElementById("audit-refresh").addEventListener("click", function () { loadAuditLog(); });
+  }
+
+  async function init() {
+    STATE.mock = seedMockData();
+    renderNav();
+    setActiveTab("dashboard");
+    wireSimulator();
+    wireXerTab();
+    wireConnectionPill();
+    wireMisc();
+    refreshIcons();
+
+    await initConnectivity(true);
+    await seedOfflineDemoState();
+    await loadTab(STATE.activeTab);
+
+    setInterval(function () { if (!STATE.online) initConnectivity(false); }, RECONNECT_POLL_MS);
+  }
+
+  async function seedOfflineDemoState() {
+    await mockIngest("2 joints of tie-in welding completed at CGS Duliajan near KP 12+000", "Site Supervisor");
+    await mockIngest("2.0 km hydrotesting completed near OCS-4 at KP 18+250", "Site Supervisor");
+    await mockIngest("Hydrotest passed for 2.0 km pipeline section near OCS-4 at KP 18+250", "QA Inspector");
+    await mockIngest("0.9 km ROW clearing progress reported near Trunkline ROW corridor", "Site Supervisor");
+  }
+
+  let selectedBatchFile = null;
+
+function handleFileSelected(event) {
+  const file = event.target.files[0];
+  if (file) {
+    selectedBatchFile = file;
+    document.getElementById("selected-filename").textContent = file.name + " (" + (file.size / 1024).toFixed(1) + " KB)";
+    document.getElementById("batch-upload-btn").disabled = false;
+  }
+}
+
+async function uploadBatchFile() {
+  if (!selectedBatchFile) return;
+  const btn = document.getElementById("batch-upload-btn");
+  btn.disabled = true;
+  btn.innerHTML = '<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Processing File...';
+  refreshIcons();
+
+  const formData = new FormData();
+  formData.append("file", selectedBatchFile);
+
+  try {
+    const resp = await fetch("http://127.0.0.1:8000/api/ingest-file", {
+      method: "POST",
+      body: formData
+    });
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+    const summary = await resp.json();
+
+    showToast("Batch file " + summary.filename + " processed successfully!", "success");
+
+    // Display Summary Banner
+    document.getElementById("batch-summary-banner").classList.remove("hidden");
+    document.getElementById("batch-summary-title").textContent = "Processed " + summary.filename + " (" + summary.total_processed + " DPR lines)";
+    document.getElementById("batch-summary-details").textContent = summary.auto_accepted_count + " Auto-Linked  |  " + summary.queued_count + " Sent to Planner Queue  |  " + summary.unmatched_count + " Flagged Unmatched";
+
+    await loadDashboard();
+  } catch (err) {
+    showToast("Batch upload failed: " + err.message, "error");
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i data-lucide="play" class="w-3.5 h-3.5"></i> Process File';
+    refreshIcons();
+  }
+}
+
+// EXPOSE BATCH FILE FUNCTIONS GLOBALLY TO WINDOW
+  window.handleFileSelected = function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      selectedBatchFile = file;
+      const nameEl = document.getElementById("selected-filename");
+      if (nameEl) nameEl.textContent = file.name + " (" + (file.size / 1024).toFixed(1) + " KB)";
+      const btn = document.getElementById("batch-upload-btn");
+      if (btn) btn.disabled = false;
+    }
+  };
+
+  window.uploadBatchFile = async function() {
+    if (!selectedBatchFile) return;
+    const btn = document.getElementById("batch-upload-btn");
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Processing File...';
+    }
+    refreshIcons();
+
+    const formData = new FormData();
+    formData.append("file", selectedBatchFile);
+
+    try {
+      const resp = await fetch("http://127.0.0.1:8000/api/ingest-file", {
+        method: "POST",
+        body: formData
+      });
+      if (!resp.ok) throw new Error("HTTP " + resp.status);
+      const summary = await resp.json();
+
+      showToast("Batch file " + summary.filename + " processed successfully!", "success");
+
+      const banner = document.getElementById("batch-summary-banner");
+      if (banner) banner.classList.remove("hidden");
+      
+      const titleEl = document.getElementById("batch-summary-title");
+      if (titleEl) titleEl.textContent = "Processed " + summary.filename + " (" + summary.total_processed + " DPR lines)";
+      
+      const detailsEl = document.getElementById("batch-summary-details");
+      if (detailsEl) detailsEl.textContent = summary.auto_accepted_count + " Auto-Linked  |  " + summary.queued_count + " Sent to Queue  |  " + summary.unmatched_count + " Flagged Unmatched";
+
+      await loadDashboard();
+    } catch (err) {
+      showToast("Batch upload failed: " + err.message, "error");
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="play" class="w-3.5 h-3.5"></i> Process File';
+      }
+      refreshIcons();
+    }
+  };
+
+  window.processSampleExcelDemo = async function() {
+    showToast("Ingesting 120 contractor DPR lines into live pipeline...", "info");
+    try {
+      const resp = await fetch("data/dprs.json");
+      if (!resp.ok) throw new Error("Failed to load data/dprs.json");
+      const dprs = await resp.json();
+      const fileBlob = new Blob([JSON.stringify(dprs)], { type: "application/json" });
+      const sampleFile = new File([fileBlob], "OIL_CONTRACTOR_DPR_SHEET_2026.json", { type: "application/json" });
+      
+      selectedBatchFile = sampleFile;
+      const nameEl = document.getElementById("selected-filename");
+      if (nameEl) nameEl.textContent = sampleFile.name;
+      await window.uploadBatchFile();
+    } catch (err) {
+      showToast("Sample demo failed: " + err.message, "error");
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+
+</script>
+</body>
+</html>

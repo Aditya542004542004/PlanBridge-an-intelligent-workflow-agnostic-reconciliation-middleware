@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.vscode/
+data/evidence_ledger.json
+data/benchmark_results.json

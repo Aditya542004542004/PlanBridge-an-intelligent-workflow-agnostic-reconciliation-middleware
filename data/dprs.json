@@ -1,0 +1,1082 @@
+[
+  {
+    "report_id": "DPR-2026-08-02-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-08-02T07:00:00+00:00",
+    "raw_content": "Trenching activity ongoing somewhere along 4C corridor.",
+    "expected_activity_id": "CIV-L5-015-108",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2027-02-15-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2027-02-15T12:30:00+00:00",
+    "raw_content": "ROW Clearing — Section 8B progress: 2.24 KM finished at Terminal Duliajan, KP 5+631.",
+    "expected_activity_id": "CIV-L5-046-041",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-09-06-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2026-09-06T19:00:00+00:00",
+    "raw_content": "About a dozen tie-in joints welded near KP 24+187, roughly 15 nos completed.",
+    "expected_activity_id": "PIP-L5-021-080",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-08-28-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2026-08-28T18:00:00+00:00",
+    "raw_content": "Valve Pit Excavation at KP 22+188 progress: 2 PIT completed at CGS Moran, KP 22+188.",
+    "expected_activity_id": "CIV-L5-021-002",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-05-22-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2026-05-22T17:15:00+00:00",
+    "raw_content": "NDT Radiography passed for 17 joints piping section at KP 40+198.",
+    "expected_activity_id": "PIP-L5-043-125",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-11-29-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Imran Ali (Mechanical Supervisor)",
+    "submission_timestamp": "2026-11-29T11:30:00+00:00",
+    "raw_content": "Welding crew active in the CGS Moran tie-in area, quantity not recorded.",
+    "expected_activity_id": "ELE-L5-041-059",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-10-01-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2026-10-01T08:15:00+00:00",
+    "raw_content": "1279 meters of work completed near KP 31+566 on hydrotesting of pipeline section 9b.",
+    "expected_activity_id": "PIP-L5-031-118",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-05-02-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2026-05-02T08:30:00+00:00",
+    "raw_content": "5.99 tonnes of cgs manifold setup at terminal duliajan carried out today near KP 47+425.",
+    "expected_activity_id": "MEC-L5-024-033",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-06-28-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2026-06-28T10:30:00+00:00",
+    "raw_content": "Approx 4765 kg of structural steel erected at Terminal Duliajan today.",
+    "expected_activity_id": "CIV-L5-009-055",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-05-16-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2026-05-16T07:15:00+00:00",
+    "raw_content": "Trenching activity ongoing somewhere along 2C corridor.",
+    "expected_activity_id": "PIP-L5-021-107",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2027-04-08-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2027-04-08T10:30:00+00:00",
+    "raw_content": "Local villagers raised access dispute near chainage; work paused pending resolution.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-11-06-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Imran Ali (Mechanical Supervisor)",
+    "submission_timestamp": "2026-11-06T19:00:00+00:00",
+    "raw_content": "Visitor group from district administration inspected the ROW corridor.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-09-18-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Field Voice Log (unattended transcription)",
+    "submission_timestamp": "2026-09-18T14:45:00+00:00",
+    "raw_content": "Concrete cube test results received — 28-day strength achieved for OCS-4 foundation near KP 37+170.",
+    "expected_activity_id": "CIV-L5-009-019",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-07-25-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2026-07-25T16:00:00+00:00",
+    "raw_content": "518 meters of work completed near KP 30+810 on access road construction near cgs duliajan.",
+    "expected_activity_id": "CIV-L5-025-062",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-04-05-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-04-05T12:15:00+00:00",
+    "raw_content": "SCADA Instrumentation Cable Laying — Section 5A progress: 0.39 KM completed at Trunkline ROW, KP 12+643.",
+    "expected_activity_id": "ELE-L5-045-054",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-11-11-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2026-11-11T11:00:00+00:00",
+    "raw_content": "1 pit of valve pit excavation at kp 4+299 finished today near KP 4+299.",
+    "expected_activity_id": "CIV-L5-017-095",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-08-15-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Imran Ali (Mechanical Supervisor)",
+    "submission_timestamp": "2026-08-15T11:15:00+00:00",
+    "raw_content": "Today's update — hdd river crossing execution at kp 37+766 completed, 182.79 M logged at KP 37+766.",
+    "expected_activity_id": "PIP-L5-014-039",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-02-20-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2027-02-20T11:30:00+00:00",
+    "raw_content": "Material delivery truck delayed at check post; unloading rescheduled for tomorrow.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-03-29-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2026-03-29T07:00:00+00:00",
+    "raw_content": "Cable laying reported near Trunkline ROW substation, section not specified.",
+    "expected_activity_id": "PIP-L5-052-165",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-02-01-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2026-02-01T10:00:00+00:00",
+    "raw_content": "Excavation continuing close to KP 29+892; surveyor yet to confirm chainage.",
+    "expected_activity_id": "CIV-L5-004-097",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-07-08-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-07-08T19:45:00+00:00",
+    "raw_content": "Fuel bowser arrived late; no productive hours recorded for the shift.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-12-18-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Field Voice Log (unattended transcription)",
+    "submission_timestamp": "2026-12-18T16:30:00+00:00",
+    "raw_content": "0.76 km of scada instrumentation cable laying — section 2b installed today near KP 31+932.",
+    "expected_activity_id": "ELE-L5-036-081",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-10-14-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Field Voice Log (unattended transcription)",
+    "submission_timestamp": "2026-10-14T14:00:00+00:00",
+    "raw_content": "Temporary drainage channel dug around labour camp to prevent waterlogging.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-01-20-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-01-20T15:00:00+00:00",
+    "raw_content": "Pig Launcher/Receiver Fabrication at Terminal Duliajan progress: 3.13 TONNES completed at Terminal Duliajan, KP 23+516.",
+    "expected_activity_id": "MEC-L5-039-082",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-01-30-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-01-30T14:45:00+00:00",
+    "raw_content": "Excavation continuing close to KP 37+455; surveyor yet to confirm chainage.",
+    "expected_activity_id": "PIP-L5-042-117",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2027-04-16-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2027-04-16T08:30:00+00:00",
+    "raw_content": "Approx 2353 kg of structural steel erected at Booster Station Naharkatiya today.",
+    "expected_activity_id": "ELE-L5-021-025",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-11-02-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2026-11-02T09:00:00+00:00",
+    "raw_content": "Today's update — pig launcher/receiver fabrication at pump station barekuri carried out, 5.18 TONNES logged at KP 43+540.",
+    "expected_activity_id": "MEC-L5-021-078",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-02-01-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2027-02-01T12:00:00+00:00",
+    "raw_content": "0.1004 km of HDD drilling progressed today at KP 35+813.",
+    "expected_activity_id": "PIP-L5-022-046",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-12-18-002",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2026-12-18T12:45:00+00:00",
+    "raw_content": "NDT Radiography passed for 98.8 m piping section at KP 30+852.",
+    "expected_activity_id": "PIP-L5-017-020",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-01-30-002",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2026-01-30T17:00:00+00:00",
+    "raw_content": "Approx 23750 kg of structural steel erected at Pump Station Barekuri today.",
+    "expected_activity_id": "CIV-L5-001-025",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2027-03-19-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2027-03-19T10:15:00+00:00",
+    "raw_content": "Concrete cube test results received — 28-day strength achieved for Pump Station Barekuri foundation near KP 23+142.",
+    "expected_activity_id": "CIV-L5-052-085",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2027-02-07-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2027-02-07T18:30:00+00:00",
+    "raw_content": "About a dozen tie-in joints welded near KP 3+254, roughly 2 nos completed.",
+    "expected_activity_id": "CIV-L5-001-061",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-01-23-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2026-01-23T11:00:00+00:00",
+    "raw_content": "First-aid training session conducted for new joinees at site clinic.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-04-05-002",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2026-04-05T11:00:00+00:00",
+    "raw_content": "Cable laying reported near CGS Duliajan substation, section not specified.",
+    "expected_activity_id": "PIP-L5-007-001",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2027-02-23-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2027-02-23T15:15:00+00:00",
+    "raw_content": "Access Road Construction near Trunkline ROW progress: 0.24 KM finished at Trunkline ROW, KP 31+430.",
+    "expected_activity_id": "CIV-L5-026-064",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-01-21-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2026-01-21T13:15:00+00:00",
+    "raw_content": "About a dozen tie-in joints welded near KP 18+768, roughly 11 nos completed.",
+    "expected_activity_id": "PIP-L5-020-133",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2027-05-01-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Anita Deka (QA/QC Engineer)",
+    "submission_timestamp": "2027-05-01T18:45:00+00:00",
+    "raw_content": "1 pit of valve pit excavation at kp 29+309 completed today near KP 29+309.",
+    "expected_activity_id": "CIV-L5-016-023",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-12-20-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Anita Deka (QA/QC Engineer)",
+    "submission_timestamp": "2026-12-20T14:45:00+00:00",
+    "raw_content": "About a dozen tie-in joints welded near KP 22+536, roughly 11 nos completed.",
+    "expected_activity_id": "PIP-L5-042-033",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-02-11-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2026-02-11T09:45:00+00:00",
+    "raw_content": "Approx 4282 kg of structural steel erected at Pump Station Barekuri today.",
+    "expected_activity_id": "MEC-L5-029-081",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-01-18-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2026-01-18T16:30:00+00:00",
+    "raw_content": "192 meters of work completed near KP 46+101 on pipe stringing along row.",
+    "expected_activity_id": "PIP-L5-032-170",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-06-03-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-06-03T09:30:00+00:00",
+    "raw_content": "Today's update — tie-in welding at chainage kp 2+717 completed, 9 JOINTS logged at KP 2+717.",
+    "expected_activity_id": "PIP-L5-044-127",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-04-28-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2027-04-28T19:30:00+00:00",
+    "raw_content": "Trenching activity ongoing somewhere along 8A corridor.",
+    "expected_activity_id": "MEC-L5-041-015",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-08-03-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Imran Ali (Mechanical Supervisor)",
+    "submission_timestamp": "2026-08-03T16:30:00+00:00",
+    "raw_content": "641 meters of work completed near KP 36+574 on access road construction near booster station naharkatiya.",
+    "expected_activity_id": "CIV-L5-020-003",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-06-30-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Suresh Yadav (HSE Officer)",
+    "submission_timestamp": "2026-06-30T07:45:00+00:00",
+    "raw_content": "Trenching activity ongoing somewhere along 1C corridor.",
+    "expected_activity_id": "ELE-L5-030-053",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2027-05-12-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Field Voice Log (unattended transcription)",
+    "submission_timestamp": "2027-05-12T07:30:00+00:00",
+    "raw_content": "About a dozen tie-in joints welded near KP 29+720, roughly 14 nos completed.",
+    "expected_activity_id": "PIP-L5-027-105",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2027-04-18-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2027-04-18T11:00:00+00:00",
+    "raw_content": "Civil team working near Trunkline ROW; exact extent to be confirmed tomorrow.",
+    "expected_activity_id": "PIP-L5-021-102",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2027-01-23-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2027-01-23T19:15:00+00:00",
+    "raw_content": "Approx 6419 kg of structural steel erected at Booster Station Naharkatiya today.",
+    "expected_activity_id": "MEC-L5-041-030",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-10-10-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-10-10T09:15:00+00:00",
+    "raw_content": "SCADA Instrumentation Cable Laying — Section 8B progress: 0.58 KM carried out at Terminal Duliajan, KP 12+309.",
+    "expected_activity_id": "ELE-L5-035-027",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-03-02-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2027-03-02T18:15:00+00:00",
+    "raw_content": "NDT Radiography passed for 6.4 tonnes mechanical section at KP 2+350.",
+    "expected_activity_id": "MEC-L5-012-050",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-03-16-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2026-03-16T09:45:00+00:00",
+    "raw_content": "13.27 tonnes of rcc foundation casting at pump station barekuri finished today near KP 32+844.",
+    "expected_activity_id": "CIV-L5-028-010",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-03-10-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Imran Ali (Mechanical Supervisor)",
+    "submission_timestamp": "2027-03-10T09:45:00+00:00",
+    "raw_content": "Welding crew active in the Pump Station Barekuri tie-in area, quantity not recorded.",
+    "expected_activity_id": "ELE-L5-026-038",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-11-07-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-11-07T07:00:00+00:00",
+    "raw_content": "Today's update — trenching & backfilling — section 1a carried out, 0.57 KM logged at KP 35+806.",
+    "expected_activity_id": "PIP-L5-033-131",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-05-06-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2026-05-06T11:30:00+00:00",
+    "raw_content": "Fuel bowser arrived late; no productive hours recorded for the shift.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-04-12-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2026-04-12T18:15:00+00:00",
+    "raw_content": "NDT Radiography passed for 12 spools piping section at KP 45+522.",
+    "expected_activity_id": "PIP-L5-032-106",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-07-29-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2026-07-29T12:00:00+00:00",
+    "raw_content": "About a dozen tie-in joints welded near KP 20+593, roughly 1 nos completed.",
+    "expected_activity_id": "ELE-L5-003-061",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-02-27-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2026-02-27T17:45:00+00:00",
+    "raw_content": "268 meters of work completed near KP 11+029 on pipe stringing along row.",
+    "expected_activity_id": "PIP-L5-026-144",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-12-06-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Suresh Yadav (HSE Officer)",
+    "submission_timestamp": "2026-12-06T16:15:00+00:00",
+    "raw_content": "Piping work progressing near Booster Station Naharkatiya inlet valve pit.",
+    "expected_activity_id": "PIP-L5-010-076",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-05-27-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-05-27T17:15:00+00:00",
+    "raw_content": "Site office generator refuelled; no construction activity today due to local bandh.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-11-11-002",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Suresh Yadav (HSE Officer)",
+    "submission_timestamp": "2026-11-11T17:45:00+00:00",
+    "raw_content": "NDT Radiography passed for 14 joints piping section at KP 3+494.",
+    "expected_activity_id": "PIP-L5-014-081",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-10-25-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2026-10-25T09:00:00+00:00",
+    "raw_content": "Contractor submitted updated insurance documents to site admin office.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2027-03-12-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2027-03-12T14:00:00+00:00",
+    "raw_content": "Hydrotesting of Pipeline Section 2B progress: 0.99 KM completed at Terminal Duliajan, KP 43+180.",
+    "expected_activity_id": "PIP-L5-048-119",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-05-22-002",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2026-05-22T15:45:00+00:00",
+    "raw_content": "Trenching activity ongoing somewhere along 8A corridor.",
+    "expected_activity_id": "HSE-L5-015-042",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-03-08-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-03-08T18:30:00+00:00",
+    "raw_content": "0.22 km of access road construction near cgs duliajan completed today near KP 31+420.",
+    "expected_activity_id": "CIV-L5-042-051",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-11-16-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-11-16T07:45:00+00:00",
+    "raw_content": "Concrete cube test results received — 28-day strength achieved for CGS Moran foundation near KP 36+237.",
+    "expected_activity_id": "CIV-L5-019-021",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2027-01-30-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2027-01-30T13:45:00+00:00",
+    "raw_content": "Pipe Stringing along ROW — Section 5A progress: 1.85 KM carried out at OCS-4, KP 40+680.",
+    "expected_activity_id": "PIP-L5-035-003",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-01-04-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2027-01-04T18:45:00+00:00",
+    "raw_content": "NDT Radiography passed for 4 joints piping section at KP 11+484.",
+    "expected_activity_id": "PIP-L5-018-147",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2027-05-08-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2027-05-08T17:00:00+00:00",
+    "raw_content": "27.3 tonnes of rcc foundation casting at trunkline row finished today near KP 40+858.",
+    "expected_activity_id": "CIV-L5-038-067",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-05-21-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2027-05-21T15:00:00+00:00",
+    "raw_content": "Welding crew active in the OCS-4 tie-in area, quantity not recorded.",
+    "expected_activity_id": "ELE-L5-019-014",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2027-01-07-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Suresh Yadav (HSE Officer)",
+    "submission_timestamp": "2027-01-07T17:30:00+00:00",
+    "raw_content": "Contractor submitted updated insurance documents to site admin office.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-11-19-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-11-19T18:15:00+00:00",
+    "raw_content": "Trenching activity ongoing somewhere along 1B corridor.",
+    "expected_activity_id": "CIV-L5-026-035",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-04-13-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Imran Ali (Mechanical Supervisor)",
+    "submission_timestamp": "2026-04-13T07:30:00+00:00",
+    "raw_content": "Welding crew active in the CGS Moran tie-in area, quantity not recorded.",
+    "expected_activity_id": "MEC-L5-020-059",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-03-06-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2026-03-06T14:15:00+00:00",
+    "raw_content": "Today's update — spool fabrication for booster station naharkatiya tie-in rack completed, 17 SPOOLS logged at KP 25+886.",
+    "expected_activity_id": "PIP-L5-027-143",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-01-07-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-01-07T17:00:00+00:00",
+    "raw_content": "About a dozen tie-in joints welded near KP 18+489, roughly 1 nos completed.",
+    "expected_activity_id": "HSE-L5-046-007",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-05-02-002",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2026-05-02T17:00:00+00:00",
+    "raw_content": "Cable laying reported near CGS Duliajan substation, section not specified.",
+    "expected_activity_id": "ELE-L5-040-041",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-10-18-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-10-18T08:00:00+00:00",
+    "raw_content": "Local villagers raised access dispute near chainage; work paused pending resolution.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-02-23-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2026-02-23T12:00:00+00:00",
+    "raw_content": "Trenching activity ongoing somewhere along 7C corridor.",
+    "expected_activity_id": "CIV-L5-009-012",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-03-13-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Anita Deka (QA/QC Engineer)",
+    "submission_timestamp": "2026-03-13T07:15:00+00:00",
+    "raw_content": "Temporary drainage channel dug around labour camp to prevent waterlogging.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2027-01-02-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Anita Deka (QA/QC Engineer)",
+    "submission_timestamp": "2027-01-02T14:15:00+00:00",
+    "raw_content": "Today's update — tie-in welding at chainage kp 11+484 completed, 5 JOINTS logged at KP 11+484.",
+    "expected_activity_id": "PIP-L5-018-147",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-02-19-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-02-19T07:45:00+00:00",
+    "raw_content": "Security fencing repaired after cattle intrusion near the yard boundary.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-06-18-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-06-18T09:15:00+00:00",
+    "raw_content": "Access Road Construction near CGS Moran progress: 0.95 KM carried out at CGS Moran, KP 3+585.",
+    "expected_activity_id": "CIV-L5-038-058",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-03-04-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-03-04T07:15:00+00:00",
+    "raw_content": "Today's update — pipe stringing along row — section 3a completed, 0.99 KM logged at KP 11+029.",
+    "expected_activity_id": "PIP-L5-026-144",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-11-02-002",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-11-02T15:15:00+00:00",
+    "raw_content": "About a dozen tie-in joints welded near KP 42+701, roughly 1 nos completed.",
+    "expected_activity_id": "HSE-L5-025-032",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-12-18-003",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-12-18T11:00:00+00:00",
+    "raw_content": "ROW Clearing — Section 7B progress: 1.08 KM finished at CGS Moran, KP 5+796.",
+    "expected_activity_id": "CIV-L5-051-075",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-06-05-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Field Voice Log (unattended transcription)",
+    "submission_timestamp": "2026-06-05T07:30:00+00:00",
+    "raw_content": "Today's update — pig launcher/receiver fabrication at trunkline row installed, 2.12 TONNES logged at KP 36+136.",
+    "expected_activity_id": "MEC-L5-019-085",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-12-21-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2026-12-21T09:15:00+00:00",
+    "raw_content": "1.49 tonnes of transformer & mcc panel installation at terminal duliajan completed today near KP 28+618.",
+    "expected_activity_id": "ELE-L5-032-077",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-09-21-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-09-21T14:30:00+00:00",
+    "raw_content": "NDT Radiography passed for 289.9 m piping section at KP 27+638.",
+    "expected_activity_id": "PIP-L5-013-022",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2027-05-11-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2027-05-11T10:45:00+00:00",
+    "raw_content": "Piping work progressing near Trunkline ROW inlet valve pit.",
+    "expected_activity_id": "MEC-L5-045-041",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-09-17-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2026-09-17T07:45:00+00:00",
+    "raw_content": "NDT Radiography passed for 225.1 m piping section at KP 27+638.",
+    "expected_activity_id": "PIP-L5-013-022",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-11-06-002",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-11-06T17:30:00+00:00",
+    "raw_content": "Mock Emergency Drill near KP 26+221 progress: 1 PIT conducted at OCS-4, KP 26+221.",
+    "expected_activity_id": "HSE-L5-016-020",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-12-25-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Anita Deka (QA/QC Engineer)",
+    "submission_timestamp": "2026-12-25T09:00:00+00:00",
+    "raw_content": "Constructed temporary mud pump pit near yard due to heavy rain.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2027-05-25-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Anita Deka (QA/QC Engineer)",
+    "submission_timestamp": "2027-05-25T16:15:00+00:00",
+    "raw_content": "NDT Radiography passed for 15 spools piping section at KP 41+572.",
+    "expected_activity_id": "PIP-L5-016-094",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2027-02-06-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2027-02-06T10:00:00+00:00",
+    "raw_content": "NDT Radiography passed for 19 joints piping section at KP 17+699.",
+    "expected_activity_id": "PIP-L5-006-052",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-08-25-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2026-08-25T18:15:00+00:00",
+    "raw_content": "Welding crew active in the CGS Duliajan tie-in area, quantity not recorded.",
+    "expected_activity_id": "MEC-L5-010-084",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-11-01-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2026-11-01T14:00:00+00:00",
+    "raw_content": "1 pit of hse compliance audit at ocs-4 completed today near KP 38+455.",
+    "expected_activity_id": "HSE-L5-039-016",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-01-14-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-01-14T18:45:00+00:00",
+    "raw_content": "Welding crew active in the OCS-4 tie-in area, quantity not recorded.",
+    "expected_activity_id": "ELE-L5-051-076",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-11-03-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Suresh Yadav (HSE Officer)",
+    "submission_timestamp": "2026-11-03T14:30:00+00:00",
+    "raw_content": "Material delivery truck delayed at check post; unloading rescheduled for tomorrow.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-11-27-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2026-11-27T09:30:00+00:00",
+    "raw_content": "2 pit of valve pit excavation at kp 5+755 carried out today near KP 5+755.",
+    "expected_activity_id": "CIV-L5-006-005",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-02-26-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Rakesh Sharma (Site Inspector)",
+    "submission_timestamp": "2027-02-26T15:00:00+00:00",
+    "raw_content": "546 meters trenching completed on Section near CGS Duliajan.",
+    "expected_activity_id": "PIP-L5-030-030",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2027-02-20-002",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2027-02-20T07:30:00+00:00",
+    "raw_content": "ROW Clearing — Section 8B progress: 0.8 KM finished at Terminal Duliajan, KP 5+631.",
+    "expected_activity_id": "CIV-L5-046-041",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-06-04-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2027-06-04T12:15:00+00:00",
+    "raw_content": "NDT Radiography passed for 8.3 tonnes mechanical section at KP 11+280.",
+    "expected_activity_id": "MEC-L5-029-065",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-05-27-002",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Imran Ali (Mechanical Supervisor)",
+    "submission_timestamp": "2026-05-27T10:00:00+00:00",
+    "raw_content": "Approx 10789 kg of structural steel erected at Pump Station Barekuri today.",
+    "expected_activity_id": "CIV-L5-027-039",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-06-04-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Ritu Baruah (Site Engineer)",
+    "submission_timestamp": "2026-06-04T12:30:00+00:00",
+    "raw_content": "Approx 2933 kg of structural steel erected at Pump Station Barekuri today.",
+    "expected_activity_id": "ELE-L5-003-030",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2027-03-11-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Kavita Rani (Project Coordinator)",
+    "submission_timestamp": "2027-03-11T12:45:00+00:00",
+    "raw_content": "Concrete cube test results received — 28-day strength achieved for OCS-4 foundation near KP 29+502.",
+    "expected_activity_id": "CIV-L5-030-036",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-03-28-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-03-28T16:30:00+00:00",
+    "raw_content": "Cable laying reported near CGS Moran substation, section not specified.",
+    "expected_activity_id": "CIV-L5-026-104",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-03-07-001",
+    "source_type": "VOICE_TRANSCRIPT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-03-07T08:00:00+00:00",
+    "raw_content": "NDT Radiography passed for 26 spools piping section at KP 20+999.",
+    "expected_activity_id": "PIP-L5-002-055",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-06-14-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Biju Gogoi (Piping Supervisor)",
+    "submission_timestamp": "2026-06-14T14:15:00+00:00",
+    "raw_content": "Trenching activity ongoing somewhere along 5A corridor.",
+    "expected_activity_id": "MEC-L5-017-020",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-10-22-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Field Voice Log (unattended transcription)",
+    "submission_timestamp": "2026-10-22T15:15:00+00:00",
+    "raw_content": "NDT Radiography passed for 4 joints piping section at KP 3+235.",
+    "expected_activity_id": "PIP-L5-033-008",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-10-03-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Field Voice Log (unattended transcription)",
+    "submission_timestamp": "2026-10-03T19:15:00+00:00",
+    "raw_content": "Civil team working near Trunkline ROW; exact extent to be confirmed tomorrow.",
+    "expected_activity_id": "ELE-L5-001-002",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2027-03-08-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2027-03-08T17:30:00+00:00",
+    "raw_content": "NDT Radiography passed for 152.9 m piping section at KP 8+200.",
+    "expected_activity_id": "PIP-L5-008-111",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-04-29-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Imran Ali (Mechanical Supervisor)",
+    "submission_timestamp": "2026-04-29T09:30:00+00:00",
+    "raw_content": "Welding crew active in the Pump Station Barekuri tie-in area, quantity not recorded.",
+    "expected_activity_id": "HSE-L5-009-048",
+    "case_type": "AMBIGUOUS_MEDIUM"
+  },
+  {
+    "report_id": "DPR-2026-08-20-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Suresh Yadav (HSE Officer)",
+    "submission_timestamp": "2026-08-20T16:15:00+00:00",
+    "raw_content": "Pig Launcher/Receiver Fabrication at Trunkline ROW progress: 5.35 TONNES completed at Trunkline ROW, KP 0+283.",
+    "expected_activity_id": "MEC-L5-027-007",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-02-08-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Anita Deka (QA/QC Engineer)",
+    "submission_timestamp": "2027-02-08T07:30:00+00:00",
+    "raw_content": "Approx 6941 kg of structural steel erected at Terminal Duliajan today.",
+    "expected_activity_id": "MEC-L5-032-031",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-02-17-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Pranjal Bora (Junior Engineer)",
+    "submission_timestamp": "2026-02-17T07:30:00+00:00",
+    "raw_content": "Approx 13767 kg of structural steel erected at OCS-4 today.",
+    "expected_activity_id": "CIV-L5-015-033",
+    "case_type": "UNIT_MISMATCH"
+  },
+  {
+    "report_id": "DPR-2026-08-12-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-08-12T11:00:00+00:00",
+    "raw_content": "First-aid training session conducted for new joinees at site clinic.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2027-02-15-002",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2027-02-15T09:00:00+00:00",
+    "raw_content": "Toolbox talk conducted for all contractor staff on monsoon safety precautions.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-08-20-002",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Imran Ali (Mechanical Supervisor)",
+    "submission_timestamp": "2026-08-20T11:15:00+00:00",
+    "raw_content": "Temporary drainage channel dug around labour camp to prevent waterlogging.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  },
+  {
+    "report_id": "DPR-2026-03-11-001",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-03-11T14:00:00+00:00",
+    "raw_content": "Concrete cube test results received — 28-day strength achieved for OCS-4 foundation near KP 27+491.",
+    "expected_activity_id": "CIV-L5-049-048",
+    "case_type": "QA_CLEARANCE"
+  },
+  {
+    "report_id": "DPR-2026-01-21-002",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Suresh Yadav (HSE Officer)",
+    "submission_timestamp": "2026-01-21T12:00:00+00:00",
+    "raw_content": "12.03 tonnes of cgs manifold setup at cgs moran installed today near KP 12+749.",
+    "expected_activity_id": "MEC-L5-049-003",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2027-02-01-002",
+    "source_type": "SPREADSHEET",
+    "submitted_by": "Manoj Tiwari (Civil Foreman)",
+    "submission_timestamp": "2027-02-01T14:00:00+00:00",
+    "raw_content": "3.24 tonnes of pig launcher/receiver fabrication at pump station barekuri installed today near KP 15+666.",
+    "expected_activity_id": "MEC-L5-023-039",
+    "case_type": "EASY_MATCH"
+  },
+  {
+    "report_id": "DPR-2026-12-02-001",
+    "source_type": "FREE_TEXT",
+    "submitted_by": "Deepak Saikia (Welding Inspector)",
+    "submission_timestamp": "2026-12-02T13:15:00+00:00",
+    "raw_content": "Temporary drainage channel dug around labour camp to prevent waterlogging.",
+    "expected_activity_id": null,
+    "case_type": "UNMATCHED_NOISE"
+  }
+]
