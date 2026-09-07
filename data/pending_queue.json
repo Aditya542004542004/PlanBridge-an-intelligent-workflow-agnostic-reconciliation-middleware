@@ -1,0 +1,818 @@
+{
+  "MATCH-3147": {
+    "decision": {
+      "match_id": "MATCH-3147",
+      "observation_id": "FILE-505E6AA0-OBS-001",
+      "selected_activity_id": "PIP-L5-043-125",
+      "entity_score": 1.0,
+      "semantic_score": 0.3648,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.8094,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-043-125 ('Tie-in Welding at Chainage KP 40+198') scored 80.9% confidence (entity=100.0%, semantic=36.5%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: ELE-L5-003-030 at 33.7%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-043-125",
+          "activity_name": "Tie-in Welding at Chainage KP 40+198",
+          "entity_score": 1.0,
+          "semantic_score": 0.3648,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.8094
+        },
+        {
+          "activity_id": "ELE-L5-003-030",
+          "activity_name": "Transformer & MCC Panel Installation at Pump Station Barekuri",
+          "entity_score": 0.5217,
+          "semantic_score": 0.1679,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.3373
+        },
+        {
+          "activity_id": "MEC-L5-011-064",
+          "activity_name": "Pig Launcher/Receiver Fabrication at CGS Moran",
+          "entity_score": 0.5252,
+          "semantic_score": 0.0789,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.3125
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "FILE-505E6AA0-OBS-001",
+      "report_id": "FILE-505E6AA0",
+      "raw_phrase": "DPR-2026-08-04 Anita Deka (QA/QC Engineer) SPREADSHEET NDT Radiography passed for 12 joints section at PIP-L5-043-125 near KP 40+198.",
+      "raw_quantity": 12.0,
+      "raw_unit": "joints",
+      "normalized_quantity": 12.0,
+      "normalized_unit": "JOINTS",
+      "conversion_applied": "Joints preserved as-is (count-based unit, no conversion)",
+      "is_qa_clearance": true
+    }
+  },
+  "MATCH-1681": {
+    "decision": {
+      "match_id": "MATCH-1681",
+      "observation_id": "FILE-1C408262-OBS-001",
+      "selected_activity_id": "CIV-L5-006-005",
+      "entity_score": 1.0,
+      "semantic_score": 0.3885,
+      "quantity_score": 0.0,
+      "final_confidence_score": 0.6665,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate CIV-L5-006-005 ('Valve Pit Excavation at KP 5+755') scored 66.6% confidence (entity=100.0%, semantic=38.9%, quantity=0.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: CIV-L5-021-002 at 65.8%.) Note: the claimed quantity's unit did not match this candidate's planned unit, which weighed against it in the quantity score.",
+      "candidate_scores": [
+        {
+          "activity_id": "CIV-L5-006-005",
+          "activity_name": "Valve Pit Excavation at KP 5+755",
+          "entity_score": 1.0,
+          "semantic_score": 0.3885,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6665
+        },
+        {
+          "activity_id": "CIV-L5-021-002",
+          "activity_name": "Valve Pit Excavation at KP 22+188",
+          "entity_score": 1.0,
+          "semantic_score": 0.361,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6583
+        },
+        {
+          "activity_id": "CIV-L5-020-003",
+          "activity_name": "Access Road Construction near Booster Station Naharkatiya",
+          "entity_score": 0.5714,
+          "semantic_score": 0.2826,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.5491
+        },
+        {
+          "activity_id": "CIV-L5-010-001",
+          "activity_name": "Access Road Construction near Pump Station Barekuri",
+          "entity_score": 0.5714,
+          "semantic_score": 0.3571,
+          "quantity_score": 0.8318,
+          "unit_match": true,
+          "final_score": 0.5462
+        },
+        {
+          "activity_id": "CIV-L5-022-006",
+          "activity_name": "Access Road Construction near Pump Station Barekuri",
+          "entity_score": 0.5714,
+          "semantic_score": 0.3571,
+          "quantity_score": 0.0,
+          "unit_match": true,
+          "final_score": 0.4214
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "FILE-1C408262-OBS-001",
+      "report_id": "FILE-1C408262",
+      "raw_phrase": "DPR-2026-08-05 Rakesh Sharma (Site Inspector) SPREADSHEET 750 meters trenching & backfilling completed on Section 4B.",
+      "raw_quantity": 750.0,
+      "raw_unit": "meters",
+      "normalized_quantity": 0.75,
+      "normalized_unit": "KM",
+      "conversion_applied": "Meters to KM (div 1000)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-4831": {
+    "decision": {
+      "match_id": "MATCH-4831",
+      "observation_id": "FILE-23DFDA1D-OBS-001",
+      "selected_activity_id": "PIP-L5-020-159",
+      "entity_score": 0.9962,
+      "semantic_score": 0.1183,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.7334,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-020-159 ('Pipe Stringing along ROW \u2014 Section 4D') scored 73.3% confidence (entity=99.6%, semantic=11.8%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: PIP-L5-038-135 at 63.3%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-020-159",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 4D",
+          "entity_score": 0.9962,
+          "semantic_score": 0.1183,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.7334
+        },
+        {
+          "activity_id": "PIP-L5-038-135",
+          "activity_name": "Trenching & Backfilling \u2014 Section 5A",
+          "entity_score": 0.767,
+          "semantic_score": 0.2211,
+          "quantity_score": 0.9646,
+          "unit_match": true,
+          "final_score": 0.6329
+        },
+        {
+          "activity_id": "PIP-L5-040-129",
+          "activity_name": "HDD River Crossing Execution at KP 32+109",
+          "entity_score": 0.7811,
+          "semantic_score": 0.2573,
+          "quantity_score": 0.0,
+          "unit_match": true,
+          "final_score": 0.5068
+        },
+        {
+          "activity_id": "PIP-L5-012-031",
+          "activity_name": "HDD River Crossing Execution at KP 32+270",
+          "entity_score": 0.7639,
+          "semantic_score": 0.2475,
+          "quantity_score": 0.0,
+          "unit_match": true,
+          "final_score": 0.4944
+        },
+        {
+          "activity_id": "PIP-L5-017-103",
+          "activity_name": "Tie-in Welding at Chainage KP 31+797",
+          "entity_score": 0.7856,
+          "semantic_score": 0.1727,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4839
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "FILE-23DFDA1D-OBS-001",
+      "report_id": "FILE-23DFDA1D",
+      "raw_phrase": "DPR-2026-08-11 Field Voice Log VOICE_TRANSCRIPT 0.76 km of scada instrumentation cable laying \u2014 section 2b installed today near KP 31+932.",
+      "raw_quantity": 0.76,
+      "raw_unit": "km",
+      "normalized_quantity": 0.76,
+      "normalized_unit": "KM",
+      "conversion_applied": "Kilometers to KM (x1, already standard)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-9855": {
+    "decision": {
+      "match_id": "MATCH-9855",
+      "observation_id": "FILE-588D3637-OBS-001",
+      "selected_activity_id": "PIP-L5-052-009",
+      "entity_score": 1.0,
+      "semantic_score": 0.3781,
+      "quantity_score": 0.0,
+      "final_confidence_score": 0.6634,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-052-009 ('Spool Fabrication for Terminal Duliajan Tie-in Rack') scored 66.3% confidence (entity=100.0%, semantic=37.8%, quantity=0.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: HSE-L5-014-004 at 63.3%.) Note: the claimed quantity's unit did not match this candidate's planned unit, which weighed against it in the quantity score.",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-052-009",
+          "activity_name": "Spool Fabrication for Terminal Duliajan Tie-in Rack",
+          "entity_score": 1.0,
+          "semantic_score": 0.3781,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6634
+        },
+        {
+          "activity_id": "HSE-L5-014-004",
+          "activity_name": "Mock Emergency Drill near KP 34+484",
+          "entity_score": 1.0,
+          "semantic_score": 0.2755,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6326
+        },
+        {
+          "activity_id": "HSE-L5-045-005",
+          "activity_name": "Mock Emergency Drill near KP 20+529",
+          "entity_score": 1.0,
+          "semantic_score": 0.2714,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6314
+        },
+        {
+          "activity_id": "PIP-L5-028-006",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 5C",
+          "entity_score": 1.0,
+          "semantic_score": 0.112,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5836
+        },
+        {
+          "activity_id": "PIP-L5-046-013",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 5C",
+          "entity_score": 1.0,
+          "semantic_score": 0.112,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5836
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "FILE-588D3637-OBS-001",
+      "report_id": "FILE-588D3637",
+      "raw_phrase": "DPR-2026-08-12 Rakesh Sharma (Site Inspector) SPREADSHEET Approx 4765 kg of structural steel erected at Terminal Duliajan today.",
+      "raw_quantity": 4765.0,
+      "raw_unit": "kg",
+      "normalized_quantity": 4.765,
+      "normalized_unit": "TONNES",
+      "conversion_applied": "Kilograms to TONNES (div 1000)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-9630": {
+    "decision": {
+      "match_id": "MATCH-9630",
+      "observation_id": "FILE-A948C6B1-OBS-001",
+      "selected_activity_id": "PIP-L5-016-094",
+      "entity_score": 0.7333,
+      "semantic_score": 0.3062,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.6452,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-016-094 ('Spool Fabrication for Terminal Duliajan Tie-in Rack') scored 64.5% confidence (entity=73.3%, semantic=30.6%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: PIP-L5-037-026 at 48.9%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-016-094",
+          "activity_name": "Spool Fabrication for Terminal Duliajan Tie-in Rack",
+          "entity_score": 0.7333,
+          "semantic_score": 0.3062,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.6452
+        },
+        {
+          "activity_id": "PIP-L5-037-026",
+          "activity_name": "Spool Fabrication for Terminal Duliajan Tie-in Rack",
+          "entity_score": 0.7212,
+          "semantic_score": 0.3062,
+          "quantity_score": 0.0,
+          "unit_match": true,
+          "final_score": 0.4885
+        },
+        {
+          "activity_id": "PIP-L5-050-064",
+          "activity_name": "Tie-in Welding at Chainage KP 41+461",
+          "entity_score": 0.7215,
+          "semantic_score": 0.2902,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4839
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "FILE-A948C6B1-OBS-001",
+      "report_id": "FILE-A948C6B1",
+      "raw_phrase": "DPR-2026-08-19 Ritu Baruah (Site Engineer) SPREADSHEET NDT Radiography passed for 15 spools piping section at KP 41+572.",
+      "raw_quantity": 15.0,
+      "raw_unit": "spools",
+      "normalized_quantity": 15.0,
+      "normalized_unit": "SPOOLS",
+      "conversion_applied": "Spools preserved as-is (count-based unit, no conversion)",
+      "is_qa_clearance": true
+    }
+  },
+  "MATCH-5301": {
+    "decision": {
+      "match_id": "MATCH-5301",
+      "observation_id": "API-48F5EB6281-OBS-001",
+      "selected_activity_id": "PIP-L5-033-008",
+      "entity_score": 1.0,
+      "semantic_score": 0.4517,
+      "quantity_score": 0.6667,
+      "final_confidence_score": 0.7855,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-033-008 ('Tie-in Welding at Chainage KP 3+235') scored 78.5% confidence (entity=100.0%, semantic=45.2%, quantity=66.7%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: PIP-L5-039-005 at 50.9%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-033-008",
+          "activity_name": "Tie-in Welding at Chainage KP 3+235",
+          "entity_score": 1.0,
+          "semantic_score": 0.4517,
+          "quantity_score": 0.6667,
+          "unit_match": true,
+          "final_score": 0.7855
+        },
+        {
+          "activity_id": "PIP-L5-039-005",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 7A",
+          "entity_score": 0.75,
+          "semantic_score": 0.3216,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.509
+        },
+        {
+          "activity_id": "PIP-L5-042-025",
+          "activity_name": "Trenching & Backfilling \u2014 Section 8B",
+          "entity_score": 0.75,
+          "semantic_score": 0.318,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5079
+        },
+        {
+          "activity_id": "PIP-L5-012-010",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 9D",
+          "entity_score": 0.75,
+          "semantic_score": 0.3081,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5049
+        },
+        {
+          "activity_id": "PIP-L5-045-002",
+          "activity_name": "Trenching & Backfilling \u2014 Section 1B",
+          "entity_score": 0.75,
+          "semantic_score": 0.2873,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4987
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-48F5EB6281-OBS-001",
+      "report_id": "API-48F5EB6281",
+      "raw_phrase": "8 joints of piping tie-in work progressing near CGS Moran valve pit.",
+      "raw_quantity": 8.0,
+      "raw_unit": "joints",
+      "normalized_quantity": 8.0,
+      "normalized_unit": "JOINTS",
+      "conversion_applied": "Joints preserved as-is (count-based unit, no conversion)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-9219": {
+    "decision": {
+      "match_id": "MATCH-9219",
+      "observation_id": "API-4649A61F2F-OBS-001",
+      "selected_activity_id": "CIV-L5-036-011",
+      "entity_score": 1.0,
+      "semantic_score": 0.4017,
+      "quantity_score": 0.0,
+      "final_confidence_score": 0.6705,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate CIV-L5-036-011 ('Valve Pit Excavation at KP 33+206') scored 67.0% confidence (entity=100.0%, semantic=40.2%, quantity=0.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: CIV-L5-006-005 at 66.9%.) Note: the claimed quantity's unit did not match this candidate's planned unit, which weighed against it in the quantity score.",
+      "candidate_scores": [
+        {
+          "activity_id": "CIV-L5-036-011",
+          "activity_name": "Valve Pit Excavation at KP 33+206",
+          "entity_score": 1.0,
+          "semantic_score": 0.4017,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6705
+        },
+        {
+          "activity_id": "CIV-L5-006-005",
+          "activity_name": "Valve Pit Excavation at KP 5+755",
+          "entity_score": 1.0,
+          "semantic_score": 0.3959,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6688
+        },
+        {
+          "activity_id": "CIV-L5-015-018",
+          "activity_name": "Valve Pit Excavation at KP 1+201",
+          "entity_score": 1.0,
+          "semantic_score": 0.3856,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6657
+        },
+        {
+          "activity_id": "CIV-L5-016-023",
+          "activity_name": "Valve Pit Excavation at KP 29+309",
+          "entity_score": 1.0,
+          "semantic_score": 0.382,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6646
+        },
+        {
+          "activity_id": "CIV-L5-042-022",
+          "activity_name": "RCC Foundation Casting at Trunkline ROW",
+          "entity_score": 0.75,
+          "semantic_score": 0.2939,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5007
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-4649A61F2F-OBS-001",
+      "report_id": "API-4649A61F2F",
+      "raw_phrase": "Trenching activity ongoing somewhere along Trunkline ROW corridor, 500 meters completed.",
+      "raw_quantity": 500.0,
+      "raw_unit": "meters",
+      "normalized_quantity": 0.5,
+      "normalized_unit": "KM",
+      "conversion_applied": "Meters to KM (div 1000)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-6677": {
+    "decision": {
+      "match_id": "MATCH-6677",
+      "observation_id": "API-DA48B1D9D2-OBS-001",
+      "selected_activity_id": "ELE-L5-021-024",
+      "entity_score": 1.0,
+      "semantic_score": 0.4824,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.8447,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate ELE-L5-021-024 ('SCADA Instrumentation Cable Laying \u2014 Section 1B') scored 84.5% confidence (entity=100.0%, semantic=48.2%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: ELE-L5-023-021 at 83.7%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "ELE-L5-021-024",
+          "activity_name": "SCADA Instrumentation Cable Laying \u2014 Section 1B",
+          "entity_score": 1.0,
+          "semantic_score": 0.4824,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.8447
+        },
+        {
+          "activity_id": "ELE-L5-023-021",
+          "activity_name": "SCADA Instrumentation Cable Laying \u2014 Section 5C",
+          "entity_score": 1.0,
+          "semantic_score": 0.4557,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.8367
+        },
+        {
+          "activity_id": "ELE-L5-001-012",
+          "activity_name": "Transformer & MCC Panel Installation at CGS Duliajan",
+          "entity_score": 0.75,
+          "semantic_score": 0.4283,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.541
+        },
+        {
+          "activity_id": "ELE-L5-029-019",
+          "activity_name": "Cathodic Protection (CP) Test Station Installation at KP 38+069",
+          "entity_score": 0.75,
+          "semantic_score": 0.2909,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4998
+        },
+        {
+          "activity_id": "ELE-L5-043-016",
+          "activity_name": "Cathodic Protection (CP) Test Station Installation at KP 15+272",
+          "entity_score": 0.75,
+          "semantic_score": 0.2629,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4914
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-DA48B1D9D2-OBS-001",
+      "report_id": "API-DA48B1D9D2",
+      "raw_phrase": "Cable laying reported near CGS Duliajan substation, 0.4 km completed today.",
+      "raw_quantity": 0.4,
+      "raw_unit": "km",
+      "normalized_quantity": 0.4,
+      "normalized_unit": "KM",
+      "conversion_applied": "Kilometers to KM (x1, already standard)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-8016": {
+    "decision": {
+      "match_id": "MATCH-8016",
+      "observation_id": "API-D0414A271B-OBS-001",
+      "selected_activity_id": "ELE-L5-021-024",
+      "entity_score": 1.0,
+      "semantic_score": 0.494,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.8482,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate ELE-L5-021-024 ('SCADA Instrumentation Cable Laying \u2014 Section 1B') scored 84.8% confidence (entity=100.0%, semantic=49.4%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: ELE-L5-023-021 at 84.2%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "ELE-L5-021-024",
+          "activity_name": "SCADA Instrumentation Cable Laying \u2014 Section 1B",
+          "entity_score": 1.0,
+          "semantic_score": 0.494,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.8482
+        },
+        {
+          "activity_id": "ELE-L5-023-021",
+          "activity_name": "SCADA Instrumentation Cable Laying \u2014 Section 5C",
+          "entity_score": 1.0,
+          "semantic_score": 0.4748,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.8424
+        },
+        {
+          "activity_id": "ELE-L5-001-012",
+          "activity_name": "Transformer & MCC Panel Installation at CGS Duliajan",
+          "entity_score": 0.75,
+          "semantic_score": 0.4369,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5436
+        },
+        {
+          "activity_id": "ELE-L5-029-019",
+          "activity_name": "Cathodic Protection (CP) Test Station Installation at KP 38+069",
+          "entity_score": 0.75,
+          "semantic_score": 0.2866,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4985
+        },
+        {
+          "activity_id": "ELE-L5-043-016",
+          "activity_name": "Cathodic Protection (CP) Test Station Installation at KP 15+272",
+          "entity_score": 0.75,
+          "semantic_score": 0.2604,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4906
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-D0414A271B-OBS-001",
+      "report_id": "API-D0414A271B",
+      "raw_phrase": "Cable laying reported near CGS Duliajan substation, 500m completed today.",
+      "raw_quantity": 500.0,
+      "raw_unit": "m",
+      "normalized_quantity": 0.5,
+      "normalized_unit": "KM",
+      "conversion_applied": "Meters to KM (div 1000)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-7906": {
+    "decision": {
+      "match_id": "MATCH-7906",
+      "observation_id": "API-936E5783BB-OBS-001",
+      "selected_activity_id": "ELE-L5-021-024",
+      "entity_score": 1.0,
+      "semantic_score": 0.4713,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.8414,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate ELE-L5-021-024 ('SCADA Instrumentation Cable Laying \u2014 Section 1B') scored 84.1% confidence (entity=100.0%, semantic=47.1%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: ELE-L5-023-021 at 83.5%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "ELE-L5-021-024",
+          "activity_name": "SCADA Instrumentation Cable Laying \u2014 Section 1B",
+          "entity_score": 1.0,
+          "semantic_score": 0.4713,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.8414
+        },
+        {
+          "activity_id": "ELE-L5-023-021",
+          "activity_name": "SCADA Instrumentation Cable Laying \u2014 Section 5C",
+          "entity_score": 1.0,
+          "semantic_score": 0.4508,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.8352
+        },
+        {
+          "activity_id": "ELE-L5-001-012",
+          "activity_name": "Transformer & MCC Panel Installation at CGS Duliajan",
+          "entity_score": 0.75,
+          "semantic_score": 0.4288,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5411
+        },
+        {
+          "activity_id": "ELE-L5-029-019",
+          "activity_name": "Cathodic Protection (CP) Test Station Installation at KP 38+069",
+          "entity_score": 0.75,
+          "semantic_score": 0.2706,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4937
+        },
+        {
+          "activity_id": "ELE-L5-043-016",
+          "activity_name": "Cathodic Protection (CP) Test Station Installation at KP 15+272",
+          "entity_score": 0.75,
+          "semantic_score": 0.2457,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4862
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-936E5783BB-OBS-001",
+      "report_id": "API-936E5783BB",
+      "raw_phrase": "Cable laying reported near CGS Duliajan substation, 500ft completed today.",
+      "raw_quantity": 500.0,
+      "raw_unit": "ft",
+      "normalized_quantity": 152.4,
+      "normalized_unit": "M",
+      "conversion_applied": "Feet to M (x0.3048)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-9584": {
+    "decision": {
+      "match_id": "MATCH-9584",
+      "observation_id": "API-085516DD35-OBS-001",
+      "selected_activity_id": "CIV-L5-010-001",
+      "entity_score": 1.0,
+      "semantic_score": 0.4038,
+      "quantity_score": 0.0,
+      "final_confidence_score": 0.6711,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate CIV-L5-010-001 ('Access Road Construction near Pump Station Barekuri') scored 67.1% confidence (entity=100.0%, semantic=40.4%, quantity=0.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: CIV-L5-020-003 at 62.0%.) Note: the claimed quantity's unit did not match this candidate's planned unit, which weighed against it in the quantity score.",
+      "candidate_scores": [
+        {
+          "activity_id": "CIV-L5-010-001",
+          "activity_name": "Access Road Construction near Pump Station Barekuri",
+          "entity_score": 1.0,
+          "semantic_score": 0.4038,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6711
+        },
+        {
+          "activity_id": "CIV-L5-020-003",
+          "activity_name": "Access Road Construction near Booster Station Naharkatiya",
+          "entity_score": 1.0,
+          "semantic_score": 0.2323,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6197
+        },
+        {
+          "activity_id": "CIV-L5-005-004",
+          "activity_name": "RCC Foundation Casting at CGS Moran",
+          "entity_score": 0.5714,
+          "semantic_score": 0.0585,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.4818
+        },
+        {
+          "activity_id": "CIV-L5-006-005",
+          "activity_name": "Valve Pit Excavation at KP 5+755",
+          "entity_score": 0.5714,
+          "semantic_score": 0.4586,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4519
+        },
+        {
+          "activity_id": "CIV-L5-021-002",
+          "activity_name": "Valve Pit Excavation at KP 22+188",
+          "entity_score": 0.5714,
+          "semantic_score": 0.4444,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4476
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-085516DD35-OBS-001",
+      "report_id": "API-085516DD35",
+      "raw_phrase": "Constructed temporary mud pump pit near warehouse due to heavy rain, roughly 2 tonnes of debris removed.",
+      "raw_quantity": 2.0,
+      "raw_unit": "tonnes",
+      "normalized_quantity": 2.0,
+      "normalized_unit": "TONNES",
+      "conversion_applied": "Tonnes to TONNES (x1, already standard)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-8716": {
+    "decision": {
+      "match_id": "MATCH-8716",
+      "observation_id": "API-1CE868A417-OBS-001",
+      "selected_activity_id": "CIV-L5-010-001",
+      "entity_score": 1.0,
+      "semantic_score": 0.4038,
+      "quantity_score": 0.0,
+      "final_confidence_score": 0.6711,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate CIV-L5-010-001 ('Access Road Construction near Pump Station Barekuri') scored 67.1% confidence (entity=100.0%, semantic=40.4%, quantity=0.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: CIV-L5-020-003 at 62.0%.) Note: the claimed quantity's unit did not match this candidate's planned unit, which weighed against it in the quantity score.",
+      "candidate_scores": [
+        {
+          "activity_id": "CIV-L5-010-001",
+          "activity_name": "Access Road Construction near Pump Station Barekuri",
+          "entity_score": 1.0,
+          "semantic_score": 0.4038,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6711
+        },
+        {
+          "activity_id": "CIV-L5-020-003",
+          "activity_name": "Access Road Construction near Booster Station Naharkatiya",
+          "entity_score": 1.0,
+          "semantic_score": 0.2323,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6197
+        },
+        {
+          "activity_id": "CIV-L5-005-004",
+          "activity_name": "RCC Foundation Casting at CGS Moran",
+          "entity_score": 0.5714,
+          "semantic_score": 0.0585,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.4818
+        },
+        {
+          "activity_id": "CIV-L5-006-005",
+          "activity_name": "Valve Pit Excavation at KP 5+755",
+          "entity_score": 0.5714,
+          "semantic_score": 0.4586,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4519
+        },
+        {
+          "activity_id": "CIV-L5-021-002",
+          "activity_name": "Valve Pit Excavation at KP 22+188",
+          "entity_score": 0.5714,
+          "semantic_score": 0.4444,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4476
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-1CE868A417-OBS-001",
+      "report_id": "API-1CE868A417",
+      "raw_phrase": "Constructed temporary mud pump pit near warehouse due to heavy rain, roughly 2 tonnes of debris removed.",
+      "raw_quantity": 2.0,
+      "raw_unit": "tonnes",
+      "normalized_quantity": 2.0,
+      "normalized_unit": "TONNES",
+      "conversion_applied": "Tonnes to TONNES (x1, already standard)",
+      "is_qa_clearance": false
+    }
+  }
+}

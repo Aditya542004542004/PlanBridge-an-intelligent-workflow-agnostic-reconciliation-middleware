@@ -289,22 +289,50 @@
 
       <!-- ---------- TAB 2: PLANNER QUEUE ---------- -->
       <section data-tab-panel="queue" class="pb-fade-in max-w-5xl mx-auto">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 bg-white border border-[#E2E8F0] rounded-lg p-5 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 bg-white border border-[#E2E8F0] rounded-lg p-5 shadow-sm">
           <div>
             <h3 class="text-xl font-bold text-[#212529]">Planner Review Queue</h3>
-            <p class="text-xs text-gray-500 mt-1">Medium-confidence matches (60–85%) awaiting planner confirmation before progress is applied</p>
+            <p class="text-xs text-gray-500 mt-1">Review medium-confidence matches (60–85%) and audit rejected non-WBS noise</p>
           </div>
           <button id="queue-refresh" class="bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-md px-3 py-1.5 text-xs font-medium shadow-sm transition flex items-center gap-1.5 cursor-pointer">
             <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-gray-500"></i> Refresh
           </button>
         </div>
-        <div id="queue-list" class="space-y-5"></div>
-        <div id="queue-empty" class="hidden bg-white border border-[#E2E8F0] rounded-lg p-12 text-center shadow-sm">
-          <div class="w-12 h-12 rounded-full bg-orange-50 text-[#FD7E14] flex items-center justify-center mx-auto mb-3">
-            <i data-lucide="inbox" class="w-6 h-6"></i>
+
+        <!-- Sub-Navigation Pills -->
+        <div class="flex items-center gap-3 border-b border-gray-200 mb-5 bg-white px-4 pt-2 rounded-t-lg border border-b-0 border-[#E2E8F0]">
+          <button id="queue-subtab-pending" class="queue-subtab active pb-2.5 px-2 text-xs font-bold border-b-2 border-[#0055A4] text-[#0055A4] flex items-center gap-1.5 cursor-pointer transition">
+            <i data-lucide="clock" class="w-4 h-4"></i> Pending Review
+            <span id="queue-subtab-pending-count" class="bg-amber-100 text-amber-800 text-[11px] px-2 py-0.5 rounded-full font-bold">0</span>
+          </button>
+          <button id="queue-subtab-rejected" class="queue-subtab pb-2.5 px-2 text-xs font-medium text-gray-500 hover:text-gray-700 flex items-center gap-1.5 cursor-pointer transition">
+            <i data-lucide="ban" class="w-4 h-4 text-red-500"></i> Rejected & Unmatched Archive
+            <span id="queue-subtab-rejected-count" class="bg-gray-100 text-gray-700 text-[11px] px-2 py-0.5 rounded-full font-bold">0</span>
+          </button>
+        </div>
+
+        <!-- Panel 1: Pending Items -->
+        <div id="queue-panel-pending">
+          <div id="queue-list" class="space-y-5"></div>
+          <div id="queue-empty" class="hidden bg-white border border-[#E2E8F0] rounded-lg p-12 text-center shadow-sm">
+            <div class="w-12 h-12 rounded-full bg-orange-50 text-[#FD7E14] flex items-center justify-center mx-auto mb-3">
+              <i data-lucide="inbox" class="w-6 h-6"></i>
+            </div>
+            <p class="text-base font-bold text-[#212529]">Queue is clear</p>
+            <p class="text-xs text-gray-500 mt-1 max-w-sm mx-auto">Nothing needs your review right now — try the Matching Engine Simulator to generate a review case.</p>
           </div>
-          <p class="text-base font-bold text-[#212529]">Queue is clear</p>
-          <p class="text-xs text-gray-500 mt-1 max-w-sm mx-auto">Nothing needs your review right now — try the Matching Engine Simulator to generate a review case.</p>
+        </div>
+
+        <!-- Panel 2: Rejected Items Archive -->
+        <div id="queue-panel-rejected" class="hidden">
+          <div id="rejected-list" class="space-y-4"></div>
+          <div id="rejected-empty" class="hidden bg-white border border-[#E2E8F0] rounded-lg p-12 text-center shadow-sm">
+            <div class="w-12 h-12 rounded-full bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3">
+              <i data-lucide="shield-alert" class="w-6 h-6"></i>
+            </div>
+            <p class="text-base font-bold text-[#212529]">No rejected DPRs recorded</p>
+            <p class="text-xs text-gray-500 mt-1 max-w-sm mx-auto">Any auto-rejected noise or planner-rejected field reports will appear here for full audit traceability.</p>
+          </div>
         </div>
       </section>
 
@@ -493,8 +521,10 @@
     online: false,
     activeTab: "dashboard",
     activityNameCache: Object.create(null),
+    activitiesMap: Object.create(null),
     ingestedTextCache: Object.create(null),
     lastAuditIntegrity: null,
+    queueSubTab: "pending",
     mock: null,
   };
 
@@ -559,6 +589,60 @@
       return resp.json();
     }
     return mockApprove(queueId, activityId, reviewerId);
+  }
+
+  async function rejectQueueItem(queueId, reason, reviewerId) {
+    if (STATE.online) {
+      const resp = await apiFetch("/api/queue/reject", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ queue_id: queueId, reason: reason || null, reviewer_id: reviewerId || null }),
+      });
+      return resp.json();
+    }
+    return mockReject(queueId, reason, reviewerId);
+  }
+
+  async function getRejectedDprs() {
+    if (STATE.online) {
+      const resp = await apiFetch("/api/rejected-dprs");
+      return resp.json();
+    }
+    return mockGetRejected();
+  }
+
+  async function fetchActivities() {
+    if (STATE.online) {
+      try {
+        const resp = await apiFetch("/api/activities");
+        const list = await resp.json();
+        list.forEach(function (act) {
+          STATE.activitiesMap[act.activity_id] = act;
+          STATE.activityNameCache[act.activity_id] = act.activity_name;
+        });
+        return list;
+      } catch (_) {}
+    }
+    return [];
+  }
+
+  async function getActivityDetails(activityId) {
+    if (STATE.activitiesMap[activityId]) {
+      return STATE.activitiesMap[activityId];
+    }
+    if (STATE.online) {
+      try {
+        const resp = await apiFetch("/api/activities/" + encodeURIComponent(activityId));
+        const act = await resp.json();
+        STATE.activitiesMap[activityId] = act;
+        return act;
+      } catch (_) {}
+    }
+    if (STATE.mock && STATE.mock.activities) {
+      const found = STATE.mock.activities.find(function (a) { return a.activity_id === activityId; });
+      if (found) return found;
+    }
+    return null;
   }
 
   async function runIngest(rawContent, submittedBy, sourceType) {
@@ -645,10 +729,43 @@
       activities: activities,
       progress: progress,
       queue: Object.create(null),
+      rejected: [],
       ledger: [],
       counters: { autoAccept: 0, unmatched: 0 },
       idSeq: 1,
     };
+  }
+
+  function persistMockState() {
+    try {
+      if (STATE.mock) {
+        localStorage.setItem("planbridge_mock_state", JSON.stringify({
+          queue: STATE.mock.queue,
+          rejected: STATE.mock.rejected || [],
+          progress: STATE.mock.progress,
+          ledger: STATE.mock.ledger,
+          counters: STATE.mock.counters,
+          idSeq: STATE.mock.idSeq,
+        }));
+      }
+    } catch (_) {}
+  }
+
+  function restoreMockState() {
+    try {
+      const saved = localStorage.getItem("planbridge_mock_state");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && parsed.queue) {
+          STATE.mock.queue = parsed.queue;
+          STATE.mock.rejected = parsed.rejected || [];
+          if (parsed.progress) Object.assign(STATE.mock.progress, parsed.progress);
+          if (parsed.ledger) STATE.mock.ledger = parsed.ledger;
+          if (parsed.counters) STATE.mock.counters = parsed.counters;
+          if (parsed.idSeq) STATE.mock.idSeq = parsed.idSeq;
+        }
+      }
+    } catch (_) {}
   }
 
   function nextMockId(prefix) {
@@ -929,8 +1046,25 @@ function mockExtractEntities(text) {
       STATE.mock.queue[matchId] = { decision: decision, observation: { observation_id: observationId, raw_phrase: rawContent, report_id: reportId, normalized_quantity: normalized.normalized_quantity, normalized_unit: normalized.normalized_unit, is_qa_clearance: entities.is_qa_clearance } };
       queued = true;
     } else {
+      if (!STATE.mock.rejected) STATE.mock.rejected = [];
+      STATE.mock.rejected.unshift({
+        rejection_id: nextMockId("REJ"),
+        timestamp: new Date().toISOString(),
+        report_id: reportId,
+        observation_id: observationId,
+        raw_phrase: rawContent,
+        submitted_by: submittedBy || "Site Supervisor",
+        source_type: "FREE_TEXT",
+        rejection_type: "AUTO_UNMATCHED",
+        confidence_score: Math.round((decision.final_confidence_score || 0) * 100),
+        reasoning: decision.reasoning,
+        reviewer_id: null,
+        reviewer_note: "Auto-rejected by confidence gate (score below 60%).",
+      });
       STATE.mock.counters.unmatched += 1;
     }
+
+    persistMockState();
 
     return {
       report_id: reportId,
@@ -964,8 +1098,38 @@ function mockExtractEntities(text) {
     const evidence = await mockLogEvidence(activityId, obs.observation_id, updatedDecision.match_id, obs.normalized_quantity, obs.normalized_unit, category, obs.report_id, reviewerId || null);
 
     delete STATE.mock.queue[queueId];
+    persistMockState();
 
     return { decision: updatedDecision, progress_state: progress, evidence: evidence };
+  }
+
+  async function mockReject(queueId, reason, reviewerId) {
+    const entry = STATE.mock.queue[queueId];
+    if (!entry) { const err = new Error("No pending queue item with queue_id='" + queueId + "'."); err.status = 404; throw err; }
+
+    if (!STATE.mock.rejected) STATE.mock.rejected = [];
+    const rec = {
+      rejection_id: nextMockId("REJ"),
+      timestamp: new Date().toISOString(),
+      report_id: entry.observation ? entry.observation.report_id : "REPORT",
+      queue_id: queueId,
+      raw_phrase: entry.observation ? entry.observation.raw_phrase : "",
+      rejection_type: "PLANNER_REJECTED",
+      confidence_score: Math.round((entry.decision.final_confidence_score || 0) * 100),
+      reasoning: entry.decision.reasoning,
+      reviewer_id: reviewerId || "planner_user",
+      reviewer_note: reason || "No matching activity confirmed by planner.",
+    };
+    STATE.mock.rejected.unshift(rec);
+    delete STATE.mock.queue[queueId];
+    STATE.mock.counters.unmatched = (STATE.mock.counters.unmatched || 0) + 1;
+    persistMockState();
+    return { status: "rejected", queue_id: queueId, rejection_record: rec };
+  }
+
+  function mockGetRejected() {
+    const items = (STATE.mock && STATE.mock.rejected) ? STATE.mock.rejected : [];
+    return { total_count: items.length, items: items };
   }
 
   function mockGetDashboard() {
@@ -1163,7 +1327,7 @@ function mockExtractEntities(text) {
   async function loadTab(tabId) {
     try {
       if (tabId === "dashboard") await loadDashboard();
-      else if (tabId === "queue") await loadQueue();
+      else if (tabId === "queue") await Promise.all([loadQueue(), loadRejected()]);
       else if (tabId === "audit") await loadAuditLog();
       else if (tabId === "xer") await loadXerPreview();
     } catch (err) {
@@ -1240,6 +1404,75 @@ function mockExtractEntities(text) {
     else { badge.classList.add("hidden"); }
   }
 
+  function renderActivityInspectorHtml(act) {
+    const isQa = act.requires_qa_gate;
+    const prog = act.progress_state;
+    return '<div class="bg-[#F8FAFC] border border-blue-200 rounded-lg p-3.5 mt-2.5 pb-fade-in text-xs shadow-2xs">' +
+      '<div class="flex items-start justify-between gap-3 border-b border-gray-200 pb-2 mb-2.5">' +
+        '<div>' +
+          '<div class="flex items-center gap-1.5 flex-wrap">' +
+            '<span class="font-mono font-bold text-xs text-[#0055A4] bg-blue-50 border border-blue-200 px-1.5 py-0.5 rounded">' + escapeHtml(act.activity_id) + '</span>' +
+            (act.wbs_code ? '<span class="font-mono text-[11px] text-gray-600 bg-gray-100 border border-gray-200 px-1.5 py-0.5 rounded">' + escapeHtml(act.wbs_code) + '</span>' : '') +
+            '<span class="text-[11px] font-semibold text-gray-700 bg-gray-200 px-1.5 py-0.5 rounded">' + escapeHtml(act.discipline || "General") + '</span>' +
+          '</div>' +
+          '<h4 class="text-xs font-bold text-[#212529] mt-1.5 font-sans leading-snug">' + escapeHtml(act.activity_name) + '</h4>' +
+        '</div>' +
+        '<div class="text-right shrink-0 bg-white border border-gray-200 px-2.5 py-1 rounded shadow-2xs">' +
+          '<span class="text-[10px] text-gray-400 block font-medium">PLANNED SCOPE</span>' +
+          '<span class="font-mono font-bold text-xs text-gray-800">' + (act.planned_quantity || 0) + ' ' + escapeHtml(act.unit || "") + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-2.5">' +
+        '<div class="bg-white border border-gray-200 rounded p-1.5">' +
+          '<span class="text-[10px] text-gray-400 block font-medium">CHAINAGE / KP</span>' +
+          '<span class="font-mono font-bold text-xs text-blue-700">' + escapeHtml(act.location_kp || "N/A") + '</span>' +
+        '</div>' +
+        '<div class="bg-white border border-gray-200 rounded p-1.5">' +
+          '<span class="text-[10px] text-gray-400 block font-medium">FACILITY</span>' +
+          '<span class="font-medium text-xs text-gray-800 truncate block">' + escapeHtml(act.facility || "Trunkline ROW") + '</span>' +
+        '</div>' +
+        '<div class="bg-white border border-gray-200 rounded p-1.5">' +
+          '<span class="text-[10px] text-gray-400 block font-medium">SCHEDULE WINDOW</span>' +
+          '<span class="font-mono text-[11px] text-gray-700 block">' + escapeHtml(act.planned_start || "—") + ' → ' + escapeHtml(act.planned_finish || "—") + '</span>' +
+        '</div>' +
+        '<div class="bg-white border border-gray-200 rounded p-1.5">' +
+          '<span class="text-[10px] text-gray-400 block font-medium">QA GATE HOLD</span>' +
+          '<span class="font-bold text-[11px] ' + (isQa ? 'text-amber-700' : 'text-emerald-700') + '">' +
+            (isQa ? ('Hold: ' + escapeHtml(act.qa_gate_type || 'QA Req.')) : 'No QA Hold') +
+          '</span>' +
+        '</div>' +
+      '</div>' +
+      (prog ? (
+        '<div class="bg-white border border-gray-200 rounded p-2 flex items-center justify-between gap-3 text-[11px]">' +
+          '<div>' +
+            '<span class="text-gray-400 text-[10px] block">PHYSICAL CLAIMED</span>' +
+            '<span class="font-mono font-bold text-gray-800">' + (prog.physical_progress_pct || 0) + '% (' + (prog.physical_claimed_quantity || 0) + ' ' + escapeHtml(prog.unit || act.unit || '') + ')</span>' +
+          '</div>' +
+          '<div class="text-right">' +
+            '<span class="text-gray-400 text-[10px] block">QA-VERIFIED EARNED</span>' +
+            '<span class="font-mono font-bold text-emerald-700">' + (prog.verified_progress_pct || 0) + '% (' + (prog.verified_earned_quantity || 0) + ' ' + escapeHtml(prog.unit || act.unit || '') + ')</span>' +
+          '</div>' +
+        '</div>'
+      ) : '') +
+    '</div>';
+  }
+
+  function updateInspector(actId, targetContainer) {
+    if (!targetContainer) return;
+    targetContainer.innerHTML = '<div class="p-2.5 bg-blue-50/50 border border-blue-200 rounded text-center text-gray-500 text-xs flex items-center justify-center gap-1.5"><i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin text-[#0055A4]"></i> Fetching activity engineering details (' + escapeHtml(actId) + ')...</div>';
+    refreshIcons();
+    getActivityDetails(actId).then(function (act) {
+      if (!act) {
+        targetContainer.innerHTML = '<div class="p-2.5 bg-gray-50 border border-gray-200 rounded text-xs text-gray-500">Activity record (' + escapeHtml(actId) + ') not found in master schedule.</div>';
+        return;
+      }
+      targetContainer.innerHTML = renderActivityInspectorHtml(act);
+      refreshIcons();
+    }).catch(function () {
+      targetContainer.innerHTML = '<div class="p-2.5 bg-gray-50 border border-gray-200 rounded text-xs text-gray-500">Could not retrieve activity details.</div>';
+    });
+  }
+
   async function loadQueue() {
     const data = await getQueue();
     renderQueue(data);
@@ -1247,6 +1480,9 @@ function mockExtractEntities(text) {
 
   function renderQueue(data) {
     updateNavBadge("queue", data.pending_count);
+    const badge = document.getElementById("queue-subtab-pending-count");
+    if (badge) badge.textContent = data.pending_count;
+
     const list = document.getElementById("queue-list");
     list.innerHTML = "";
     document.getElementById("queue-empty").classList.toggle("hidden", data.items.length > 0);
@@ -1295,23 +1531,26 @@ function mockExtractEntities(text) {
     if (!entities.location_kp && !entities.action_verb) chipRow.appendChild(el("span", { class: "text-xs text-gray-400 italic" }, ["No structured entities detected client-side"]));
     card.appendChild(chipRow);
 
-    const tableWrap = el("div", { class: "border border-gray-200 rounded-lg overflow-hidden mb-4 bg-white shadow-xs" });
+    const tableWrap = el("div", { class: "border border-gray-200 rounded-lg overflow-hidden bg-white shadow-xs" });
     const table = el("table", { class: "w-full text-xs border-collapse" });
     table.innerHTML =
       '<thead><tr class="bg-[#F1F5F9] text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">' +
         '<th class="py-2 px-3 text-left w-12 font-bold">Select</th>' +
-        '<th class="py-2 px-3 text-left font-bold">Candidate</th>' +
+        '<th class="py-2 px-3 text-left font-bold">Candidate Activity (Click row to inspect)</th>' +
         '<th class="py-2 px-3 text-left font-bold w-16">Entity</th>' +
         '<th class="py-2 px-3 text-left font-bold w-16">Semantic</th>' +
         '<th class="py-2 px-3 text-left font-bold w-16">Qty</th>' +
         '<th class="py-2 px-3 text-left font-bold w-16">Final</th>' +
       '</tr></thead>';
     const tbody = document.createElement("tbody");
+
+    const inspectorWrap = el("div", { class: "mt-3 mb-4" });
+
     decision.candidate_scores.forEach(function (c, idx) {
       const tr = document.createElement("tr");
       const isDefault = c.activity_id === decision.selected_activity_id || (idx === 0 && !decision.selected_activity_id);
       const radioName = "cand-" + cssEscape(item.queue_id);
-      tr.className = "border-b border-gray-100 last:border-b-0 transition " +
+      tr.className = "border-b border-gray-100 last:border-b-0 transition cursor-pointer " +
         (isDefault ? "bg-blue-50/70 border-l-2 border-l-[#0055A4]" : "hover:bg-blue-50/50");
 
       tr.innerHTML =
@@ -1322,23 +1561,27 @@ function mockExtractEntities(text) {
         '<td class="py-2 px-3 align-middle font-mono text-xs font-medium text-gray-700 tabular-nums">' + (c.quantity_score * 100).toFixed(0) + '%</td>' +
         '<td class="py-2 px-3 align-middle font-mono text-xs font-medium text-gray-700 tabular-nums">' + (c.final_score * 100).toFixed(0) + '%</td>';
 
-      const radio = tr.querySelector('input[type="radio"]');
-      if (radio) {
-        radio.addEventListener("change", function () {
-          tbody.querySelectorAll("tr").forEach(function (r) {
-            r.className = "border-b border-gray-100 last:border-b-0 hover:bg-blue-50/50 transition";
-          });
-          if (radio.checked) {
-            tr.className = "border-b border-gray-100 last:border-b-0 bg-blue-50/70 border-l-2 border-l-[#0055A4] transition";
-          }
+      const selectThisRow = function () {
+        tbody.querySelectorAll("tr").forEach(function (r) {
+          r.className = "border-b border-gray-100 last:border-b-0 hover:bg-blue-50/50 transition cursor-pointer";
         });
-      }
+        tr.className = "border-b border-gray-100 last:border-b-0 bg-blue-50/70 border-l-2 border-l-[#0055A4] transition cursor-pointer";
+        const r = tr.querySelector('input[type="radio"]');
+        if (r) r.checked = true;
+        updateInspector(c.activity_id, inspectorWrap);
+      };
 
+      tr.addEventListener("click", selectThisRow);
       tbody.appendChild(tr);
     });
     table.appendChild(tbody);
     tableWrap.appendChild(table);
     card.appendChild(tableWrap);
+
+    // Initial inspector rendering for top/default candidate
+    const topActId = decision.selected_activity_id || (decision.candidate_scores[0] ? decision.candidate_scores[0].activity_id : null);
+    if (topActId) updateInspector(topActId, inspectorWrap);
+    card.appendChild(inspectorWrap);
 
     const reasoning = el("details", { class: "mb-4 text-xs group" });
     reasoning.innerHTML =
@@ -1351,6 +1594,14 @@ function mockExtractEntities(text) {
     card.appendChild(reasoning);
 
     const footer = el("div", { class: "flex items-center justify-end gap-3 pt-3 border-t border-gray-100" });
+
+    const rejectBtn = el("button", {
+      class: "border border-red-300 bg-red-50 hover:bg-red-100 text-red-700 font-semibold text-sm px-4 py-2 rounded-md shadow-sm transition flex items-center gap-1.5 cursor-pointer",
+      onclick: function () { handleReject(item.queue_id, card); },
+    });
+    rejectBtn.innerHTML = '<i data-lucide="ban" class="w-4 h-4"></i> Reject Match';
+    footer.appendChild(rejectBtn);
+
     const acceptBtn = el("button", {
       class: "bg-[#0055A4] hover:bg-[#004080] text-white font-semibold text-sm px-5 py-2 rounded-md shadow-sm transition flex items-center gap-2 cursor-pointer",
       onclick: function () { handleApprove(item.queue_id, card); },
@@ -1375,6 +1626,97 @@ function mockExtractEntities(text) {
     } catch (err) {
       showToast("Approval failed: " + err.message, "error");
     }
+  }
+
+  async function handleReject(queueId, cardEl) {
+    const reason = prompt("Enter rejection reason or leave default (e.g. 'Out-of-scope work', 'Duplicate DPR', 'Chainage mismatch'):", "Out-of-scope work / no matching schedule activity");
+    if (reason === null) return;
+    try {
+      await rejectQueueItem(queueId, reason, "planner_demo_user");
+      showToast("DPR rejected and logged in Rejected Archive.", "warn");
+      await Promise.all([loadQueue(), loadRejected(), loadDashboard()]);
+    } catch (err) {
+      showToast("Rejection failed: " + err.message, "error");
+    }
+  }
+
+  async function loadRejected() {
+    const data = await getRejectedDprs();
+    renderRejected(data);
+  }
+
+  function renderRejected(data) {
+    const countEl = document.getElementById("queue-subtab-rejected-count");
+    if (countEl) countEl.textContent = data.total_count || (data.items ? data.items.length : 0);
+    const list = document.getElementById("rejected-list");
+    const empty = document.getElementById("rejected-empty");
+    if (!list || !empty) return;
+    list.innerHTML = "";
+    empty.classList.toggle("hidden", data.items && data.items.length > 0);
+
+    if (data.items) {
+      data.items.forEach(function (item) {
+        list.appendChild(renderRejectedCard(item));
+      });
+    }
+    refreshIcons();
+  }
+
+  function renderRejectedCard(item) {
+    const isPlanner = item.rejection_type === "PLANNER_REJECTED";
+    const card = el("div", {
+      class: "bg-white border border-[#E2E8F0] border-l-4 " + (isPlanner ? "border-l-red-500" : "border-l-gray-400") + " rounded-lg p-5 shadow-xs pb-fade-in"
+    });
+
+    const header = el("div", { class: "flex items-start justify-between gap-3 mb-2 flex-wrap" });
+    const headerLeft = el("div", { class: "flex items-center gap-2 flex-wrap" });
+    headerLeft.appendChild(el("span", { class: "font-mono text-xs font-bold text-gray-700 bg-gray-100 px-2 py-0.5 rounded" }, [item.rejection_id || "REJ"]));
+    if (isPlanner) {
+      headerLeft.appendChild(el("span", { class: "bg-red-50 text-red-700 border border-red-200 text-xs font-semibold px-2 py-0.5 rounded flex items-center gap-1" }, [
+        el("i", { "data-lucide": "ban", class: "w-3 h-3 text-red-600" }),
+        "Planner Rejected"
+      ]));
+    } else {
+      headerLeft.appendChild(el("span", { class: "bg-gray-100 text-gray-700 border border-gray-300 text-xs font-semibold px-2 py-0.5 rounded flex items-center gap-1" }, [
+        el("i", { "data-lucide": "shield-x", class: "w-3 h-3 text-gray-500" }),
+        "Auto-Unmatched (<60%)"
+      ]));
+    }
+    header.appendChild(headerLeft);
+
+    const ts = item.timestamp ? new Date(item.timestamp).toLocaleString() : "Recent";
+    header.appendChild(el("span", { class: "text-xs text-gray-400 font-mono" }, [ts]));
+    card.appendChild(header);
+
+    const quote = el("blockquote", { class: "bg-[#F8FAFC] border-l-2 border-gray-300 p-2.5 rounded-r text-xs text-[#212529] font-medium my-2.5 italic" }, [
+      '"' + (item.raw_phrase || "No raw text available") + '"'
+    ]);
+    card.appendChild(quote);
+
+    const metaRow = el("div", { class: "flex items-center justify-between gap-3 text-xs text-gray-500 mt-2 pt-2 border-t border-gray-100 flex-wrap" });
+    const metaLeft = el("div", { class: "flex items-center gap-3 flex-wrap" });
+    if (item.submitted_by) metaLeft.appendChild(el("span", { class: "text-[11px]" }, ["Submitted by: ", el("strong", { class: "text-gray-700" }, [item.submitted_by])]));
+    if (item.report_id) metaLeft.appendChild(el("span", { class: "text-[11px] font-mono text-gray-400" }, ["Report: " + item.report_id]));
+    metaRow.appendChild(metaLeft);
+
+    const score = (typeof item.confidence_score === "number") ? item.confidence_score : 0;
+    metaRow.appendChild(el("span", { class: "font-mono font-bold text-xs " + (score >= 60 ? "text-amber-700" : "text-gray-500") }, ["Match Score: " + score + "%"]));
+    card.appendChild(metaRow);
+
+    if (item.reviewer_note || item.reasoning) {
+      const noteBox = el("div", { class: "mt-2.5 p-2 bg-amber-50/50 border border-amber-200/60 rounded text-[11px] text-gray-700 leading-relaxed" });
+      if (item.reviewer_note) {
+        noteBox.appendChild(el("p", { class: "font-semibold text-gray-800 mb-0.5" }, [
+          "Planner Note: ", el("span", { class: "font-normal italic text-gray-700" }, [item.reviewer_note])
+        ]));
+      }
+      if (item.reasoning) {
+        noteBox.appendChild(el("p", { class: "text-gray-500 text-[10px]" }, ["Engine: " + item.reasoning]));
+      }
+      card.appendChild(noteBox);
+    }
+
+    return card;
   }
 
   const PRESETS = {
@@ -1469,24 +1811,32 @@ function mockExtractEntities(text) {
       body.appendChild(row);
     }));
 
-    container.appendChild(stepCard(4, "Candidate Scores", "from PlanBridge API", function (body) {
+    container.appendChild(stepCard(4, "Candidate Scores & Engineering Detail", "from PlanBridge API", function (body) {
       if (!decision.candidate_scores.length) { body.appendChild(el("p", { class: "text-xs text-gray-500" }, ["No candidates were evaluated."])); return; }
+
+      const hint = el("div", { class: "text-[11px] text-gray-500 mb-2 flex items-center gap-1.5" });
+      hint.innerHTML = '<i data-lucide="info" class="w-3.5 h-3.5 text-[#0055A4]"></i> Click on any contender below to inspect full WBS engineering metadata from activities.json:';
+      body.appendChild(hint);
+
       const tableWrap = el("div", { class: "border border-gray-200 rounded-lg overflow-hidden bg-white shadow-xs" });
       const table = document.createElement("table");
       table.className = "w-full text-xs border-collapse";
       table.innerHTML =
         '<thead><tr class="bg-[#F1F5F9] text-xs font-semibold text-gray-600 uppercase border-b border-gray-200 text-left">' +
-          '<th class="py-2 px-3 font-bold">Activity</th>' +
+          '<th class="py-2 px-3 font-bold">Activity (Click to inspect)</th>' +
           '<th class="py-2 px-3 font-bold w-16">Entity</th>' +
           '<th class="py-2 px-3 font-bold w-16">Semantic</th>' +
           '<th class="py-2 px-3 font-bold w-16">Qty</th>' +
           '<th class="py-2 px-3 font-bold w-16">Final</th>' +
         '</tr></thead>';
       const tbody = document.createElement("tbody");
+
+      const inspectorWrap = el("div", { class: "mt-3" });
+
       decision.candidate_scores.forEach(function (c) {
         const tr = document.createElement("tr");
         const isSelected = c.activity_id === decision.selected_activity_id;
-        tr.className = "border-b border-gray-100 last:border-b-0 transition " +
+        tr.className = "border-b border-gray-100 last:border-b-0 transition cursor-pointer " +
           (isSelected ? "bg-blue-50/70 border-l-2 border-l-[#0055A4]" : "hover:bg-blue-50/50");
         tr.innerHTML =
           '<td class="py-2 px-3 align-middle"><span class="font-mono text-sm font-bold text-[#0055A4]">' + escapeHtml(c.activity_id) + '</span><div class="text-xs text-gray-600 font-sans mt-0.5">' + escapeHtml(truncate(c.activity_name, 48)) + '</div></td>' +
@@ -1494,11 +1844,24 @@ function mockExtractEntities(text) {
           '<td class="py-2 px-3 align-middle font-mono font-medium text-gray-700 tabular-nums">' + (c.semantic_score * 100).toFixed(0) + '%</td>' +
           '<td class="py-2 px-3 align-middle font-mono font-medium text-gray-700 tabular-nums">' + (c.quantity_score * 100).toFixed(0) + '%</td>' +
           '<td class="py-2 px-3 align-middle font-mono font-bold text-[#0055A4] tabular-nums">' + (c.final_score * 100).toFixed(0) + '%</td>';
+
+        tr.addEventListener("click", function () {
+          tbody.querySelectorAll("tr").forEach(function (r) {
+            r.className = "border-b border-gray-100 last:border-b-0 hover:bg-blue-50/50 transition cursor-pointer";
+          });
+          tr.className = "border-b border-gray-100 last:border-b-0 bg-blue-50/70 border-l-2 border-l-[#0055A4] transition cursor-pointer";
+          updateInspector(c.activity_id, inspectorWrap);
+        });
+
         tbody.appendChild(tr);
       });
       table.appendChild(tbody);
       tableWrap.appendChild(table);
       body.appendChild(tableWrap);
+
+      const topActId = decision.selected_activity_id || (decision.candidate_scores[0] ? decision.candidate_scores[0].activity_id : null);
+      if (topActId) updateInspector(topActId, inspectorWrap);
+      body.appendChild(inspectorWrap);
     }));
 
     refreshIcons();
@@ -1692,6 +2055,33 @@ function mockExtractEntities(text) {
     document.getElementById("connection-pill").addEventListener("click", function () { initConnectivity(false); });
   }
 
+  function wireQueueSubtabs() {
+    const pendingBtn = document.getElementById("queue-subtab-pending");
+    const rejectedBtn = document.getElementById("queue-subtab-rejected");
+    const pendingPanel = document.getElementById("queue-panel-pending");
+    const rejectedPanel = document.getElementById("queue-panel-rejected");
+
+    if (!pendingBtn || !rejectedBtn) return;
+
+    pendingBtn.addEventListener("click", function () {
+      STATE.queueSubTab = "pending";
+      pendingBtn.className = "queue-subtab active pb-2.5 px-2 text-xs font-bold border-b-2 border-[#0055A4] text-[#0055A4] flex items-center gap-1.5 cursor-pointer transition";
+      rejectedBtn.className = "queue-subtab pb-2.5 px-2 text-xs font-medium text-gray-500 hover:text-gray-700 flex items-center gap-1.5 cursor-pointer transition";
+      pendingPanel.classList.remove("hidden");
+      rejectedPanel.classList.add("hidden");
+      loadQueue();
+    });
+
+    rejectedBtn.addEventListener("click", function () {
+      STATE.queueSubTab = "rejected";
+      rejectedBtn.className = "queue-subtab active pb-2.5 px-2 text-xs font-bold border-b-2 border-[#0055A4] text-[#0055A4] flex items-center gap-1.5 cursor-pointer transition";
+      pendingBtn.className = "queue-subtab pb-2.5 px-2 text-xs font-medium text-gray-500 hover:text-gray-700 flex items-center gap-1.5 cursor-pointer transition";
+      rejectedPanel.classList.remove("hidden");
+      pendingPanel.classList.add("hidden");
+      loadRejected();
+    });
+  }
+
   function wireMisc() {
     document.getElementById("sidebar-open").addEventListener("click", openSidebar);
     document.getElementById("sidebar-close").addEventListener("click", closeSidebar);
@@ -1700,22 +2090,31 @@ function mockExtractEntities(text) {
     document.getElementById("activity-search").addEventListener("input", function () { if (lastDashboardData) renderProgressTable(lastDashboardData.activities_progress_list); });
     document.getElementById("show-all-activities").addEventListener("change", function () { if (lastDashboardData) renderProgressTable(lastDashboardData.activities_progress_list); });
 
-    document.getElementById("queue-refresh").addEventListener("click", function () { loadQueue(); });
+    document.getElementById("queue-refresh").addEventListener("click", function () {
+      if (STATE.queueSubTab === "rejected") loadRejected();
+      else loadQueue();
+    });
     document.getElementById("audit-refresh").addEventListener("click", function () { loadAuditLog(); });
   }
 
   async function init() {
     STATE.mock = seedMockData();
+    restoreMockState();
     renderNav();
     setActiveTab("dashboard");
     wireSimulator();
     wireXerTab();
     wireConnectionPill();
+    wireQueueSubtabs();
     wireMisc();
     refreshIcons();
 
     await initConnectivity(true);
-    await seedOfflineDemoState();
+    if (STATE.online) {
+      await fetchActivities().catch(function () {});
+    } else {
+      await seedOfflineDemoState();
+    }
     await loadTab(STATE.activeTab);
 
     setInterval(function () { if (!STATE.online) initConnectivity(false); }, RECONNECT_POLL_MS);

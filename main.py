@@ -56,7 +56,7 @@ from confidence_gate import ConfidenceGate
 from entity_extractor import EntityExtractor
 from ingestion import IngestionEngine
 from progress_engine import ProgressEngine
-from schemas import EvidenceLog, MatchDecision, ProgressState, ReportEvent, SourceType
+from schemas import EvidenceLog, MatchDecision, NormalizedObservation, ProgressState, ReportEvent, SourceType
 from scoring_engine import ScoringEngine
 from unit_normalizer import UnitNormalizer
 from vector_ranker import VectorRanker
@@ -76,8 +76,72 @@ if not FRONTEND_DIR.exists():
 
 ACTIVITIES_PATH = Path(os.environ.get("PLANBRIDGE_ACTIVITIES_PATH", str(DATA_DIR / "activities.json")))
 LEDGER_PATH = Path(os.environ.get("PLANBRIDGE_LEDGER_PATH", str(DATA_DIR / "evidence_ledger.json")))
+QUEUE_PATH = Path(os.environ.get("PLANBRIDGE_QUEUE_PATH", str(DATA_DIR / "pending_queue.json")))
+REJECTED_PATH = Path(os.environ.get("PLANBRIDGE_REJECTED_PATH", str(DATA_DIR / "rejected_dprs.json")))
 
 BENCHMARK_FALSE_AUTO_ACCEPT_RATE = 0.00
+
+
+def _save_pending_queue(queue_dict: dict[str, Any], path: Path) -> None:
+    try:
+        serializable = {}
+        for qid, item in queue_dict.items():
+            dec = item["decision"]
+            obs = item["observation"]
+            serializable[qid] = {
+                "decision": dec.model_dump(mode="json") if hasattr(dec, "model_dump") else dec,
+                "observation": obs.model_dump(mode="json") if hasattr(obs, "model_dump") else obs,
+            }
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = path.with_suffix(".tmp")
+        with tmp_path.open("w", encoding="utf-8") as f:
+            json.dump(serializable, f, indent=2)
+        tmp_path.replace(path)
+    except Exception as exc:
+        log.warning("Could not persist pending queue to %s: %s", path, exc)
+
+
+def _load_pending_queue(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            raw = json.load(f)
+        loaded = {}
+        for qid, item in raw.items():
+            loaded[qid] = {
+                "decision": MatchDecision.model_validate(item["decision"]),
+                "observation": NormalizedObservation.model_validate(item["observation"]),
+            }
+        log.info("Loaded %d pending review items from %s", len(loaded), path)
+        return loaded
+    except Exception as exc:
+        log.warning("Could not load pending queue from %s: %s", path, exc)
+        return {}
+
+
+def _save_rejected_dprs(rejected_list: list[dict[str, Any]], path: Path) -> None:
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = path.with_suffix(".tmp")
+        with tmp_path.open("w", encoding="utf-8") as f:
+            json.dump(rejected_list, f, indent=2)
+        tmp_path.replace(path)
+    except Exception as exc:
+        log.warning("Could not persist rejected DPRs to %s: %s", path, exc)
+
+
+def _load_rejected_dprs(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    try:
+        with path.open("r", encoding="utf-8") as f:
+            items = json.load(f)
+        log.info("Loaded %d rejected DPR records from %s", len(items), path)
+        return items
+    except Exception as exc:
+        log.warning("Could not load rejected DPRs from %s: %s", path, exc)
+        return []
 
 
 # --------------------------------------------------------------------------
@@ -153,6 +217,23 @@ class ApproveResponse(BaseModel):
     decision: MatchDecision
     progress_state: ProgressState
     evidence: EvidenceLog
+
+
+class RejectRequest(BaseModel):
+    queue_id: str = Field(..., min_length=1)
+    reason: Optional[str] = Field(default=None, description="Planner reasoning or note for rejecting this match.")
+    reviewer_id: Optional[str] = Field(default=None, description="Identifier of the human planner rejecting this match.")
+
+
+class RejectResponse(BaseModel):
+    status: str = "rejected"
+    queue_id: str
+    rejection_record: dict[str, Any]
+
+
+class RejectedDprResponse(BaseModel):
+    total_count: int
+    items: list[dict[str, Any]]
 
 
 class AuditLogsResponse(BaseModel):
@@ -251,8 +332,10 @@ async def lifespan(app: FastAPI):
         except Exception as exc:
             log.warning("Could not replay evidence ledger on startup: %s", exc)
 
-    # In-memory planner review queue
-    app.state.pending_queue = {}
+    # Persistent planner review queue & rejected DPRs
+    app.state.pending_queue = _load_pending_queue(QUEUE_PATH)
+    app.state.rejected_dprs = _load_rejected_dprs(REJECTED_PATH)
+    unmatched_count = len(app.state.rejected_dprs)
 
     # Session-lifetime counters for the dashboard
     app.state.metrics = {"auto_accept_count": auto_count, "unmatched_count": unmatched_count}
@@ -344,6 +427,25 @@ async def ingest_report(payload: IngestRequest, request: Request) -> IngestRespo
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Ingestion/normalization failed: {exc}") from exc
 
+    if not observations:
+        rejection_record = {
+            "rejection_id": f"REJ-{uuid.uuid4().hex[:8].upper()}",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "report_id": report_id,
+            "observation_id": None,
+            "raw_phrase": payload.raw_content,
+            "submitted_by": payload.submitted_by,
+            "source_type": str(payload.source_type),
+            "rejection_type": "AUTO_UNMATCHED",
+            "confidence_score": 0.0,
+            "reasoning": "No parseable physical quantity claim detected (administrative, HSE, or noise log).",
+            "reviewer_id": None,
+            "reviewer_note": "Filtered out at Ingestion / Normalization Stage 1.",
+        }
+        state.rejected_dprs.insert(0, rejection_record)
+        _save_rejected_dprs(state.rejected_dprs, REJECTED_PATH)
+        state.metrics["unmatched_count"] = len(state.rejected_dprs)
+
     results: list[ObservationResult] = []
     for obs in observations:
         try:
@@ -371,9 +473,26 @@ async def ingest_report(payload: IngestRequest, request: Request) -> IngestRespo
                 ) from exc
         elif decision.decision_type == "HUMAN_REVIEW":
             state.pending_queue[decision.match_id] = {"decision": decision, "observation": obs}
+            _save_pending_queue(state.pending_queue, QUEUE_PATH)
             queued = True
         else:  # UNMATCHED
-            state.metrics["unmatched_count"] += 1
+            rejection_record = {
+                "rejection_id": f"REJ-{uuid.uuid4().hex[:8].upper()}",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "report_id": report_id,
+                "observation_id": obs.observation_id,
+                "raw_phrase": obs.raw_phrase,
+                "submitted_by": payload.submitted_by,
+                "source_type": str(payload.source_type),
+                "rejection_type": "AUTO_UNMATCHED",
+                "confidence_score": round(decision.final_confidence_score * 100, 1),
+                "reasoning": decision.reasoning,
+                "reviewer_id": None,
+                "reviewer_note": "Auto-rejected by confidence gate (score below 60% or unmatchable noise).",
+            }
+            state.rejected_dprs.insert(0, rejection_record)
+            _save_rejected_dprs(state.rejected_dprs, REJECTED_PATH)
+            state.metrics["unmatched_count"] = len(state.rejected_dprs)
 
         results.append(ObservationResult(
             observation_id=obs.observation_id,
@@ -461,6 +580,24 @@ async def ingest_file(request: Request, file: UploadFile = File(...)) -> BatchIn
         )
         
         observations = state.ingestion_engine.process_report(report)
+        if not observations:
+            rejection_record = {
+                "rejection_id": f"REJ-{uuid.uuid4().hex[:8].upper()}",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "report_id": report_id,
+                "observation_id": None,
+                "raw_phrase": line,
+                "submitted_by": f"Contractor ({file.filename})",
+                "source_type": "SPREADSHEET",
+                "rejection_type": "AUTO_UNMATCHED",
+                "confidence_score": 0.0,
+                "reasoning": "No parseable quantity claim detected in contractor row.",
+                "reviewer_id": None,
+                "reviewer_note": "Batch file line skipped by normalizer.",
+            }
+            state.rejected_dprs.insert(0, rejection_record)
+            unmatched_count += 1
+
         for obs in observations:
             entities = state.entity_extractor.extract(obs.raw_phrase)
             shortlist = state.candidate_narrower.narrow_candidates(obs, entities)
@@ -477,8 +614,26 @@ async def ingest_file(request: Request, file: UploadFile = File(...)) -> BatchIn
                 state.pending_queue[decision.match_id] = {"decision": decision, "observation": obs}
                 queued_count += 1
             else:
-                state.metrics["unmatched_count"] += 1
+                rejection_record = {
+                    "rejection_id": f"REJ-{uuid.uuid4().hex[:8].upper()}",
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "report_id": report_id,
+                    "observation_id": obs.observation_id,
+                    "raw_phrase": obs.raw_phrase,
+                    "submitted_by": f"Contractor ({file.filename})",
+                    "source_type": "SPREADSHEET",
+                    "rejection_type": "AUTO_UNMATCHED",
+                    "confidence_score": round(decision.final_confidence_score * 100, 1),
+                    "reasoning": decision.reasoning,
+                    "reviewer_id": None,
+                    "reviewer_note": "Auto-rejected by confidence gate (score below 60%).",
+                }
+                state.rejected_dprs.insert(0, rejection_record)
                 unmatched_count += 1
+
+    _save_pending_queue(state.pending_queue, QUEUE_PATH)
+    _save_rejected_dprs(state.rejected_dprs, REJECTED_PATH)
+    state.metrics["unmatched_count"] = len(state.rejected_dprs)
 
     return BatchIngestSummary(
         total_processed=len(raw_lines),
@@ -565,8 +720,83 @@ async def approve_queue_item(payload: ApproveRequest, request: Request) -> Appro
         raise HTTPException(status_code=500, detail=f"Failed to apply approved decision: {exc}") from exc
 
     del state.pending_queue[payload.queue_id]
+    _save_pending_queue(state.pending_queue, QUEUE_PATH)
 
     return ApproveResponse(decision=updated_decision, progress_state=progress_state, evidence=evidence)
+
+
+# --------------------------------------------------------------------------
+# POST /api/queue/reject
+# --------------------------------------------------------------------------
+@app.post("/api/queue/reject", response_model=RejectResponse, tags=["review-queue"])
+async def reject_queue_item(payload: RejectRequest, request: Request) -> RejectResponse:
+    """
+    Planner explicitly rejects a pending match recommendation when none of the
+    contenders match the field report or when work is out of scope.
+    Moves the item into the persistent Rejected DPRs Archive.
+    """
+    state = request.app.state
+    entry = state.pending_queue.get(payload.queue_id)
+    if entry is None:
+        raise HTTPException(status_code=404, detail=f"No pending queue item with queue_id='{payload.queue_id}'.")
+
+    decision: MatchDecision = entry["decision"]
+    observation = entry["observation"]
+
+    rejection_record = {
+        "rejection_id": f"REJ-{uuid.uuid4().hex[:8].upper()}",
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "report_id": observation.report_id,
+        "queue_id": payload.queue_id,
+        "raw_phrase": observation.raw_phrase,
+        "rejection_type": "PLANNER_REJECTED",
+        "confidence_score": round(decision.final_confidence_score * 100, 1),
+        "reasoning": decision.reasoning,
+        "reviewer_id": payload.reviewer_id or "planner_user",
+        "reviewer_note": payload.reason or "No matching activity confirmed by planner (rejected from queue).",
+    }
+
+    del state.pending_queue[payload.queue_id]
+    _save_pending_queue(state.pending_queue, QUEUE_PATH)
+
+    state.rejected_dprs.insert(0, rejection_record)
+    _save_rejected_dprs(state.rejected_dprs, REJECTED_PATH)
+    state.metrics["unmatched_count"] = len(state.rejected_dprs)
+
+    return RejectResponse(status="rejected", queue_id=payload.queue_id, rejection_record=rejection_record)
+
+
+# --------------------------------------------------------------------------
+# GET /api/rejected-dprs
+# --------------------------------------------------------------------------
+@app.get("/api/rejected-dprs", response_model=RejectedDprResponse, tags=["review-queue"])
+async def get_rejected_dprs(request: Request) -> RejectedDprResponse:
+    """Returns all rejected DPRs (both auto-unmatched noise and manual planner rejections)."""
+    state = request.app.state
+    return RejectedDprResponse(total_count=len(state.rejected_dprs), items=state.rejected_dprs)
+
+
+# --------------------------------------------------------------------------
+# GET /api/activities & GET /api/activities/{activity_id}
+# --------------------------------------------------------------------------
+@app.get("/api/activities", tags=["schedule"])
+async def get_activities(request: Request) -> list[dict[str, Any]]:
+    """Returns all WBS schedule activities from activities.json."""
+    return request.app.state.activities
+
+
+@app.get("/api/activities/{activity_id}", tags=["schedule"])
+async def get_activity_detail(activity_id: str, request: Request) -> dict[str, Any]:
+    """Returns the full Primavera P6 / WBS metadata for a specific activity from activities.json."""
+    state = request.app.state
+    for act in state.activities:
+        if act.get("activity_id") == activity_id:
+            res = dict(act)
+            prog = state.progress_engine.get_progress_state(activity_id)
+            if prog:
+                res["progress_state"] = prog.model_dump(mode="json") if hasattr(prog, "model_dump") else prog
+            return res
+    raise HTTPException(status_code=404, detail=f"Activity '{activity_id}' not found in schedule master.")
 
 
 # --------------------------------------------------------------------------
