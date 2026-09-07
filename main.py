@@ -307,6 +307,15 @@ async def serve_emblem():
     raise HTTPException(status_code=404, detail="Emblem asset not found")
 
 
+@app.get("/minister.jpg", include_in_schema=False)
+async def serve_minister_photo():
+    """Serves the official portrait of the Union Minister."""
+    photo_path = FRONTEND_DIR / "minister.jpg"
+    if photo_path.exists():
+        return FileResponse(photo_path, media_type="image/jpeg")
+    raise HTTPException(status_code=404, detail="Minister photo not found")
+
+
 if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 

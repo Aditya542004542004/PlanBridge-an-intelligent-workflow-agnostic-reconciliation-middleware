@@ -118,7 +118,7 @@
   <!-- Top Masthead Bar -->
   <header class="bg-white border-b border-[#E2E8F0] shadow-sm px-6 py-3 shrink-0 z-40 flex items-center justify-between gap-4">
     <!-- Left Section: Ashoka National Emblem + Bilingual Ministry Branding -->
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-3.5">
       <button id="sidebar-open" class="lg:hidden text-gray-700 hover:text-[#0055A4] p-1.5 -ml-2 rounded hover:bg-gray-100 mr-1" aria-label="Open menu">
         <i data-lucide="menu" class="w-5 h-5"></i>
       </button>
@@ -126,7 +126,7 @@
         <!-- Official State Emblem of India (Ashoka Lion Capital) -->
         <img src="static/emblem.svg" onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src='emblem.svg';}" class="h-12 w-auto object-contain" alt="State Emblem of India" title="State Emblem of India">
       </div>
-      <div class="flex flex-col border-l border-[#E2E8F0] pl-3">
+      <div class="flex flex-col border-l border-[#E2E8F0] pl-3.5">
         <span class="text-xs font-bold text-[#212529] tracking-tight leading-tight">पेट्रोलियम एवं प्राकृतिक गैस मंत्रालय</span>
         <span class="text-[11px] font-semibold text-[#475569] tracking-tight leading-tight">MINISTRY OF PETROLEUM AND NATURAL GAS</span>
         <span class="text-[10px] font-medium text-gray-500 uppercase tracking-wider leading-tight">Government of India</span>
@@ -134,16 +134,30 @@
     </div>
 
     <!-- Center Section: Portal Name & Subtitle -->
-    <div class="text-center hidden md:block">
+    <div class="text-center hidden xl:block">
       <span class="text-2xl font-bold text-[#0055A4] tracking-tight block leading-none">PlanBridge</span>
       <span class="text-xs text-gray-500 font-medium block mt-1">OIL Planning-to-Execution Reconciliation Console</span>
     </div>
 
-    <!-- Right Section: Clean Status Indicator (no hackathon text, no bulky pills) -->
-    <div class="flex items-center gap-3">
-      <button id="connection-pill" title="Click to test connection" class="flex items-center text-xs font-medium text-gray-600 bg-transparent border-0 p-0 shadow-none cursor-pointer">
-        <span id="connection-dot" class="h-2.5 w-2.5 rounded-full bg-[#198754] inline-block mr-2 animate-pulse"></span>
-        <span id="connection-label" class="text-xs font-medium text-gray-600">Live · Connected to API</span>
+    <!-- Right Section: Minister Portrait & Name + Live Dot Indicator -->
+    <div class="flex items-center gap-3.5">
+      <!-- Minister of Petroleum & Natural Gas Card -->
+      <div class="flex items-center gap-3 bg-[#F8FAFC] border border-[#E2E8F0] px-3.5 py-1.5 rounded-lg shadow-xs">
+        <img src="static/minister.jpg" onerror="if(!this.dataset.tried){this.dataset.tried=1;this.src='minister.jpg';}" 
+             class="rounded-full object-cover object-top ring-2 ring-[#FD7E14] shadow-sm shrink-0" 
+             style="width: 52px; height: 52px;"
+             alt="Shri Hardeep Singh Puri" title="Shri Hardeep Singh Puri — Hon'ble Union Minister of Petroleum & Natural Gas">
+        <div class="flex flex-col text-left">
+          <span class="text-xs sm:text-sm font-bold text-[#212529] tracking-tight leading-snug">Shri Hardeep Singh Puri</span>
+          <span class="text-[10.5px] font-semibold text-[#0055A4] leading-tight">Hon'ble Union Minister</span>
+          <span class="text-[9.5px] font-medium text-gray-500 leading-tight">Petroleum &amp; Natural Gas</span>
+        </div>
+      </div>
+
+      <!-- Status Indicator Dot -->
+      <button id="connection-pill" title="Live · Connected to API (Click to test)" class="flex items-center bg-transparent border-0 p-1 shadow-none cursor-pointer" aria-label="Connection Status">
+        <span id="connection-dot" class="h-2.5 w-2.5 rounded-full bg-[#198754] inline-block animate-pulse"></span>
+        <span id="connection-label" class="hidden"></span>
       </button>
     </div>
   </header>
@@ -1641,15 +1655,17 @@
     const pill = document.getElementById("connection-pill");
     const dot = document.getElementById("connection-dot");
     const label = document.getElementById("connection-label");
-    if (!pill || !dot || !label) return;
+    if (!pill || !dot) return;
     if (online) {
-      pill.className = "flex items-center text-xs font-medium text-gray-600 bg-transparent border-0 p-0 shadow-none cursor-pointer";
-      dot.className = "h-2.5 w-2.5 rounded-full bg-[#198754] inline-block mr-2 animate-pulse";
-      label.textContent = "Live · Connected to API";
+      pill.className = "flex items-center bg-transparent border-0 p-1 shadow-none cursor-pointer";
+      dot.className = "h-2.5 w-2.5 rounded-full bg-[#198754] inline-block animate-pulse";
+      pill.title = "Live · Connected to API (Click to test)";
+      if (label) label.textContent = "";
     } else {
-      pill.className = "flex items-center text-xs font-medium text-amber-600 bg-transparent border-0 p-0 shadow-none cursor-pointer";
-      dot.className = "h-2.5 w-2.5 rounded-full bg-[#FD7E14] inline-block mr-2 pb-pulse-dot";
-      label.textContent = "Offline · Demo Mode";
+      pill.className = "flex items-center bg-transparent border-0 p-1 shadow-none cursor-pointer";
+      dot.className = "h-2.5 w-2.5 rounded-full bg-[#FD7E14] inline-block pb-pulse-dot";
+      pill.title = "Offline · Demo Mode (Click to test)";
+      if (label) label.textContent = "";
     }
   }
 
