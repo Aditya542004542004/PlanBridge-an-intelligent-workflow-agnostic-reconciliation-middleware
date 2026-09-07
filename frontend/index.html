@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PlanBridge — OIL Reconciliation Console</title>
-<meta name="description" content="PlanBridge — Intelligent Planning-to-Execution Reconciliation Middleware for Oil India Limited (SIH 2026, PS26122).">
+<meta name="description" content="PlanBridge — Intelligent Planning-to-Execution Reconciliation Middleware for Oil India Limited.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,16 +16,22 @@
     theme: {
       extend: {
         colors: {
-          'oil-navy':    '#0b192c',
-          'oil-navy-2':  '#0f2038',
-          'oil-blue':    '#1e3e62',
-          'oil-blue-2':  '#274a72',
-          'oil-amber':   '#d97706',
-          'oil-emerald': '#059669',
-          'oil-danger':  '#b3261e',
-          'oil-ink':     '#e9eff6',
-          'oil-mute':    '#8fa5c2',
-          'oil-line':    'rgba(233,239,246,0.09)',
+          'gov-blue':    '#0055A4',
+          'gov-green':   '#2A7B4C',
+          'gov-orange':  '#FD7E14',
+          'gov-bg':      '#F4F6F9',
+          'gov-text':    '#212529',
+          'gov-border':  '#E2E8F0',
+          'oil-navy':    '#FFFFFF',
+          'oil-navy-2':  '#F8FAFC',
+          'oil-blue':    '#0055A4',
+          'oil-blue-2':  '#004482',
+          'oil-amber':   '#FD7E14',
+          'oil-emerald': '#2A7B4C',
+          'oil-danger':  '#DC3545',
+          'oil-ink':     '#212529',
+          'oil-mute':    '#64748B',
+          'oil-line':    '#E2E8F0',
         },
         fontFamily: {
           sans: ['"IBM Plex Sans"', 'system-ui', 'sans-serif'],
@@ -40,37 +46,39 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 
 <style>
-  ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #274a72; border-radius: 8px; border: 2px solid #0b192c; }
-  ::-webkit-scrollbar-thumb:hover { background: #345a8a; }
-  * { scrollbar-width: thin; scrollbar-color: #274a72 transparent; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: #F1F5F9; }
+  ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+  * { scrollbar-width: thin; scrollbar-color: #CBD5E1 #F1F5F9; }
 
   body { font-feature-settings: "tnum" 1; }
 
   .pb-panel {
-    background: #10233c;
-    border: 1px solid rgba(233,239,246,0.09);
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
   }
   .pb-panel-raised {
-    background: linear-gradient(180deg, #16304f 0%, #10233c 100%);
-    border: 1px solid rgba(233,239,246,0.10);
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
   }
   .pb-track {
-    background: rgba(233,239,246,0.08);
+    background: #E2E8F0;
   }
   .pb-input {
-    background: #0b192c;
-    border: 1px solid rgba(233,239,246,0.14);
-    color: #e9eff6;
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #212529;
   }
   .pb-input:focus {
     outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.25);
+    border-color: #0055A4;
+    box-shadow: 0 0 0 3px rgba(0, 85, 164, 0.15);
   }
   button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, [tabindex]:focus-visible {
-    outline: 2px solid #60a5fa;
+    outline: 2px solid #0055A4;
     outline-offset: 2px;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -91,9 +99,9 @@
     white-space: pre;
     tab-size: 4;
   }
-  .pb-xer-marker { color: #f2b84b; }
-  .pb-xer-field  { color: #6fd4a8; }
-  .pb-xer-header { color: #7fb2ea; }
+  .pb-xer-marker { color: #D97706; }
+  .pb-xer-field  { color: #059669; }
+  .pb-xer-header { color: #0055A4; }
 
   .pb-sidebar-collapsed { transform: translateX(-100%); }
 
@@ -102,144 +110,191 @@
 </style>
 </head>
 
-<body class="bg-oil-navy text-oil-ink font-sans antialiased">
+<body class="bg-[#F4F6F9] text-[#212529] font-sans antialiased flex flex-col h-screen overflow-hidden">
 
-<div class="flex h-screen overflow-hidden">
+  <!-- Top saffron/orange accent line (3px) -->
+  <div class="h-[3px] bg-[#FD7E14] w-full shrink-0 z-50"></div>
 
-  <!-- ============================= SIDEBAR ============================= -->
-  <aside id="sidebar"
-    class="fixed lg:static z-40 inset-y-0 left-0 w-72 shrink-0 bg-oil-navy border-r border-oil-line
-           flex flex-col transition-transform duration-200 lg:translate-x-0 pb-sidebar-collapsed lg:transform-none">
-
-    <div class="h-16 flex items-center gap-3 px-5 border-b border-oil-line shrink-0">
-      <div class="w-9 h-9 rounded-lg bg-oil-blue flex items-center justify-center border border-oil-line">
-        <i data-lucide="waypoints" class="w-5 h-5 text-oil-ink"></i>
-      </div>
-      <div class="min-w-0">
-        <p class="text-sm font-semibold leading-tight tracking-tight truncate">PlanBridge</p>
-        <p class="text-[11px] text-oil-mute leading-tight truncate">OIL Reconciliation Console</p>
-      </div>
-      <button id="sidebar-close" class="ml-auto lg:hidden text-oil-mute hover:text-oil-ink p-1" aria-label="Close menu">
-        <i data-lucide="x" class="w-5 h-5"></i>
+  <!-- Top Masthead Bar -->
+  <header class="bg-white border-b border-[#E2E8F0] shadow-sm px-6 py-3 shrink-0 z-40 flex items-center justify-between gap-4">
+    <!-- Left Section: Ashoka National Emblem + Bilingual Ministry Branding -->
+    <div class="flex items-center gap-3">
+      <button id="sidebar-open" class="lg:hidden text-gray-700 hover:text-[#0055A4] p-1.5 -ml-2 rounded hover:bg-gray-100 mr-1" aria-label="Open menu">
+        <i data-lucide="menu" class="w-5 h-5"></i>
       </button>
+      <div class="shrink-0 flex items-center justify-center">
+        <!-- Official State Emblem of India (Ashoka Lion Capital) -->
+        <svg class="h-10 w-auto" viewBox="0 0 90 115" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Emblem of India">
+          <g fill="#0055A4">
+            <path d="M45 4C39.5 4 35.8 7.5 34.2 12C31.5 11 28 12 26 14.8C23.5 17.5 24 22 25 25C21.5 27.5 20.5 32 22 36C23.8 39.5 27.2 41 31 41.5C31.8 45 34.5 48.5 38 50.5C36.2 54 33.5 58 33.5 62H56.5C56.5 58 53.8 54 52 50.5C55.5 48.5 58.2 45 59 41.5C62.8 41 66.2 39.5 68 36C69.5 32 68.5 27.5 65 25C66 22 66.5 17.5 64 14.8C62 12 58.5 11 55.8 12C54.2 7.5 50.5 4 45 4Z"/>
+            <rect x="24" y="64" width="42" height="4" rx="1"/>
+            <circle cx="29" cy="74" r="3"/>
+            <circle cx="61" cy="74" r="3"/>
+          </g>
+          <circle cx="45" cy="74" r="6.5" stroke="#0055A4" stroke-width="1.6" fill="#FFFFFF"/>
+          <circle cx="45" cy="74" r="1.5" fill="#0055A4"/>
+          <g stroke="#0055A4" stroke-width="0.8">
+            <line x1="45" y1="67.5" x2="45" y2="80.5"/>
+            <line x1="38.5" y1="74" x2="51.5" y2="74"/>
+            <line x1="40.4" y1="69.4" x2="49.6" y2="78.6"/>
+            <line x1="40.4" y1="78.6" x2="49.6" y2="69.4"/>
+          </g>
+          <path d="M18 84H72V88C72 89.1 71.1 90 70 90H20C18.9 90 18 89.1 18 88V84Z" fill="#0055A4"/>
+          <text x="45" y="103" font-family="'IBM Plex Sans', sans-serif" font-size="9" font-weight="700" text-anchor="middle" fill="#212529" letter-spacing="0.6">सत्यमेव जयते</text>
+        </svg>
+      </div>
+      <div class="flex flex-col border-l border-[#E2E8F0] pl-3">
+        <span class="text-xs font-semibold text-[#212529] tracking-tight leading-tight">पेट्रोलियम एवं प्राकृतिक गैस मंत्रालय</span>
+        <span class="text-xs font-semibold text-[#212529] tracking-tight leading-tight">MINISTRY OF PETROLEUM AND NATURAL GAS</span>
+        <span class="text-xs font-semibold text-[#212529] tracking-tight leading-tight">Government of India</span>
+      </div>
     </div>
 
-    <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1" id="nav-list">
-      <!-- nav items injected by JS: renderNav() -->
-    </nav>
-
-    <div class="px-5 py-4 border-t border-oil-line shrink-0">
-      <p class="text-[11px] text-oil-mute leading-snug">
-        Smart India Hackathon 2026<br>
-        Problem Statement <span class="font-mono">SIH26122</span> · Oil India Limited
-      </p>
+    <!-- Center Section: Portal Name & Subtitle -->
+    <div class="text-center hidden md:block">
+      <span class="text-2xl font-bold text-[#0055A4] tracking-tight block leading-none">PlanBridge</span>
+      <span class="text-xs text-gray-500 font-medium block mt-1">OIL Planning-to-Execution Reconciliation Console</span>
     </div>
-  </aside>
 
-  <div id="sidebar-scrim" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
-
-  <!-- ============================= MAIN ============================= -->
-  <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-
-    <!-- TOPBAR -->
-    <header class="h-16 shrink-0 border-b border-oil-line bg-oil-navy/95 backdrop-blur flex items-center gap-4 px-4 lg:px-6">
-      <button id="sidebar-open" class="lg:hidden text-oil-mute hover:text-oil-ink p-1" aria-label="Open menu">
-        <i data-lucide="menu" class="w-6 h-6"></i>
+    <!-- Right Section: Clean Status Indicator (no hackathon text, no bulky pills) -->
+    <div class="flex items-center gap-3">
+      <button id="connection-pill" title="Click to test connection" class="flex items-center text-xs font-medium text-gray-600 bg-transparent border-0 p-0 shadow-none cursor-pointer">
+        <span id="connection-dot" class="h-2.5 w-2.5 rounded-full bg-[#198754] inline-block mr-2 animate-pulse"></span>
+        <span id="connection-label" class="text-xs font-medium text-gray-600">Live · Connected to API</span>
       </button>
+    </div>
+  </header>
 
-      <div class="min-w-0">
-        <h1 id="page-title" class="text-base sm:text-lg font-semibold truncate">Dashboard &amp; Gantt Variance View</h1>
-        <p id="page-subtitle" class="text-xs text-oil-mute truncate hidden sm:block">Aggregate reconciliation metrics and dual progress tracking</p>
+  <!-- App Body Layout (Sidebar + Main Area) -->
+  <div class="flex-1 flex overflow-hidden">
+
+    <!-- ============================= SIDEBAR ============================= -->
+    <aside id="sidebar"
+      class="fixed lg:static z-40 inset-y-0 left-0 w-64 lg:w-72 shrink-0 bg-white border-r border-[#E2E8F0] min-h-screen
+             flex flex-col justify-between transition-transform duration-200 lg:translate-x-0 pb-sidebar-collapsed lg:transform-none">
+
+      <div class="flex-1 flex flex-col min-h-0">
+        <div class="h-12 flex items-center justify-between px-4 border-b border-[#E2E8F0] lg:hidden">
+          <span class="text-xs font-bold text-[#0055A4] uppercase tracking-wider">Navigation</span>
+          <button id="sidebar-close" class="text-gray-500 hover:text-[#0055A4] p-1 rounded" aria-label="Close menu">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <nav class="p-3 space-y-1.5 flex-1 overflow-y-auto" id="nav-list">
+          <!-- nav items injected by JS: renderNav() -->
+        </nav>
       </div>
 
-      <div class="ml-auto flex items-center gap-2 shrink-0">
-        <button id="connection-pill" title="Click to retry connection"
-          class="flex items-center gap-2 pl-2.5 pr-3 py-1.5 rounded-full border text-xs font-medium transition-colors">
-          <span id="connection-dot" class="w-2 h-2 rounded-full"></span>
-          <span id="connection-label">Checking…</span>
-        </button>
+      <div class="p-4 border-t border-[#E2E8F0] bg-[#F8FAFC] shrink-0">
+        <p class="text-xs text-gray-600 font-medium leading-relaxed">
+          PlanBridge Middleware v2.4 · Oil India Limited
+        </p>
       </div>
-    </header>
+    </aside>
 
-    <!-- CONTENT -->
-    <main class="flex-1 overflow-y-auto px-4 py-5 lg:px-8 lg:py-7" id="content-scroll">
+    <div id="sidebar-scrim" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"></div>
+
+    <!-- ============================= MAIN ============================= -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F4F6F9]">
+
+      <!-- CONTENT -->
+      <main class="flex-1 overflow-y-auto px-4 py-5 lg:px-8 lg:py-6" id="content-scroll">
+
+        <!-- Page Sub-Header / Current View Title -->
+        <div class="max-w-7xl mx-auto mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#E2E8F0] pb-4">
+          <div>
+            <h2 id="page-title" class="text-xl font-bold text-[#212529]">Dashboard &amp; Gantt Variance View</h2>
+            <p id="page-subtitle" class="text-xs text-gray-500 font-medium mt-0.5">Aggregate reconciliation metrics and dual progress tracking</p>
+          </div>
+        </div>
 
       <!-- ---------- TAB 1: DASHBOARD ---------- -->
       <section data-tab-panel="dashboard" class="pb-active pb-fade-in max-w-7xl mx-auto">
 
+        <!-- Top 4 Metric / KPI Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div class="pb-panel-raised rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-medium text-oil-mute">Auto-Linked Matches</span>
-              <i data-lucide="check-check" class="w-4 h-4 text-oil-emerald"></i>
+          <div class="bg-white border border-[#E2E8F0] rounded-lg p-5 shadow-sm hover:shadow transition border-t-2 border-t-[#0055A4]">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Auto-Linked Matches</span>
+              <div class="w-7 h-7 rounded bg-blue-50 flex items-center justify-center text-[#0055A4]">
+                <i data-lucide="check-check" class="w-4 h-4"></i>
+              </div>
             </div>
-            <p class="text-3xl font-semibold tabular-nums" id="metric-autolinked">—</p>
-            <p class="text-[11px] text-oil-mute mt-1">Confidence ≥ 85%, applied automatically</p>
+            <p class="text-3xl font-extrabold text-[#212529] mt-2 mb-1 tabular-nums" id="metric-autolinked">—</p>
+            <p class="text-xs text-[#6C757D]">Confidence ≥ 85%, applied automatically</p>
           </div>
 
-          <div class="pb-panel-raised rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-medium text-oil-mute">Planner Queue</span>
-              <i data-lucide="inbox" class="w-4 h-4 text-oil-amber"></i>
+          <div class="bg-white border border-[#E2E8F0] rounded-lg p-5 shadow-sm hover:shadow transition border-t-2 border-t-[#FD7E14]">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Planner Queue</span>
+              <span class="text-[#FD7E14] bg-orange-50 border border-orange-200 px-2 py-0.5 rounded text-xs font-semibold flex items-center gap-1">
+                <i data-lucide="inbox" class="w-3.5 h-3.5"></i> Review
+              </span>
             </div>
-            <p class="text-3xl font-semibold tabular-nums" id="metric-queue">—</p>
-            <p class="text-[11px] text-oil-mute mt-1">60–85% confidence, awaiting review</p>
+            <p class="text-3xl font-extrabold text-[#212529] mt-2 mb-1 tabular-nums" id="metric-queue">—</p>
+            <p class="text-xs text-[#6C757D]">60–85% confidence, awaiting review</p>
           </div>
 
-          <div class="pb-panel-raised rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-medium text-oil-mute">Unmatched Noise</span>
-              <i data-lucide="circle-slash" class="w-4 h-4 text-oil-mute"></i>
+          <div class="bg-white border border-[#E2E8F0] rounded-lg p-5 shadow-sm hover:shadow transition border-t-2 border-t-gray-300">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Unmatched Noise</span>
+              <div class="w-7 h-7 rounded bg-gray-100 flex items-center justify-center text-gray-500">
+                <i data-lucide="circle-slash" class="w-4 h-4"></i>
+              </div>
             </div>
-            <p class="text-3xl font-semibold tabular-nums" id="metric-unmatched">—</p>
-            <p class="text-[11px] text-oil-mute mt-1">Below 60%, flagged for manual triage</p>
+            <p class="text-3xl font-extrabold text-[#212529] mt-2 mb-1 tabular-nums" id="metric-unmatched">—</p>
+            <p class="text-xs text-[#6C757D]">Below 60%, flagged for manual triage</p>
           </div>
 
-          <div class="pb-panel-raised rounded-lg p-4">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-medium text-oil-mute">False Auto-Accept Rate</span>
-              <i data-lucide="shield-check" class="w-4 h-4 text-oil-emerald"></i>
+          <div class="bg-white border border-[#E2E8F0] rounded-lg p-5 shadow-sm hover:shadow transition border-t-2 border-t-[#198754]">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">False Auto-Accept Rate</span>
+              <span class="text-[#198754] bg-green-50 border border-green-200 px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Target 0.00%
+              </span>
             </div>
-            <p class="text-3xl font-semibold tabular-nums text-oil-emerald" id="metric-false-accept">—</p>
-            <p class="text-[11px] text-oil-mute mt-1">Measured on labeled benchmark data</p>
+            <p class="text-3xl font-extrabold text-[#198754] mt-2 mb-1 tabular-nums" id="metric-false-accept">—</p>
+            <p class="text-xs text-[#6C757D]">Measured on labeled benchmark data</p>
           </div>
         </div>
 
-        <div class="pb-panel rounded-lg">
-          <div class="flex flex-wrap items-center gap-3 justify-between p-4 border-b border-oil-line">
+        <!-- Dual Progress Table Section -->
+        <div class="bg-white border border-[#E2E8F0] rounded-lg shadow-sm overflow-hidden p-6 mt-6">
+          <div class="flex flex-wrap items-center gap-3 justify-between pb-4 border-b border-[#E2E8F0]">
             <div>
-              <h2 class="text-sm font-semibold">Dual Progress by Activity</h2>
-              <p class="text-xs text-oil-mute mt-0.5">Physical site claims vs QA/QC-verified earned progress</p>
+              <h2 class="text-lg font-bold text-[#212529]">Dual Progress by Activity</h2>
+              <p class="text-xs text-gray-500 mt-0.5">Physical site claims vs QA/QC-verified earned progress</p>
             </div>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-3">
               <div class="relative">
-                <i data-lucide="search" class="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-oil-mute"></i>
+                <i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
                 <input id="activity-search" type="text" placeholder="Filter by Activity ID…"
-                  class="pb-input rounded-md pl-8 pr-3 py-1.5 text-xs w-44 sm:w-56">
+                  class="bg-white border border-gray-300 text-gray-800 placeholder-gray-400 rounded-md pl-8 pr-3 py-1.5 text-sm focus:outline-none focus:border-[#0055A4] focus:ring-1 focus:ring-[#0055A4] w-48 sm:w-60">
               </div>
-              <label class="flex items-center gap-1.5 text-xs text-oil-mute select-none cursor-pointer">
-                <input id="show-all-activities" type="checkbox" class="accent-oil-amber w-3.5 h-3.5">
+              <label class="flex items-center gap-2 text-xs text-gray-600 select-none cursor-pointer">
+                <input id="show-all-activities" type="checkbox" class="accent-[#0055A4] w-4 h-4 rounded">
                 Show zero-progress rows
               </label>
             </div>
           </div>
-          <div class="pb-scroll-x">
-            <table class="w-full text-sm">
+          <div class="pb-scroll-x overflow-x-auto mt-4">
+            <table class="w-full text-sm border-collapse">
               <thead>
-                <tr class="text-left text-[11px] uppercase tracking-wide text-oil-mute border-b border-oil-line">
-                  <th class="px-4 py-2.5 font-medium">Activity</th>
-                  <th class="px-4 py-2.5 font-medium">Target Scope</th>
-                  <th class="px-4 py-2.5 font-medium">QA Gate</th>
-                  <th class="px-4 py-2.5 font-medium w-1/4">Physical Claim</th>
-                  <th class="px-4 py-2.5 font-medium w-1/4">QA Verified Earned</th>
+                <tr class="bg-[#F1F5F9] border-b border-[#E2E8F0] text-[#475569] text-xs font-bold uppercase tracking-wider">
+                  <th class="py-3 px-4 text-left font-bold">Activity</th>
+                  <th class="py-3 px-4 text-left font-bold">Target Scope</th>
+                  <th class="py-3 px-4 text-left font-bold">QA Gate</th>
+                  <th class="py-3 px-4 text-left font-bold w-1/4">Physical Claim</th>
+                  <th class="py-3 px-4 text-left font-bold w-1/4">QA Verified Earned</th>
                 </tr>
               </thead>
               <tbody id="progress-table-body">
-                <!-- injected -->
+                <!-- injected by renderProgressTable() -->
               </tbody>
             </table>
           </div>
-          <div id="progress-empty" class="hidden p-8 text-center text-sm text-oil-mute">
+          <div id="progress-empty" class="hidden p-8 text-center text-sm text-gray-500">
             No activity progress recorded yet. Run the Simulator or wait for field reports to populate this view.
           </div>
         </div>
@@ -247,98 +302,105 @@
 
       <!-- ---------- TAB 2: PLANNER QUEUE ---------- -->
       <section data-tab-panel="queue" class="pb-fade-in max-w-5xl mx-auto">
-        <div class="flex items-center justify-between mb-4">
-          <p class="text-sm text-oil-mute">Medium-confidence matches (60–85%) awaiting planner confirmation before progress is applied.</p>
-          <button id="queue-refresh" class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md pb-panel-raised hover:border-oil-blue-2 border border-transparent">
-            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Refresh
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 bg-white border border-[#E2E8F0] rounded-lg p-5 shadow-sm">
+          <div>
+            <h3 class="text-xl font-bold text-[#212529]">Planner Review Queue</h3>
+            <p class="text-xs text-gray-500 mt-1">Medium-confidence matches (60–85%) awaiting planner confirmation before progress is applied</p>
+          </div>
+          <button id="queue-refresh" class="bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-md px-3 py-1.5 text-xs font-medium shadow-sm transition flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-gray-500"></i> Refresh
           </button>
         </div>
-        <div id="queue-list" class="space-y-4"></div>
-        <div id="queue-empty" class="hidden pb-panel rounded-lg p-10 text-center">
-          <i data-lucide="inbox" class="w-8 h-8 text-oil-mute mx-auto mb-3"></i>
-          <p class="text-sm font-medium">Queue is clear</p>
-          <p class="text-xs text-oil-mute mt-1">Nothing needs your review right now — try the Matching Engine Simulator to generate a review case.</p>
+        <div id="queue-list" class="space-y-5"></div>
+        <div id="queue-empty" class="hidden bg-white border border-[#E2E8F0] rounded-lg p-12 text-center shadow-sm">
+          <div class="w-12 h-12 rounded-full bg-orange-50 text-[#FD7E14] flex items-center justify-center mx-auto mb-3">
+            <i data-lucide="inbox" class="w-6 h-6"></i>
+          </div>
+          <p class="text-base font-bold text-[#212529]">Queue is clear</p>
+          <p class="text-xs text-gray-500 mt-1 max-w-sm mx-auto">Nothing needs your review right now — try the Matching Engine Simulator to generate a review case.</p>
         </div>
       </section>
 
       <!-- ---------- TAB 3: SIMULATOR ---------- -->
       <section data-tab-panel="simulator" class="pb-fade-in max-w-5xl mx-auto">
-        <div class="pb-panel rounded-lg p-4 mb-5">
-          <h2 class="text-sm font-semibold mb-1">Matching Engine Demo Simulator</h2>
-          <p class="text-xs text-oil-mute mb-4">Send a raw field-report sentence through the full reconciliation pipeline and watch each stage resolve.</p>
-
+        <!-- SIMULATOR INPUT CARD -->
+        <div class="bg-white border border-[#E2E8F0] rounded-lg p-6 mb-5 shadow-sm">
           <div class="flex flex-wrap gap-2 mb-3">
-            <button data-preset="easy" class="preset-btn text-xs px-3 py-1.5 rounded-md border border-oil-emerald/40 text-oil-emerald bg-oil-emerald/10 hover:bg-oil-emerald/20">
+            <button data-preset="easy" class="preset-btn text-xs font-medium px-3 py-1.5 rounded-md border border-emerald-200 text-[#198754] bg-green-50 hover:bg-green-100 transition cursor-pointer">
               Easy · Auto-Match
             </button>
-            <button data-preset="medium" class="preset-btn text-xs px-3 py-1.5 rounded-md border border-oil-amber/40 text-oil-amber bg-oil-amber/10 hover:bg-oil-amber/20">
+            <button data-preset="medium" class="preset-btn text-xs font-medium px-3 py-1.5 rounded-md border border-amber-200 text-[#B45309] bg-amber-50 hover:bg-amber-100 transition cursor-pointer">
               Medium · Queue
             </button>
-            <button data-preset="low" class="preset-btn text-xs px-3 py-1.5 rounded-md border border-oil-danger/40 text-red-300 bg-oil-danger/10 hover:bg-oil-danger/20">
+            <button data-preset="low" class="preset-btn text-xs font-medium px-3 py-1.5 rounded-md border border-red-200 text-red-700 bg-red-50 hover:bg-red-100 transition cursor-pointer">
               Low · Unmatched Noise
             </button>
           </div>
 
           <textarea id="simulator-input" rows="3"
-            class="pb-input w-full rounded-md px-3 py-2.5 text-sm resize-none"
+            class="w-full bg-white border border-gray-300 text-[#212529] rounded-md p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#0055A4] focus:border-transparent font-sans leading-relaxed"
             placeholder="e.g. 150m HDD drilling finished near KP 24+600 at river site.">150m HDD drilling finished near KP 24+600 at river site.</textarea>
-          <!-- BATCH FILE UPLOAD CARD -->
-<div class="pb-panel rounded-lg p-4 mb-5 border border-oil-emerald/30 bg-oil-emerald/5">
-  <div class="flex items-center justify-between mb-2">
-    <div class="flex items-center gap-2">
-      <i data-lucide="file-spreadsheet" class="w-5 h-5 text-oil-emerald"></i>
-      <h3 class="text-sm font-semibold text-oil-emerald">Batch Contractor File Ingestion (Excel / CSV / JSON)</h3>
-    </div>
-    <span class="text-[10px] font-mono text-oil-mute bg-oil-navy px-2 py-0.5 rounded border border-oil-line">Automated Multi-Source Pipeline</span>
-  </div>
-  <p class="text-xs text-oil-mute mb-3">Upload contractor DPR spreadsheets or JSON files to run 100+ lines through the 5-stage pipeline at once.</p>
 
-  <div class="flex flex-wrap items-center gap-3">
-    <!-- FILE INPUT -->
-    <input type="file" id="batch-file-input" accept=".csv,.json,.txt" class="hidden" onchange="handleFileSelected(event)">
-    <button onclick="document.getElementById('batch-file-input').click()" class="flex items-center gap-2 bg-oil-blue hover:bg-oil-blue-2 border border-oil-line px-3.5 py-1.5 rounded-md text-xs font-medium">
-      <i data-lucide="upload" class="w-3.5 h-3.5"></i> Select Contractor File (.csv, .json)
-    </button>
-    <span id="selected-filename" class="text-xs font-mono text-oil-mute truncate max-w-xs">No file selected</span>
-
-    <!-- PROCESS BUTTON -->
-    <button id="batch-upload-btn" onclick="uploadBatchFile()" disabled class="disabled:opacity-50 disabled:cursor-not-allowed bg-oil-emerald hover:bg-emerald-600 px-4 py-1.5 rounded-md text-xs font-medium text-white flex items-center gap-1.5">
-      <i data-lucide="play" class="w-3.5 h-3.5"></i> Process File
-    </button>
-
-    <!-- 1-CLICK SAMPLE EXCEL DEMO BUTTON -->
-    <button onclick="processSampleExcelDemo()" class="ml-auto flex items-center gap-1.5 bg-oil-amber/20 hover:bg-oil-amber/30 text-oil-amber border border-oil-amber/40 px-3.5 py-1.5 rounded-md text-xs font-medium">
-      <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Demo: Ingest Sample Contractor Sheet (120 DPRs)
-    </button>
-  </div>
-
-  <!-- BATCH INGESTION RESULT SUMMARY BANNER -->
-  <div id="batch-summary-banner" class="hidden mt-3 p-3 bg-oil-navy rounded border border-oil-emerald/40 text-xs flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <i data-lucide="check-circle-2" class="w-4 h-4 text-oil-emerald"></i>
-      <div>
-        <strong id="batch-summary-title" class="text-oil-emerald block font-semibold">File Processed Successfully!</strong>
-        <span id="batch-summary-details" class="text-oil-mute">Processed 120 lines: 75 Auto-Linked, 26 Sent to Queue, 19 Flagged Unmatched.</span>
-      </div>
-    </div>
-    <button onclick="setActiveTab('dashboard')" class="bg-oil-emerald/20 hover:bg-oil-emerald/30 text-oil-emerald border border-oil-emerald/40 px-3 py-1 rounded font-medium text-[11px]">
-      View Updated Dashboard →
-    </button>
-  </div>
-</div>
           <div class="flex items-center gap-3 mt-3">
             <input id="simulator-submitted-by" type="text" value="Site Supervisor"
-              class="pb-input rounded-md px-3 py-1.5 text-xs w-48" placeholder="Submitted by">
-            <button id="run-engine" class="ml-auto flex items-center gap-2 bg-oil-blue hover:bg-oil-blue-2 border border-oil-line px-4 py-2 rounded-md text-sm font-medium">
+              class="bg-white border border-gray-300 text-[#212529] rounded-md px-3 py-1.5 text-xs w-48 focus:outline-none focus:ring-2 focus:ring-[#0055A4]" placeholder="Submitted by">
+            <button id="run-engine" class="ml-auto flex items-center gap-2 bg-[#0055A4] hover:bg-[#004080] text-white px-4 py-2 rounded-md text-sm font-medium shadow-sm transition cursor-pointer">
               <i data-lucide="play" class="w-4 h-4"></i> Run Engine
             </button>
           </div>
         </div>
 
-        <div id="trace-empty" class="pb-panel rounded-lg p-10 text-center">
-          <i data-lucide="cpu" class="w-8 h-8 text-oil-mute mx-auto mb-3"></i>
-          <p class="text-sm font-medium">No trace yet</p>
-          <p class="text-xs text-oil-mute mt-1">Choose a preset or write your own field report, then run the engine.</p>
+        <!-- BATCH FILE UPLOAD CARD -->
+        <div class="bg-[#F8FAFC] border border-[#E2E8F0] rounded-lg p-5 mb-5 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+            <div class="flex items-center gap-2">
+              <i data-lucide="file-spreadsheet" class="w-5 h-5 text-[#2A7B4C]"></i>
+              <h3 class="text-sm font-bold text-[#212529]">Batch Contractor File Ingestion (Excel / CSV / JSON)</h3>
+            </div>
+            <span class="text-[11px] font-mono text-gray-500 bg-white px-2 py-0.5 rounded border border-gray-200 self-start sm:self-auto">Automated Multi-Source Pipeline</span>
+          </div>
+          <p class="text-xs text-gray-500 mb-3">Upload contractor DPR spreadsheets or JSON files to run 100+ lines through the 5-stage pipeline at once.</p>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <!-- FILE INPUT -->
+            <input type="file" id="batch-file-input" accept=".csv,.json,.txt" class="hidden" onchange="handleFileSelected(event)">
+            <button onclick="document.getElementById('batch-file-input').click()" class="bg-white border border-gray-300 text-gray-700 text-xs font-medium px-3 py-1.5 rounded hover:bg-gray-50 flex items-center gap-1.5 transition cursor-pointer">
+              <i data-lucide="upload" class="w-3.5 h-3.5"></i> Select Contractor File (.csv, .json)
+            </button>
+            <span id="selected-filename" class="text-xs font-mono text-gray-500 truncate max-w-xs">No file selected</span>
+
+            <!-- PROCESS BUTTON -->
+            <button id="batch-upload-btn" onclick="uploadBatchFile()" disabled class="disabled:opacity-50 disabled:cursor-not-allowed bg-[#2A7B4C] hover:bg-[#23633D] text-white text-xs font-bold px-3 py-1.5 rounded transition flex items-center gap-1.5 cursor-pointer">
+              <i data-lucide="play" class="w-3.5 h-3.5"></i> Process File
+            </button>
+
+            <!-- 1-CLICK SAMPLE EXCEL DEMO BUTTON -->
+            <button onclick="processSampleExcelDemo()" class="sm:ml-auto flex items-center gap-1.5 bg-[#FFF3CD] border border-[#FFE69C] text-[#664D03] text-xs font-semibold px-3 py-1.5 rounded transition hover:bg-[#ffe082] cursor-pointer">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Demo: Ingest Sample Contractor Sheet (120 DPRs)
+            </button>
+          </div>
+
+          <!-- BATCH INGESTION RESULT SUMMARY BANNER -->
+          <div id="batch-summary-banner" class="hidden mt-3 p-3.5 bg-green-50 rounded-lg border border-green-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-[#2A7B4C] shrink-0"></i>
+              <div>
+                <strong id="batch-summary-title" class="text-[#2A7B4C] block font-bold text-xs">File Processed Successfully!</strong>
+                <span id="batch-summary-details" class="text-gray-600">Processed 120 lines: 75 Auto-Linked, 26 Sent to Queue, 19 Flagged Unmatched.</span>
+              </div>
+            </div>
+            <button onclick="setActiveTab('dashboard')" class="bg-white hover:bg-green-100 text-[#2A7B4C] border border-green-300 px-3 py-1 rounded-md font-semibold text-xs transition cursor-pointer self-start sm:self-auto">
+              View Updated Dashboard →
+            </button>
+          </div>
+        </div>
+
+        <div id="trace-empty" class="bg-white border border-[#E2E8F0] rounded-lg p-10 text-center shadow-sm">
+          <div class="w-12 h-12 rounded-full bg-blue-50 text-[#0055A4] flex items-center justify-center mx-auto mb-3">
+            <i data-lucide="cpu" class="w-6 h-6"></i>
+          </div>
+          <p class="text-sm font-bold text-[#212529]">No trace yet</p>
+          <p class="text-xs text-gray-500 mt-1">Choose a preset or write your own field report, then run the engine.</p>
         </div>
 
         <div id="trace-result" class="hidden space-y-4"></div>
@@ -985,37 +1047,38 @@
 
   function decisionBadge(type) {
     const map = {
-      AUTO_ACCEPT:  { cls: "bg-oil-emerald/15 text-oil-emerald border-oil-emerald/30", label: "AUTO_ACCEPT" },
-      HUMAN_REVIEW: { cls: "bg-oil-amber/15 text-oil-amber border-oil-amber/30",       label: "HUMAN_REVIEW" },
-      UNMATCHED:    { cls: "bg-oil-danger/15 text-red-300 border-oil-danger/40",       label: "UNMATCHED" },
+      AUTO_ACCEPT:  { cls: "bg-green-50 text-[#198754] border-green-200", label: "AUTO_ACCEPT" },
+      HUMAN_REVIEW: { cls: "bg-[#FFF3CD] text-[#664D03] border-[#FFECB5]", label: "HUMAN_REVIEW" },
+      UNMATCHED:    { cls: "bg-red-50 text-red-700 border-red-200",       label: "UNMATCHED" },
     };
     const m = map[type] || map.UNMATCHED;
-    return el("span", { class: "inline-flex items-center px-2 py-0.5 rounded border text-[11px] font-mono font-medium " + m.cls }, [m.label]);
+    return el("span", { class: "inline-flex items-center px-2.5 py-0.5 rounded border text-xs font-mono font-bold " + m.cls }, [m.label]);
   }
 
   function scoreRing(pct, size) {
-    size = size || 56;
-    const radius = (size - 6) / 2;
+    size = size || 64;
+    const strokeWidth = 5;
+    const radius = (size - strokeWidth - 2) / 2;
     const circumference = 2 * Math.PI * radius;
     const clamped = Math.max(0, Math.min(100, pct));
     const offset = circumference * (1 - clamped / 100);
-    const color = clamped >= 85 ? "#059669" : clamped >= 60 ? "#d97706" : "#b3261e";
-    const wrap = el("div", { class: "relative shrink-0", style: "width:" + size + "px;height:" + size + "px" });
+    const color = clamped >= 85 ? "#2A7B4C" : clamped >= 60 ? "#FD7E14" : "#DC3545";
+    const wrap = el("div", { class: "relative shrink-0 flex items-center justify-center", style: "width:" + size + "px;height:" + size + "px" });
     wrap.innerHTML =
-      '<svg width="' + size + '" height="' + size + '" class="-rotate-90">' +
-        '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + radius + '" fill="none" stroke="rgba(233,239,246,0.12)" stroke-width="5"></circle>' +
-        '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + radius + '" fill="none" stroke="' + color + '" stroke-width="5" stroke-linecap="round" ' +
+      '<svg width="' + size + '" height="' + size + '" class="-rotate-90 block">' +
+        '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + radius + '" fill="none" stroke="#E2E8F0" stroke-width="' + strokeWidth + '"></circle>' +
+        '<circle cx="' + size / 2 + '" cy="' + size / 2 + '" r="' + radius + '" fill="none" stroke="' + color + '" stroke-width="' + strokeWidth + '" stroke-linecap="round" ' +
           'stroke-dasharray="' + circumference + '" stroke-dashoffset="' + offset + '"></circle>' +
       '</svg>' +
-      '<span class="absolute inset-0 flex items-center justify-center text-[11px] font-semibold tabular-nums">' + Math.round(clamped) + '%</span>';
+      '<span class="absolute inset-0 flex items-center justify-center text-lg font-bold tabular-nums text-[#212529]">' + Math.round(clamped) + '%</span>';
     return wrap;
   }
 
   function activityLabel(activityId) {
     const name = STATE.activityNameCache[activityId];
     const wrap = el("div", { class: "min-w-0" });
-    wrap.appendChild(el("p", { class: "font-mono text-xs text-oil-ink truncate" }, [activityId || "—"]));
-    if (name) wrap.appendChild(el("p", { class: "text-[11px] text-oil-mute truncate" }, [name]));
+    wrap.appendChild(el("p", { class: "font-mono font-semibold text-xs text-[#0055A4] truncate" }, [activityId || "—"]));
+    if (name) wrap.appendChild(el("p", { class: "text-xs text-gray-500 truncate mt-0.5" }, [name]));
     return wrap;
   }
 
@@ -1054,12 +1117,12 @@
     nav.innerHTML = "";
     TABS.forEach(function (tab) {
       const btn = el("button", {
-        class: "pb-nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-oil-mute hover:text-oil-ink hover:bg-oil-blue/40 transition-colors",
+        class: "pb-nav-item w-full flex items-center justify-between gap-2 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-[#F1F5F9] hover:text-[#0055A4] transition",
         "data-tab": tab.id,
         onclick: function () { setActiveTab(tab.id); closeSidebarOnMobile(); },
       });
-      btn.innerHTML = '<i data-lucide="' + tab.icon + '" class="w-4 h-4 shrink-0"></i><span class="truncate">' + tab.label + "</span>" +
-        '<span data-nav-badge="' + tab.id + '" class="ml-auto hidden text-[10px] font-mono bg-oil-amber text-oil-navy rounded-full px-1.5 py-0.5"></span>';
+      btn.innerHTML = '<div class="flex items-center gap-2.5 min-w-0"><i data-lucide="' + tab.icon + '" class="w-4 h-4 shrink-0"></i><span class="whitespace-nowrap text-xs sm:text-sm">' + tab.label + "</span></div>" +
+        '<span data-nav-badge="' + tab.id + '" class="ml-auto shrink-0 hidden bg-[#FD7E14] text-white text-xs font-bold px-2 py-0.5 rounded-full"></span>';
       nav.appendChild(btn);
     });
     refreshIcons();
@@ -1072,14 +1135,17 @@
     });
     document.querySelectorAll(".pb-nav-item").forEach(function (btn) {
       const active = btn.getAttribute("data-tab") === tabId;
-      btn.classList.toggle("bg-oil-blue", active);
-      btn.classList.toggle("text-oil-ink", active);
-      btn.classList.toggle("text-oil-mute", !active);
+      btn.classList.toggle("bg-[#0055A4]", active);
+      btn.classList.toggle("text-white", active);
+      btn.classList.toggle("shadow-sm", active);
+      btn.classList.toggle("text-gray-700", !active);
     });
     const tab = TABS.find(function (t) { return t.id === tabId; });
     if (tab) {
-      document.getElementById("page-title").textContent = tab.title;
-      document.getElementById("page-subtitle").textContent = tab.subtitle;
+      const pt = document.getElementById("page-title");
+      const ps = document.getElementById("page-subtitle");
+      if (pt) pt.textContent = tab.title;
+      if (ps) ps.textContent = tab.subtitle;
     }
     document.getElementById("content-scroll").scrollTop = 0;
     loadTab(tabId);
@@ -1135,23 +1201,23 @@
     document.getElementById("progress-empty").classList.toggle("hidden", rows.length > 0);
 
     rows.forEach(function (p) {
-      const tr = el("tr", { class: "border-b border-oil-line last:border-b-0 hover:bg-oil-blue/10" });
+      const tr = el("tr", { class: "even:bg-white odd:bg-[#F8FAFC] hover:bg-[#EDF2F7] transition border-b border-gray-100 text-sm text-[#212529]" });
 
       const tdActivity = el("td", { class: "px-4 py-3 align-top" }, [activityLabel(p.activity_id)]);
-      const tdScope = el("td", { class: "px-4 py-3 align-top pb-nowrap-cell text-xs font-mono text-oil-mute" }, [fmtQty(p.planned_quantity, p.unit)]);
+      const tdScope = el("td", { class: "px-4 py-3 align-top pb-nowrap-cell text-xs font-mono font-medium text-gray-700" }, [fmtQty(p.planned_quantity, p.unit)]);
 
       const gateMap = {
-        PENDING_QA:      { cls: "text-oil-amber bg-oil-amber/10 border-oil-amber/30", label: "Pending QA" },
-        VERIFIED_PASSED: { cls: "text-oil-emerald bg-oil-emerald/10 border-oil-emerald/30", label: "Verified" },
-        NOT_REQUIRED:    { cls: "text-oil-mute bg-white/5 border-oil-line", label: "Not required" },
+        PENDING_QA:      { cls: "bg-amber-50 text-[#B45309] border border-amber-200 text-xs px-2 py-0.5 rounded font-medium", label: "Pending QA" },
+        VERIFIED_PASSED: { cls: "bg-green-50 text-[#198754] border border-green-200 text-xs px-2 py-0.5 rounded font-medium", label: "Verified" },
+        NOT_REQUIRED:    { cls: "bg-gray-100 text-gray-600 border border-gray-200 text-xs px-2 py-0.5 rounded font-medium", label: "Not required" },
       };
       const gate = gateMap[p.qa_gate_status] || gateMap.NOT_REQUIRED;
       const tdGate = el("td", { class: "px-4 py-3 align-top" }, [
-        el("span", { class: "inline-flex items-center px-2 py-0.5 rounded border text-[11px] " + gate.cls }, [gate.label])
+        el("span", { class: "inline-flex items-center " + gate.cls }, [gate.label])
       ]);
 
-      const tdPhysical = el("td", { class: "px-4 py-3 align-top" }, [progressBarCell(p.physical_progress_pct, "bg-blue-400")]);
-      const tdVerified = el("td", { class: "px-4 py-3 align-top" }, [progressBarCell(p.verified_progress_pct, "bg-oil-emerald")]);
+      const tdPhysical = el("td", { class: "px-4 py-3 align-top" }, [progressBarCell(p.physical_progress_pct, "bg-[#0055A4]")]);
+      const tdVerified = el("td", { class: "px-4 py-3 align-top" }, [progressBarCell(p.verified_progress_pct, "bg-[#2A7B4C]")]);
 
       tr.appendChild(tdActivity); tr.appendChild(tdScope); tr.appendChild(tdGate); tr.appendChild(tdPhysical); tr.appendChild(tdVerified);
       tbody.appendChild(tr);
@@ -1160,11 +1226,11 @@
 
   function progressBarCell(pct, colorClass) {
     const wrap = el("div", { class: "flex items-center gap-2" });
-    const track = el("div", { class: "flex-1 h-2 rounded-full pb-track overflow-hidden" });
+    const track = el("div", { class: "flex-1 h-2.5 rounded-full bg-gray-200 overflow-hidden" });
     const fill = el("div", { class: "h-full rounded-full " + colorClass, style: "width:" + Math.max(0, Math.min(100, pct)) + "%" });
     track.appendChild(fill);
     wrap.appendChild(track);
-    wrap.appendChild(el("span", { class: "text-xs tabular-nums text-oil-mute w-11 text-right shrink-0" }, [fmtPct(pct)]));
+    wrap.appendChild(el("span", { class: "text-xs font-semibold text-[#212529] ml-2 tabular-nums w-11 text-right shrink-0" }, [fmtPct(pct)]));
     return wrap;
   }
 
@@ -1195,64 +1261,102 @@
     const entities = mockExtractEntities(item.raw_phrase);
     const norm = mockNormalizeUnit(item.raw_phrase);
 
-    const card = el("div", { class: "pb-panel rounded-lg p-4 pb-fade-in" });
+    const card = el("div", { class: "bg-white border border-[#E2E8F0] border-l-4 border-l-[#FD7E14] rounded-lg p-6 mb-5 shadow-sm pb-fade-in" });
 
-    const header = el("div", { class: "flex items-start gap-4 mb-3" });
-    header.appendChild(scoreRing(decision.final_confidence_score * 100, 52));
+    const header = el("div", { class: "flex items-start gap-4 mb-4" });
+    header.appendChild(scoreRing(decision.final_confidence_score * 100, 64));
     const headerText = el("div", { class: "min-w-0 flex-1" });
     headerText.appendChild(el("div", { class: "flex items-center gap-2 flex-wrap" }, [
-      el("span", { class: "font-mono text-xs text-oil-mute" }, [item.queue_id]),
-      decisionBadge(decision.decision_type),
+      el("span", { class: "font-mono text-xs font-bold text-gray-700 bg-gray-100 px-2 py-0.5 rounded" }, [item.queue_id]),
+      el("span", { class: "bg-[#FFF3CD] text-[#664D03] border border-[#FFECB5] text-xs font-semibold px-2.5 py-0.5 rounded" }, ["Awaiting Planner Review"]),
     ]));
-    headerText.appendChild(el("p", { class: "text-sm mt-1.5 leading-snug" }, ['"' + item.raw_phrase + '"']));
-    headerText.appendChild(el("p", { class: "text-[11px] text-oil-mute mt-1" }, ["Source: " + item.source_report_id]));
+    headerText.appendChild(el("blockquote", { class: "bg-[#F8FAFC] border-l-2 border-[#0055A4] p-3 rounded-r text-sm text-[#212529] font-medium my-3 italic" }, [
+      '"' + item.raw_phrase + '"'
+    ]));
+    headerText.appendChild(el("p", { class: "text-xs text-gray-400 font-mono" }, ["Source: " + item.source_report_id]));
     header.appendChild(headerText);
     card.appendChild(header);
 
-    const chipRow = el("div", { class: "flex flex-wrap gap-1.5 mb-4" });
+    const chipRow = el("div", { class: "flex flex-wrap gap-2 mb-4" });
     const chip = function (label, value, tone) {
       if (!value) return null;
-      const tones = { kp: "border-blue-400/30 text-blue-300 bg-blue-400/10", qty: "border-oil-emerald/30 text-oil-emerald bg-oil-emerald/10", action: "border-oil-amber/30 text-oil-amber bg-oil-amber/10" };
-      return el("span", { class: "text-[11px] px-2 py-1 rounded border " + (tones[tone] || "border-oil-line text-oil-mute") }, [label + ": " + value]);
+      const styles = {
+        kp: "bg-blue-50 text-[#0055A4] border border-blue-200 font-mono text-xs px-2.5 py-1 rounded-md font-semibold",
+        qty: "bg-purple-50 text-purple-700 border border-purple-200 text-xs px-2.5 py-1 rounded-md font-medium",
+        action: "bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs px-2.5 py-1 rounded-md font-medium",
+        discipline: "bg-gray-100 text-gray-700 border border-gray-300 text-xs px-2.5 py-1 rounded-md font-medium",
+      };
+      return el("span", { class: styles[tone] || "bg-gray-100 text-gray-700 border border-gray-300 text-xs px-2.5 py-1 rounded-md font-medium" }, [label + ": " + value]);
     };
     [chip("KP", entities.location_kp, "kp"),
      chip("Qty", norm ? (norm.normalized_quantity + " " + norm.normalized_unit) : null, "qty"),
      chip("Action", entities.action_verb, "action"),
-     chip("Discipline", entities.discipline, null)]
+     chip("Discipline", entities.discipline, "discipline")]
       .forEach(function (c) { if (c) chipRow.appendChild(c); });
-    if (!entities.location_kp && !entities.action_verb) chipRow.appendChild(el("span", { class: "text-[11px] text-oil-mute" }, ["No structured entities detected client-side"]));
+    if (!entities.location_kp && !entities.action_verb) chipRow.appendChild(el("span", { class: "text-xs text-gray-400 italic" }, ["No structured entities detected client-side"]));
     card.appendChild(chipRow);
 
-    const table = el("table", { class: "w-full text-xs mb-4" });
+    const tableWrap = el("div", { class: "border border-gray-200 rounded-lg overflow-hidden mb-4 bg-white shadow-xs" });
+    const table = el("table", { class: "w-full text-xs border-collapse" });
     table.innerHTML =
-      '<thead><tr class="text-left text-oil-mute border-b border-oil-line"><th class="py-1.5 pr-2 font-medium">Select</th><th class="py-1.5 pr-2 font-medium">Candidate</th><th class="py-1.5 pr-2 font-medium">Entity</th><th class="py-1.5 pr-2 font-medium">Semantic</th><th class="py-1.5 pr-2 font-medium">Qty</th><th class="py-1.5 font-medium">Final</th></tr></thead>';
+      '<thead><tr class="bg-[#F1F5F9] text-xs font-semibold text-gray-600 uppercase border-b border-gray-200">' +
+        '<th class="py-2 px-3 text-left w-12 font-bold">Select</th>' +
+        '<th class="py-2 px-3 text-left font-bold">Candidate</th>' +
+        '<th class="py-2 px-3 text-left font-bold w-16">Entity</th>' +
+        '<th class="py-2 px-3 text-left font-bold w-16">Semantic</th>' +
+        '<th class="py-2 px-3 text-left font-bold w-16">Qty</th>' +
+        '<th class="py-2 px-3 text-left font-bold w-16">Final</th>' +
+      '</tr></thead>';
     const tbody = document.createElement("tbody");
     decision.candidate_scores.forEach(function (c, idx) {
       const tr = document.createElement("tr");
-      tr.className = "border-b border-oil-line last:border-b-0";
       const isDefault = c.activity_id === decision.selected_activity_id || (idx === 0 && !decision.selected_activity_id);
+      const radioName = "cand-" + cssEscape(item.queue_id);
+      tr.className = "border-b border-gray-100 last:border-b-0 transition " +
+        (isDefault ? "bg-blue-50/70 border-l-2 border-l-[#0055A4]" : "hover:bg-blue-50/50");
+
       tr.innerHTML =
-        '<td class="py-1.5 pr-2"><input type="radio" name="cand-' + cssEscape(item.queue_id) + '" value="' + escapeHtml(c.activity_id) + '" ' + (isDefault ? "checked" : "") + ' class="accent-oil-amber"></td>' +
-        '<td class="py-1.5 pr-2 font-mono">' + escapeHtml(c.activity_id) + '<div class="text-oil-mute font-sans">' + escapeHtml(truncate(c.activity_name, 42)) + '</div></td>' +
-        '<td class="py-1.5 pr-2 tabular-nums">' + (c.entity_score * 100).toFixed(0) + '%</td>' +
-        '<td class="py-1.5 pr-2 tabular-nums">' + (c.semantic_score * 100).toFixed(0) + '%</td>' +
-        '<td class="py-1.5 pr-2 tabular-nums">' + (c.quantity_score * 100).toFixed(0) + '%</td>' +
-        '<td class="py-1.5 font-semibold tabular-nums">' + (c.final_score * 100).toFixed(0) + '%</td>';
+        '<td class="py-2 px-3 align-middle"><input type="radio" name="' + radioName + '" value="' + escapeHtml(c.activity_id) + '" ' + (isDefault ? "checked" : "") + ' class="accent-[#0055A4] w-4 h-4 cursor-pointer align-middle"></td>' +
+        '<td class="py-2 px-3 align-middle"><span class="font-mono text-sm font-bold text-[#0055A4]">' + escapeHtml(c.activity_id) + '</span><div class="text-xs text-gray-600 font-sans mt-0.5">' + escapeHtml(truncate(c.activity_name, 48)) + '</div></td>' +
+        '<td class="py-2 px-3 align-middle font-mono text-xs font-medium text-gray-700 tabular-nums">' + (c.entity_score * 100).toFixed(0) + '%</td>' +
+        '<td class="py-2 px-3 align-middle font-mono text-xs font-medium text-gray-700 tabular-nums">' + (c.semantic_score * 100).toFixed(0) + '%</td>' +
+        '<td class="py-2 px-3 align-middle font-mono text-xs font-medium text-gray-700 tabular-nums">' + (c.quantity_score * 100).toFixed(0) + '%</td>' +
+        '<td class="py-2 px-3 align-middle font-mono text-xs font-medium text-gray-700 tabular-nums">' + (c.final_score * 100).toFixed(0) + '%</td>';
+
+      const radio = tr.querySelector('input[type="radio"]');
+      if (radio) {
+        radio.addEventListener("change", function () {
+          tbody.querySelectorAll("tr").forEach(function (r) {
+            r.className = "border-b border-gray-100 last:border-b-0 hover:bg-blue-50/50 transition";
+          });
+          if (radio.checked) {
+            tr.className = "border-b border-gray-100 last:border-b-0 bg-blue-50/70 border-l-2 border-l-[#0055A4] transition";
+          }
+        });
+      }
+
       tbody.appendChild(tr);
     });
     table.appendChild(tbody);
-    card.appendChild(table);
+    tableWrap.appendChild(table);
+    card.appendChild(tableWrap);
 
-    const reasoning = el("details", { class: "mb-4 text-xs text-oil-mute" });
-    reasoning.innerHTML = '<summary class="cursor-pointer select-none hover:text-oil-ink">View scoring rationale</summary><p class="mt-2 leading-relaxed">' + escapeHtml(decision.reasoning) + "</p>";
+    const reasoning = el("details", { class: "mb-4 text-xs group" });
+    reasoning.innerHTML =
+      '<summary class="text-xs text-[#0055A4] hover:underline font-medium cursor-pointer flex items-center gap-1 mt-2 select-none">' +
+        '<i data-lucide="chevron-right" class="w-3.5 h-3.5 transition-transform group-open:rotate-90"></i> View scoring rationale' +
+      '</summary>' +
+      '<div class="mt-2.5 p-3 rounded-md bg-[#F8FAFC] border border-gray-200 text-xs text-gray-700 leading-relaxed font-sans">' +
+        escapeHtml(decision.reasoning) +
+      '</div>';
     card.appendChild(reasoning);
 
-    const footer = el("div", { class: "flex items-center justify-end gap-2" });
+    const footer = el("div", { class: "flex items-center justify-end gap-3 pt-3 border-t border-gray-100" });
     const acceptBtn = el("button", {
-      class: "flex items-center gap-2 bg-oil-emerald hover:bg-emerald-600 px-3.5 py-1.5 rounded-md text-xs font-medium",
+      class: "bg-[#0055A4] hover:bg-[#004080] text-white font-semibold text-sm px-5 py-2 rounded-md shadow-sm transition flex items-center gap-2 cursor-pointer",
       onclick: function () { handleApprove(item.queue_id, card); },
     });
-    acceptBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Accept';
+    acceptBtn.innerHTML = '<i data-lucide="check" class="w-4 h-4"></i> Accept';
     footer.appendChild(acceptBtn);
     card.appendChild(footer);
 
@@ -1273,6 +1377,12 @@
       showToast("Approval failed: " + err.message, "error");
     }
   }
+
+  const PRESETS = {
+    easy: "150m HDD drilling finished near KP 24+600 at river site.",
+    medium: "Trenching activity ongoing somewhere along 4C corridor.",
+    low: "Toolbox safety meeting conducted with 12 workers this morning."
+  };
 
   function wireSimulator() {
     document.querySelectorAll(".preset-btn").forEach(function (btn) {
@@ -1314,10 +1424,10 @@
     container.innerHTML = "";
 
     if (result.observations_processed === 0) {
-      const card = el("div", { class: "pb-panel rounded-lg p-6 text-center pb-fade-in" });
-      card.innerHTML = '<i data-lucide="search-x" class="w-8 h-8 text-oil-mute mx-auto mb-3"></i>' +
-        '<p class="text-sm font-medium">No quantity claim detected</p>' +
-        '<p class="text-xs text-oil-mute mt-1 max-w-md mx-auto">This text carries no recognizable "&lt;number&gt; &lt;unit&gt;" phrase, so the pipeline correctly stopped before matching -- nothing to reconcile. This is expected for administrative or purely descriptive reports.</p>';
+      const card = el("div", { class: "bg-white border border-[#E2E8F0] rounded-lg p-6 text-center shadow-sm pb-fade-in" });
+      card.innerHTML = '<i data-lucide="search-x" class="w-8 h-8 text-gray-400 mx-auto mb-3"></i>' +
+        '<p class="text-sm font-bold text-[#212529]">No quantity claim detected</p>' +
+        '<p class="text-xs text-gray-500 mt-1 max-w-md mx-auto">This text carries no recognizable "&lt;number&gt; &lt;unit&gt;" phrase, so the pipeline correctly stopped before matching -- nothing to reconcile. This is expected for administrative or purely descriptive reports.</p>';
       container.appendChild(card);
       refreshIcons();
       return;
@@ -1328,7 +1438,7 @@
     const entities = mockExtractEntities(rawText);
 
     container.appendChild(stepCard(1, "Unit Normalization", "client-side preview", function (body) {
-      if (!norm) { body.appendChild(el("p", { class: "text-xs text-oil-mute" }, ["No quantity/unit phrase recognized."])); return; }
+      if (!norm) { body.appendChild(el("p", { class: "text-xs text-gray-500" }, ["No quantity/unit phrase recognized."])); return; }
       const grid = el("div", { class: "grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs" });
       grid.appendChild(kvBlock("Raw", norm.raw_quantity + " " + norm.raw_unit));
       grid.appendChild(kvBlock("Normalized", norm.normalized_quantity + " " + norm.normalized_unit));
@@ -1338,8 +1448,13 @@
     }));
 
     container.appendChild(stepCard(2, "Entity Extraction", "client-side preview", function (body) {
-      const chipRow = el("div", { class: "flex flex-wrap gap-1.5" });
-      const chip = function (label, v) { return el("span", { class: "text-[11px] px-2 py-1 rounded border " + (v ? "border-blue-400/30 text-blue-300 bg-blue-400/10" : "border-oil-line text-oil-mute") }, [label + ": " + (v || "not detected")]); };
+      const chipRow = el("div", { class: "flex flex-wrap gap-2" });
+      const chip = function (label, v) {
+        return el("span", {
+          class: "text-xs px-2.5 py-1 rounded-md border font-medium " +
+            (v ? "border-blue-200 text-[#0055A4] bg-blue-50 font-semibold" : "border-gray-200 text-gray-400 bg-gray-50")
+        }, [label + ": " + (v || "not detected")]);
+      };
       [chip("KP", entities.location_kp), chip("Facility", entities.facility), chip("Discipline", entities.discipline), chip("Action", entities.action_verb)]
         .forEach(function (c) { chipRow.appendChild(c); });
       body.appendChild(chipRow);
@@ -1348,53 +1463,65 @@
     container.appendChild(stepCard(3, "Confidence Gate Decision", "from PlanBridge API", function (body) {
       const row = el("div", { class: "flex items-center gap-4 flex-wrap" });
       row.appendChild(scoreRing(decision.final_confidence_score * 100, 64));
-      const info = el("div", { class: "min-w-0" });
+      const info = el("div", { class: "min-w-0 flex-1" });
       info.appendChild(decisionBadge(decision.decision_type));
-      info.appendChild(el("p", { class: "text-xs text-oil-mute mt-2 leading-relaxed" }, [decision.reasoning]));
+      info.appendChild(el("p", { class: "text-xs text-gray-700 mt-2 leading-relaxed font-sans" }, [decision.reasoning]));
       row.appendChild(info);
       body.appendChild(row);
     }));
 
     container.appendChild(stepCard(4, "Candidate Scores", "from PlanBridge API", function (body) {
-      if (!decision.candidate_scores.length) { body.appendChild(el("p", { class: "text-xs text-oil-mute" }, ["No candidates were evaluated."])); return; }
+      if (!decision.candidate_scores.length) { body.appendChild(el("p", { class: "text-xs text-gray-500" }, ["No candidates were evaluated."])); return; }
+      const tableWrap = el("div", { class: "border border-gray-200 rounded-lg overflow-hidden bg-white shadow-xs" });
       const table = document.createElement("table");
-      table.className = "w-full text-xs";
-      table.innerHTML = '<thead><tr class="text-left text-oil-mute border-b border-oil-line"><th class="py-1.5 pr-2 font-medium">Activity</th><th class="py-1.5 pr-2 font-medium">Entity</th><th class="py-1.5 pr-2 font-medium">Semantic</th><th class="py-1.5 pr-2 font-medium">Qty</th><th class="py-1.5 font-medium">Final</th></tr></thead>';
+      table.className = "w-full text-xs border-collapse";
+      table.innerHTML =
+        '<thead><tr class="bg-[#F1F5F9] text-xs font-semibold text-gray-600 uppercase border-b border-gray-200 text-left">' +
+          '<th class="py-2 px-3 font-bold">Activity</th>' +
+          '<th class="py-2 px-3 font-bold w-16">Entity</th>' +
+          '<th class="py-2 px-3 font-bold w-16">Semantic</th>' +
+          '<th class="py-2 px-3 font-bold w-16">Qty</th>' +
+          '<th class="py-2 px-3 font-bold w-16">Final</th>' +
+        '</tr></thead>';
       const tbody = document.createElement("tbody");
       decision.candidate_scores.forEach(function (c) {
         const tr = document.createElement("tr");
-        tr.className = "border-b border-oil-line last:border-b-0" + (c.activity_id === decision.selected_activity_id ? " bg-oil-emerald/5" : "");
-        tr.innerHTML = '<td class="py-1.5 pr-2 font-mono">' + escapeHtml(c.activity_id) + '</td>' +
-          '<td class="py-1.5 pr-2 tabular-nums">' + (c.entity_score * 100).toFixed(0) + '%</td>' +
-          '<td class="py-1.5 pr-2 tabular-nums">' + (c.semantic_score * 100).toFixed(0) + '%</td>' +
-          '<td class="py-1.5 pr-2 tabular-nums">' + (c.quantity_score * 100).toFixed(0) + '%</td>' +
-          '<td class="py-1.5 font-semibold tabular-nums">' + (c.final_score * 100).toFixed(0) + '%</td>';
+        const isSelected = c.activity_id === decision.selected_activity_id;
+        tr.className = "border-b border-gray-100 last:border-b-0 transition " +
+          (isSelected ? "bg-blue-50/70 border-l-2 border-l-[#0055A4]" : "hover:bg-blue-50/50");
+        tr.innerHTML =
+          '<td class="py-2 px-3 align-middle"><span class="font-mono text-sm font-bold text-[#0055A4]">' + escapeHtml(c.activity_id) + '</span><div class="text-xs text-gray-600 font-sans mt-0.5">' + escapeHtml(truncate(c.activity_name, 48)) + '</div></td>' +
+          '<td class="py-2 px-3 align-middle font-mono font-medium text-gray-700 tabular-nums">' + (c.entity_score * 100).toFixed(0) + '%</td>' +
+          '<td class="py-2 px-3 align-middle font-mono font-medium text-gray-700 tabular-nums">' + (c.semantic_score * 100).toFixed(0) + '%</td>' +
+          '<td class="py-2 px-3 align-middle font-mono font-medium text-gray-700 tabular-nums">' + (c.quantity_score * 100).toFixed(0) + '%</td>' +
+          '<td class="py-2 px-3 align-middle font-mono font-bold text-[#0055A4] tabular-nums">' + (c.final_score * 100).toFixed(0) + '%</td>';
         tbody.appendChild(tr);
       });
       table.appendChild(tbody);
-      body.appendChild(table);
+      tableWrap.appendChild(table);
+      body.appendChild(tableWrap);
     }));
 
     refreshIcons();
   }
 
   function stepCard(num, title, sourceTag, fill) {
-    const card = el("div", { class: "pb-panel rounded-lg p-4 pb-fade-in" });
-    const header = el("div", { class: "flex items-center gap-3 mb-3" });
-    header.appendChild(el("span", { class: "w-6 h-6 rounded-full bg-oil-blue flex items-center justify-center text-[11px] font-semibold shrink-0" }, [String(num)]));
-    header.appendChild(el("h3", { class: "text-sm font-semibold flex-1" }, [title]));
-    header.appendChild(el("span", { class: "text-[10px] text-oil-mute font-mono shrink-0" }, [sourceTag]));
+    const card = el("div", { class: "bg-white border border-[#E2E8F0] rounded-lg p-4 mb-3 shadow-sm pb-fade-in" });
+    const header = el("div", { class: "flex items-center gap-3 mb-3 pb-2 border-b border-gray-100" });
+    header.appendChild(el("span", { class: "w-6 h-6 rounded-full bg-[#0055A4] text-white flex items-center justify-center text-xs font-bold shrink-0" }, [String(num)]));
+    header.appendChild(el("h3", { class: "text-sm font-bold text-[#212529] flex-1" }, [title]));
+    header.appendChild(el("span", { class: "text-[11px] text-gray-500 font-mono shrink-0 bg-gray-100 px-2 py-0.5 rounded border border-gray-200" }, [sourceTag]));
     card.appendChild(header);
-    const body = el("div", {});
+    const body = el("div", { class: "text-[#212529]" });
     fill(body);
     card.appendChild(body);
     return card;
   }
 
   function kvBlock(label, value) {
-    const wrap = el("div", {});
-    wrap.appendChild(el("p", { class: "text-oil-mute mb-0.5" }, [label]));
-    wrap.appendChild(el("p", { class: "font-mono text-oil-ink" }, [String(value)]));
+    const wrap = el("div", { class: "bg-[#F8FAFC] border border-[#E2E8F0] rounded p-2.5" });
+    wrap.appendChild(el("p", { class: "text-gray-500 text-[11px] font-medium mb-0.5" }, [label]));
+    wrap.appendChild(el("p", { class: "font-mono font-bold text-xs text-[#212529]" }, [String(value)]));
     return wrap;
   }
 
@@ -1531,13 +1658,14 @@
     const pill = document.getElementById("connection-pill");
     const dot = document.getElementById("connection-dot");
     const label = document.getElementById("connection-label");
+    if (!pill || !dot || !label) return;
     if (online) {
-      pill.className = "flex items-center gap-2 pl-2.5 pr-3 py-1.5 rounded-full border text-xs font-medium transition-colors border-oil-emerald/40 bg-oil-emerald/10 text-oil-emerald";
-      dot.className = "w-2 h-2 rounded-full bg-oil-emerald";
+      pill.className = "flex items-center text-xs font-medium text-gray-600 bg-transparent border-0 p-0 shadow-none cursor-pointer";
+      dot.className = "h-2.5 w-2.5 rounded-full bg-[#198754] inline-block mr-2 animate-pulse";
       label.textContent = "Live · Connected to API";
     } else {
-      pill.className = "flex items-center gap-2 pl-2.5 pr-3 py-1.5 rounded-full border text-xs font-medium transition-colors border-oil-amber/40 bg-oil-amber/10 text-oil-amber";
-      dot.className = "w-2 h-2 rounded-full bg-oil-amber pb-pulse-dot";
+      pill.className = "flex items-center text-xs font-medium text-amber-600 bg-transparent border-0 p-0 shadow-none cursor-pointer";
+      dot.className = "h-2.5 w-2.5 rounded-full bg-[#FD7E14] inline-block mr-2 pb-pulse-dot";
       label.textContent = "Offline · Demo Mode";
     }
   }
