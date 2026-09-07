@@ -298,6 +298,15 @@ async def serve_dashboard():
     return JSONResponse(content={"service": "PlanBridge Reconciliation API", "status": "ok"})
 
 
+@app.get("/emblem.svg", include_in_schema=False)
+async def serve_emblem():
+    """Serves the official State Emblem of India SVG."""
+    emblem_path = FRONTEND_DIR / "emblem.svg"
+    if emblem_path.exists():
+        return FileResponse(emblem_path, media_type="image/svg+xml")
+    raise HTTPException(status_code=404, detail="Emblem asset not found")
+
+
 if FRONTEND_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
