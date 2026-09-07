@@ -684,28 +684,40 @@
 
     return { raw_quantity: rawQty, raw_unit: rawUnit, normalized_quantity: round4(normQty), normalized_unit: normUnit, conversion_applied: conversion };
   }
-
-  function mockExtractEntities(text) {
+function mockExtractEntities(text) {
     const kpMatch = text.match(/KP\s*\d+(?:\+\d+)?/i);
     const location_kp = kpMatch ? ("KP " + (kpMatch[0].match(/\d+(?:\+\d+)?/)[0])) : null;
 
-    const facilityMatch = text.match(/(CGS|OCS|GCP|Valve\s+Pit|Yard|Station|Trunkline)\s*[A-Za-z0-9-]*|Duliajan|Numaligarh/i);
-    const facility = facilityMatch ? facilityMatch[0].replace(/\s+/g, " ").trim() : null;
+    const facilityMatch = text.match(/Booster\s+Station\s+Naharkatiya|Pump\s+Station\s+Barekuri|Terminal\s+Duliajan|CGS\s+Duliajan|CGS\s+Moran|Trunkline\s+ROW|OCS-4|Naharkatiya|Barekuri|Duliajan|Moran/i);
+    let facility = null;
+    if (facilityMatch) {
+      const f = facilityMatch[0].toLowerCase();
+      if (f.includes("terminal") || f === "duliajan") facility = f.includes("cgs") ? "CGS Duliajan" : "Terminal Duliajan";
+      else if (f.includes("moran")) facility = "CGS Moran";
+      else if (f.includes("barekuri")) facility = "Pump Station Barekuri";
+      else if (f.includes("naharkatiya")) facility = "Booster Station Naharkatiya";
+      else if (f.includes("ocs")) facility = "OCS-4";
+      else if (f.includes("trunkline") || f.includes("row")) facility = "Trunkline ROW";
+    }
 
     let action_verb = null, discipline = null;
     const lower = text.toLowerCase();
-    if (/\b(ndt|radiography|hydrotest|hydro test|cube test)\b/.test(lower)) { action_verb = "QA Inspection"; discipline = "HSE"; }
-    else if (/\b(hdd|drilling|drill|boring|bore)\b/.test(lower)) { action_verb = "HDD Drilling"; discipline = "Piping"; }
-    else if (/\b(welded|welding|weld|tie-in|tie in)\b/.test(lower)) { action_verb = "Tie-in Welding"; discipline = "Piping"; }
-    else if (/\b(excavated|excavation|trenching|trench|pit|backfilling|backfill)\b/.test(lower)) { action_verb = "Excavation"; discipline = "Civil"; }
+    if (/\b(ndt|radiography|hydrotest|cube test)\b/.test(lower)) { action_verb = "QA Inspection"; discipline = "HSE"; }
+    else if (/\b(row clearing|clearing)\b/.test(lower)) { action_verb = "ROW Clearing"; discipline = "Civil"; }
+    else if (/\b(manifold|cgs manifold)\b/.test(lower)) { action_verb = "CGS Manifold Setup"; discipline = "Mechanical"; }
+    else if (/\b(valve pit|pit excavation)\b/.test(lower)) { action_verb = "Valve Pit Excavation"; discipline = "Civil"; }
+    else if (/\b(hdd|drilling|boring)\b/.test(lower)) { action_verb = "HDD Drilling"; discipline = "Piping"; }
+    else if (/\b(welded|welding|tie-in)\b/.test(lower)) { action_verb = "Tie-in Welding"; discipline = "Piping"; }
+    else if (/\b(excavated|trenching|backfill)\b/.test(lower)) { action_verb = "Excavation"; discipline = "Civil"; }
+    else if (/\b(road|access road)\b/.test(lower)) { action_verb = "Access Road Construction"; discipline = "Civil"; }
+    else if (/\b(cable|scada)\b/.test(lower)) { action_verb = "SCADA Cable Laying"; discipline = "Electrical"; }
+    else if (/\b(foundation|concrete|rcc)\b/.test(lower)) { action_verb = "Foundation Casting"; discipline = "Civil"; }
 
-    const is_qa_clearance = /\bndt\b/.test(lower) ||
-      /radiography\s+(passed|cleared|clearance)/.test(lower) ||
-      /hydrotest\s+(clearance|cleared|passed)/.test(lower) ||
-      /cube\s+test\s+(passed|cleared|clearance)/.test(lower);
+    const is_qa_clearance = /\b(ndt|radiography|cube test)\b/.test(lower) && /\b(passed|cleared|achieved)\b/.test(lower);
 
     return { location_kp: location_kp, facility: facility, discipline: discipline, action_verb: action_verb, is_qa_clearance: is_qa_clearance };
   }
+  
 
   function kpToFloat(kp) {
     if (!kp) return null;
