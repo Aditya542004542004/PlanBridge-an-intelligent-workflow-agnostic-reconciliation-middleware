@@ -1,5 +1,33 @@
 [
   {
+    "rejection_id": "REJ-7BA9A942",
+    "timestamp": "2026-09-08T05:31:21.815455+00:00",
+    "report_id": "API-E8F3D8E6C7",
+    "observation_id": null,
+    "raw_phrase": "Toolbox safety meeting conducted with 12 workers this morning.",
+    "submitted_by": "Site Supervisor",
+    "source_type": "FREE_TEXT",
+    "rejection_type": "AUTO_UNMATCHED",
+    "confidence_score": 0.0,
+    "reasoning": "No parseable physical quantity claim detected (administrative, HSE, or noise log).",
+    "reviewer_id": null,
+    "reviewer_note": "Filtered out at Ingestion / Normalization Stage 1."
+  },
+  {
+    "rejection_id": "REJ-7A4E3EA4",
+    "timestamp": "2026-09-08T05:29:14.957137+00:00",
+    "report_id": "API-6B2FFD5932",
+    "observation_id": null,
+    "raw_phrase": "Trenching activity ongoing somewhere along 4C corridor.",
+    "submitted_by": "Site Supervisor",
+    "source_type": "FREE_TEXT",
+    "rejection_type": "AUTO_UNMATCHED",
+    "confidence_score": 0.0,
+    "reasoning": "No parseable physical quantity claim detected (administrative, HSE, or noise log).",
+    "reviewer_id": null,
+    "reviewer_note": "Filtered out at Ingestion / Normalization Stage 1."
+  },
+  {
     "rejection_id": "REJ-04023950",
     "timestamp": "2026-09-07T19:04:02.764521+00:00",
     "report_id": "API-86906F1D0F",

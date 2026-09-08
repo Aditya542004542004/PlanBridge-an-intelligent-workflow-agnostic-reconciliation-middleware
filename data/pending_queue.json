@@ -814,5 +814,289 @@
       "conversion_applied": "Tonnes to TONNES (x1, already standard)",
       "is_qa_clearance": false
     }
+  },
+  "MATCH-6154": {
+    "decision": {
+      "match_id": "MATCH-6154",
+      "observation_id": "API-03B7882ED4-OBS-001",
+      "selected_activity_id": "PIP-L5-033-008",
+      "entity_score": 1.0,
+      "semantic_score": 0.4517,
+      "quantity_score": 0.6667,
+      "final_confidence_score": 0.7855,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-033-008 ('Tie-in Welding at Chainage KP 3+235') scored 78.5% confidence (entity=100.0%, semantic=45.2%, quantity=66.7%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: PIP-L5-039-005 at 50.9%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-033-008",
+          "activity_name": "Tie-in Welding at Chainage KP 3+235",
+          "entity_score": 1.0,
+          "semantic_score": 0.4517,
+          "quantity_score": 0.6667,
+          "unit_match": true,
+          "final_score": 0.7855
+        },
+        {
+          "activity_id": "PIP-L5-039-005",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 7A",
+          "entity_score": 0.75,
+          "semantic_score": 0.3216,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.509
+        },
+        {
+          "activity_id": "PIP-L5-042-025",
+          "activity_name": "Trenching & Backfilling \u2014 Section 8B",
+          "entity_score": 0.75,
+          "semantic_score": 0.318,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5079
+        },
+        {
+          "activity_id": "PIP-L5-012-010",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 9D",
+          "entity_score": 0.75,
+          "semantic_score": 0.3081,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5049
+        },
+        {
+          "activity_id": "PIP-L5-045-002",
+          "activity_name": "Trenching & Backfilling \u2014 Section 1B",
+          "entity_score": 0.75,
+          "semantic_score": 0.2873,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4987
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-03B7882ED4-OBS-001",
+      "report_id": "API-03B7882ED4",
+      "raw_phrase": "8 joints of piping tie-in work progressing near CGS Moran valve pit.",
+      "raw_quantity": 8.0,
+      "raw_unit": "joints",
+      "normalized_quantity": 8.0,
+      "normalized_unit": "JOINTS",
+      "conversion_applied": "Joints preserved as-is (count-based unit, no conversion)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-5518": {
+    "decision": {
+      "match_id": "MATCH-5518",
+      "observation_id": "API-28C309EA44-OBS-001",
+      "selected_activity_id": "PIP-L5-033-008",
+      "entity_score": 1.0,
+      "semantic_score": 0.4517,
+      "quantity_score": 0.6667,
+      "final_confidence_score": 0.7855,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-033-008 ('Tie-in Welding at Chainage KP 3+235') scored 78.5% confidence (entity=100.0%, semantic=45.2%, quantity=66.7%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: PIP-L5-039-005 at 50.9%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-033-008",
+          "activity_name": "Tie-in Welding at Chainage KP 3+235",
+          "entity_score": 1.0,
+          "semantic_score": 0.4517,
+          "quantity_score": 0.6667,
+          "unit_match": true,
+          "final_score": 0.7855
+        },
+        {
+          "activity_id": "PIP-L5-039-005",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 7A",
+          "entity_score": 0.75,
+          "semantic_score": 0.3216,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.509
+        },
+        {
+          "activity_id": "PIP-L5-042-025",
+          "activity_name": "Trenching & Backfilling \u2014 Section 8B",
+          "entity_score": 0.75,
+          "semantic_score": 0.318,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5079
+        },
+        {
+          "activity_id": "PIP-L5-012-010",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 9D",
+          "entity_score": 0.75,
+          "semantic_score": 0.3081,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5049
+        },
+        {
+          "activity_id": "PIP-L5-045-002",
+          "activity_name": "Trenching & Backfilling \u2014 Section 1B",
+          "entity_score": 0.75,
+          "semantic_score": 0.2873,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4987
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-28C309EA44-OBS-001",
+      "report_id": "API-28C309EA44",
+      "raw_phrase": "8 joints of piping tie-in work progressing near CGS Moran valve pit.",
+      "raw_quantity": 8.0,
+      "raw_unit": "joints",
+      "normalized_quantity": 8.0,
+      "normalized_unit": "JOINTS",
+      "conversion_applied": "Joints preserved as-is (count-based unit, no conversion)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-8154": {
+    "decision": {
+      "match_id": "MATCH-8154",
+      "observation_id": "API-3E930C6AB8-OBS-001",
+      "selected_activity_id": "CIV-L5-006-005",
+      "entity_score": 1.0,
+      "semantic_score": 0.4586,
+      "quantity_score": 0.0,
+      "final_confidence_score": 0.6876,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate CIV-L5-006-005 ('Valve Pit Excavation at KP 5+755') scored 68.8% confidence (entity=100.0%, semantic=45.9%, quantity=0.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: CIV-L5-021-002 at 68.3%.) Note: the claimed quantity's unit did not match this candidate's planned unit, which weighed against it in the quantity score.",
+      "candidate_scores": [
+        {
+          "activity_id": "CIV-L5-006-005",
+          "activity_name": "Valve Pit Excavation at KP 5+755",
+          "entity_score": 1.0,
+          "semantic_score": 0.4586,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6876
+        },
+        {
+          "activity_id": "CIV-L5-021-002",
+          "activity_name": "Valve Pit Excavation at KP 22+188",
+          "entity_score": 1.0,
+          "semantic_score": 0.4444,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.6833
+        },
+        {
+          "activity_id": "CIV-L5-005-004",
+          "activity_name": "RCC Foundation Casting at CGS Moran",
+          "entity_score": 0.5714,
+          "semantic_score": 0.0585,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.4818
+        },
+        {
+          "activity_id": "CIV-L5-010-001",
+          "activity_name": "Access Road Construction near Pump Station Barekuri",
+          "entity_score": 0.5714,
+          "semantic_score": 0.4038,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4354
+        },
+        {
+          "activity_id": "CIV-L5-020-003",
+          "activity_name": "Access Road Construction near Booster Station Naharkatiya",
+          "entity_score": 0.5714,
+          "semantic_score": 0.2323,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.384
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-3E930C6AB8-OBS-001",
+      "report_id": "API-3E930C6AB8",
+      "raw_phrase": "Constructed temporary mud pump pit near warehouse due to heavy rain, roughly 2 tonnes of debris removed.",
+      "raw_quantity": 2.0,
+      "raw_unit": "tonnes",
+      "normalized_quantity": 2.0,
+      "normalized_unit": "TONNES",
+      "conversion_applied": "Tonnes to TONNES (x1, already standard)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-2723": {
+    "decision": {
+      "match_id": "MATCH-2723",
+      "observation_id": "API-E5495320DE-OBS-001",
+      "selected_activity_id": "PIP-L5-033-008",
+      "entity_score": 1.0,
+      "semantic_score": 0.4517,
+      "quantity_score": 0.6667,
+      "final_confidence_score": 0.7855,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-033-008 ('Tie-in Welding at Chainage KP 3+235') scored 78.5% confidence (entity=100.0%, semantic=45.2%, quantity=66.7%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: PIP-L5-039-005 at 50.9%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-033-008",
+          "activity_name": "Tie-in Welding at Chainage KP 3+235",
+          "entity_score": 1.0,
+          "semantic_score": 0.4517,
+          "quantity_score": 0.6667,
+          "unit_match": true,
+          "final_score": 0.7855
+        },
+        {
+          "activity_id": "PIP-L5-039-005",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 7A",
+          "entity_score": 0.75,
+          "semantic_score": 0.3216,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.509
+        },
+        {
+          "activity_id": "PIP-L5-042-025",
+          "activity_name": "Trenching & Backfilling \u2014 Section 8B",
+          "entity_score": 0.75,
+          "semantic_score": 0.318,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5079
+        },
+        {
+          "activity_id": "PIP-L5-012-010",
+          "activity_name": "Pipe Stringing along ROW \u2014 Section 9D",
+          "entity_score": 0.75,
+          "semantic_score": 0.3081,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.5049
+        },
+        {
+          "activity_id": "PIP-L5-045-002",
+          "activity_name": "Trenching & Backfilling \u2014 Section 1B",
+          "entity_score": 0.75,
+          "semantic_score": 0.2873,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.4987
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-E5495320DE-OBS-001",
+      "report_id": "API-E5495320DE",
+      "raw_phrase": "8 joints of piping tie-in work progressing near CGS Moran valve pit.",
+      "raw_quantity": 8.0,
+      "raw_unit": "joints",
+      "normalized_quantity": 8.0,
+      "normalized_unit": "JOINTS",
+      "conversion_applied": "Joints preserved as-is (count-based unit, no conversion)",
+      "is_qa_clearance": false
+    }
   }
 }
