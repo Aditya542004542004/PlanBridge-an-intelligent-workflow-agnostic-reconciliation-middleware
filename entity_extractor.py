@@ -1,4 +1,4 @@
-﻿"""
+"""
 entity_extractor.py
 PlanBridge — Stage 1: Entity Extraction
 """
@@ -49,8 +49,8 @@ class EntityExtractor:
             discipline="HSE",
         ),
         ActionRule(
-            keywords=("drill", "mock drill", "emergency drill", "compliance audit", "hse audit"),
-            lemmas=("drill", "audit"),
+            keywords=("mock drill", "emergency drill", "safety drill", "compliance audit", "hse audit"),
+            lemmas=("audit",),
             action="HSE Monitoring",
             discipline="HSE",
         ),

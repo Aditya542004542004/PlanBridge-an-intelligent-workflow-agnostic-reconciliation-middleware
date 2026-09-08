@@ -486,6 +486,14 @@ class ProgressState(BaseModel):
         default="NOT_REQUIRED",
         description="'PENDING_QA' (gate required, not yet passed), 'VERIFIED_PASSED', or 'NOT_REQUIRED'.",
     )
+    actual_start_date: Optional[str] = Field(
+        default=None,
+        description="Actual start timestamp (YYYY-MM-DD HH:MM) when progress first exceeds 0%.",
+    )
+    actual_finish_date: Optional[str] = Field(
+        default=None,
+        description="Actual finish timestamp (YYYY-MM-DD HH:MM) when progress reaches 100%.",
+    )
 
     model_config = {
         "json_schema_extra": {

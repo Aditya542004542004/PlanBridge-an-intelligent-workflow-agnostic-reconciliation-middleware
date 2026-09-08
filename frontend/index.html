@@ -1167,14 +1167,16 @@ function mockExtractEntities(text) {
     const exportDate = new Date().toISOString().slice(0, 10);
     lines.push(["ERMHDR", "20.12", exportDate, "P", "PLANBRIDGE", "PlanBridge Reconciliation Engine", "Y", "INR", "en"].join("\t"));
     lines.push("%T\tTASK");
-    lines.push(["%F", "task_id", "proj_id", "wbs_id", "task_code", "task_name", "status_code", "target_qty", "act_qty", "phys_complete_pct"].join("\t"));
+    lines.push(["%F", "task_id", "proj_id", "wbs_id", "task_code", "task_name", "status_code", "target_qty", "act_qty", "phys_complete_pct", "act_start_date", "act_end_date"].join("\t"));
     STATE.mock.activities.forEach(function (a) {
       const p = STATE.mock.progress[a.activity_id];
       if (p.physical_progress_pct <= 0 && p.verified_progress_pct <= 0) return;
       const statusCode = p.verified_progress_pct <= 0 ? "TK_NotStart" : (p.verified_progress_pct >= 100 ? "TK_Complete" : "TK_Active");
       const taskId = String(100000 + (hashStringToInt(a.activity_id) % 900000));
+      const actStart = statusCode === "TK_NotStart" ? "" : (p.actual_start_date || (exportDate + " 08:00"));
+      const actEnd = statusCode === "TK_Complete" ? (p.actual_finish_date || (exportDate + " 17:00")) : "";
       lines.push(["%R", taskId, "20286", a.activity_id, a.activity_id, a.activity_name, statusCode,
-        p.planned_quantity.toFixed(4), p.verified_earned_quantity.toFixed(4), p.verified_progress_pct.toFixed(2)].join("\t"));
+        p.planned_quantity.toFixed(4), p.verified_earned_quantity.toFixed(4), p.verified_progress_pct.toFixed(2), actStart, actEnd].join("\t"));
     });
     lines.push("%E");
     return lines.join("\n") + "\n";
@@ -1407,6 +1409,9 @@ function mockExtractEntities(text) {
   function renderActivityInspectorHtml(act) {
     const isQa = act.requires_qa_gate;
     const prog = act.progress_state;
+    const actualExecution = (prog && prog.actual_start_date)
+      ? (prog.actual_start_date.slice(0, 10) + ' → ' + (prog.actual_finish_date ? prog.actual_finish_date.slice(0, 10) : 'Active'))
+      : 'Not Started';
     return '<div class="bg-[#F8FAFC] border border-blue-200 rounded-lg p-3.5 mt-2.5 pb-fade-in text-xs shadow-2xs">' +
       '<div class="flex items-start justify-between gap-3 border-b border-gray-200 pb-2 mb-2.5">' +
         '<div>' +
@@ -1432,14 +1437,12 @@ function mockExtractEntities(text) {
           '<span class="font-medium text-xs text-gray-800 truncate block">' + escapeHtml(act.facility || "Trunkline ROW") + '</span>' +
         '</div>' +
         '<div class="bg-white border border-gray-200 rounded p-1.5">' +
-          '<span class="text-[10px] text-gray-400 block font-medium">SCHEDULE WINDOW</span>' +
+          '<span class="text-[10px] text-gray-400 block font-medium">PLANNED BASELINE</span>' +
           '<span class="font-mono text-[11px] text-gray-700 block">' + escapeHtml(act.planned_start || "—") + ' → ' + escapeHtml(act.planned_finish || "—") + '</span>' +
         '</div>' +
         '<div class="bg-white border border-gray-200 rounded p-1.5">' +
-          '<span class="text-[10px] text-gray-400 block font-medium">QA GATE HOLD</span>' +
-          '<span class="font-bold text-[11px] ' + (isQa ? 'text-amber-700' : 'text-emerald-700') + '">' +
-            (isQa ? ('Hold: ' + escapeHtml(act.qa_gate_type || 'QA Req.')) : 'No QA Hold') +
-          '</span>' +
+          '<span class="text-[10px] text-gray-400 block font-medium">ACTUAL EXECUTION</span>' +
+          '<span class="font-mono text-[11px] font-semibold ' + ((prog && prog.actual_start_date) ? 'text-[#0055A4]' : 'text-gray-400') + ' block">' + actualExecution + '</span>' +
         '</div>' +
       '</div>' +
       (prog ? (

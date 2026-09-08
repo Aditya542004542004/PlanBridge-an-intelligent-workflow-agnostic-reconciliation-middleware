@@ -32,6 +32,7 @@ verified" are not allowed to silently become the same number.
 from __future__ import annotations
 
 import logging
+from datetime import datetime, timezone
 from typing import Any, Optional
 
 from schemas import MatchDecision, NormalizedObservation, ProgressState
@@ -100,7 +101,10 @@ class ProgressEngine:
     # Public API
     # ------------------------------------------------------------------
     def apply_match_decision(
-        self, decision: MatchDecision, observation: NormalizedObservation
+        self,
+        decision: MatchDecision,
+        observation: NormalizedObservation,
+        event_timestamp: Optional[str] = None,
     ) -> ProgressState:
         """
         Apply a matched observation's quantity to its selected activity's
@@ -157,10 +161,11 @@ class ProgressEngine:
             )
             return state
 
+        ts_formatted = _format_p6_date(event_timestamp)
         if observation.is_qa_clearance:
-            updated_state = self._apply_qa_verification(state, comparable_quantity)
+            updated_state = self._apply_qa_verification(state, comparable_quantity, ts_formatted)
         else:
-            updated_state = self._apply_physical_claim(state, comparable_quantity)
+            updated_state = self._apply_physical_claim(state, comparable_quantity, ts_formatted)
 
         self._states[activity_id] = updated_state
         return updated_state
@@ -178,45 +183,34 @@ class ProgressEngine:
     # Internal update logic
     # ------------------------------------------------------------------
     @staticmethod
-    def _apply_physical_claim(state: ProgressState, comparable_quantity: float) -> ProgressState:
+    def _apply_physical_claim(
+        state: ProgressState, comparable_quantity: float, timestamp: str
+    ) -> ProgressState:
         """
         A non-QA observation claims new physical execution. The claimed
         quantity accumulates cumulatively across every DPR reporting
-        against this activity (each report describes incremental work done
-        "today", not a cumulative-to-date total).
-
-        ``comparable_quantity`` is the observation's quantity already
-        converted into this activity's own unit (see
-        ``unit_normalizer.convert_for_comparison``) — this method never
-        looks at the observation's original unit directly.
-
-        The raw ``physical_claimed_quantity`` is intentionally NOT capped at
-        ``planned_quantity`` — a cumulative claim exceeding planned scope is
-        itself meaningful audit information (potential scope overrun or an
-        inflated claim) and should never be silently discarded. Only the
-        *percentage* is capped at 100%, exactly per the spec formula.
+        against this activity.
         """
         new_claimed = state.physical_claimed_quantity + comparable_quantity
         new_pct = min(100.0, (new_claimed / state.planned_quantity) * 100.0)
 
+        start_date = state.actual_start_date or (timestamp if new_claimed > 0 else None)
+        finish_date = state.actual_finish_date or (timestamp if new_pct >= 100.0 else None)
+
         return state.model_copy(update={
             "physical_claimed_quantity": round(new_claimed, 4),
             "physical_progress_pct": round(new_pct, 4),
+            "actual_start_date": start_date,
+            "actual_finish_date": finish_date,
         })
 
     @staticmethod
-    def _apply_qa_verification(state: ProgressState, comparable_quantity: float) -> ProgressState:
+    def _apply_qa_verification(
+        state: ProgressState, comparable_quantity: float, timestamp: str
+    ) -> ProgressState:
         """
         A QA-clearance observation certifies previously-claimed physical
-        work as verified — it does NOT introduce new physical claim
-        quantity of its own. ``verified_earned_quantity`` accumulates but is
-        capped at ``physical_claimed_quantity``: QA cannot verify more work
-        than has actually been claimed as physically done, by design — this
-        is the core anti-fraud/anti-error guarantee of the dual-tracking
-        model.
-
-        ``comparable_quantity`` is the observation's quantity already
-        converted into this activity's own unit.
+        work as verified.
         """
         proposed_verified = state.verified_earned_quantity + comparable_quantity
         new_verified = min(state.physical_claimed_quantity, proposed_verified)
@@ -224,15 +218,33 @@ class ProgressEngine:
         if proposed_verified > state.physical_claimed_quantity:
             log.warning(
                 "Activity %s: QA verification claim (%.4f) exceeds physical claimed quantity (%.4f) — "
-                "capping verified_earned_quantity at the physical claim. This may indicate the QA report "
-                "arrived before the corresponding physical DPR, or a data quality issue worth reviewing.",
+                "capping verified_earned_quantity at the physical claim.",
                 state.activity_id, proposed_verified, state.physical_claimed_quantity,
             )
 
         new_pct = min(100.0, (new_verified / state.planned_quantity) * 100.0)
 
+        start_date = state.actual_start_date or (timestamp if new_verified > 0 else None)
+        finish_date = state.actual_finish_date or (timestamp if new_pct >= 100.0 else None)
+
         return state.model_copy(update={
             "verified_earned_quantity": round(new_verified, 4),
             "verified_progress_pct": round(new_pct, 4),
             "qa_gate_status": "VERIFIED_PASSED",
+            "actual_start_date": start_date,
+            "actual_finish_date": finish_date,
         })
+
+
+def _format_p6_date(ts_str: Optional[str]) -> str:
+    """Format an ISO timestamp or date into standard Primavera P6 YYYY-MM-DD HH:MM."""
+    if not ts_str:
+        return datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M")
+    try:
+        clean = ts_str.replace("Z", "+00:00")
+        dt = datetime.fromisoformat(clean)
+        return dt.strftime("%Y-%m-%d %H:%M")
+    except Exception:
+        if len(ts_str) >= 16:
+            return ts_str[:16].replace("T", " ")
+        return ts_str

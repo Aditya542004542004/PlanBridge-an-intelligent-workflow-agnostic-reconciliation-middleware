@@ -66,6 +66,7 @@ STATUS_COMPLETE = "TK_Complete"
 TASK_TABLE_FIELDS = (
     "task_id", "proj_id", "wbs_id", "task_code", "task_name",
     "status_code", "target_qty", "act_qty", "phys_complete_pct",
+    "act_start_date", "act_end_date",
 )
 
 
@@ -224,6 +225,20 @@ class XERExporter:
 
         status_code = self._status_code_for(complete_pct)
 
+        # In Primavera P6:
+        # TK_NotStart -> no actual start or end date
+        # TK_Active   -> actual start date, but no actual end date
+        # TK_Complete -> both actual start and actual end date
+        if status_code == STATUS_NOT_STARTED:
+            act_start = ""
+            act_end = ""
+        elif status_code == STATUS_ACTIVE:
+            act_start = state.actual_start_date or ""
+            act_end = ""
+        else:  # STATUS_COMPLETE
+            act_start = state.actual_start_date or state.actual_finish_date or ""
+            act_end = state.actual_finish_date or ""
+
         values = [
             task_id,
             self.project_id,
@@ -234,6 +249,8 @@ class XERExporter:
             f"{state.planned_quantity:.4f}",
             f"{act_qty:.4f}",
             f"{complete_pct:.2f}",
+            act_start,
+            act_end,
         ]
         # Tab-delimited, with %R row marker — real XER row syntax.
         return "%R\t" + "\t".join(self._sanitize_field(v) for v in values)

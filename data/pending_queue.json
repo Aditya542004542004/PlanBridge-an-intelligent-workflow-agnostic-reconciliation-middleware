@@ -814,5 +814,253 @@
       "conversion_applied": "Tonnes to TONNES (x1, already standard)",
       "is_qa_clearance": false
     }
+  },
+  "MATCH-5668": {
+    "decision": {
+      "match_id": "MATCH-5668",
+      "observation_id": "API-68184643A7-OBS-001",
+      "selected_activity_id": "PIP-L5-024-003",
+      "entity_score": 0.5333,
+      "semantic_score": 0.9,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.7133,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-024-003 ('HDD River Crossing Execution at KP 24+600') scored 71.3% confidence (entity=53.3%, semantic=90.0%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: ELE-L5-007-001 at 27.0%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-024-003",
+          "activity_name": "HDD River Crossing Execution at KP 24+600",
+          "entity_score": 0.5333,
+          "semantic_score": 0.9,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.7133
+        },
+        {
+          "activity_id": "ELE-L5-007-001",
+          "activity_name": "Cathodic Protection (CP) Test Station Installation at KP 30+000",
+          "entity_score": 0.0,
+          "semantic_score": 0.9,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.27
+        },
+        {
+          "activity_id": "PIP-L5-011-018",
+          "activity_name": "Tie-in Welding at Chainage KP 12+000",
+          "entity_score": 0.0,
+          "semantic_score": 0.9,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.27
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-68184643A7-OBS-001",
+      "report_id": "API-68184643A7",
+      "raw_phrase": "150m HDD drilling finished near KP 24+600",
+      "raw_quantity": 150.0,
+      "raw_unit": "m",
+      "normalized_quantity": 0.15,
+      "normalized_unit": "KM",
+      "conversion_applied": "Meters to KM (div 1000)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-1738": {
+    "decision": {
+      "match_id": "MATCH-1738",
+      "observation_id": "API-2552F93B3E-OBS-001",
+      "selected_activity_id": "PIP-L5-024-003",
+      "entity_score": 0.5333,
+      "semantic_score": 0.9,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.7133,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-024-003 ('HDD River Crossing Execution at KP 24+600') scored 71.3% confidence (entity=53.3%, semantic=90.0%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: ELE-L5-007-001 at 27.0%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-024-003",
+          "activity_name": "HDD River Crossing Execution at KP 24+600",
+          "entity_score": 0.5333,
+          "semantic_score": 0.9,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.7133
+        },
+        {
+          "activity_id": "ELE-L5-007-001",
+          "activity_name": "Cathodic Protection (CP) Test Station Installation at KP 30+000",
+          "entity_score": 0.0,
+          "semantic_score": 0.9,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.27
+        },
+        {
+          "activity_id": "PIP-L5-011-018",
+          "activity_name": "Tie-in Welding at Chainage KP 12+000",
+          "entity_score": 0.0,
+          "semantic_score": 0.9,
+          "quantity_score": 0.0,
+          "unit_match": false,
+          "final_score": 0.27
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-2552F93B3E-OBS-001",
+      "report_id": "API-2552F93B3E",
+      "raw_phrase": "150m HDD drilling finished near KP 24+600",
+      "raw_quantity": 150.0,
+      "raw_unit": "m",
+      "normalized_quantity": 0.15,
+      "normalized_unit": "KM",
+      "conversion_applied": "Meters to KM (div 1000)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-3337": {
+    "decision": {
+      "match_id": "MATCH-3337",
+      "observation_id": "API-E61FB6F1A1-OBS-001",
+      "selected_activity_id": "PIP-L5-044-036",
+      "entity_score": 0.8768,
+      "semantic_score": 0.593,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.8102,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-044-036 ('HDD River Crossing Execution at KP 25+755') scored 81.0% confidence (entity=87.7%, semantic=59.3%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: PIP-L5-036-062 at 75.4%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-044-036",
+          "activity_name": "HDD River Crossing Execution at KP 25+755",
+          "entity_score": 0.8768,
+          "semantic_score": 0.593,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.8102
+        },
+        {
+          "activity_id": "PIP-L5-036-062",
+          "activity_name": "HDD River Crossing Execution at KP 26+593",
+          "entity_score": 0.7874,
+          "semantic_score": 0.5684,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.7536
+        },
+        {
+          "activity_id": "PIP-L5-015-078",
+          "activity_name": "HDD River Crossing Execution at KP 22+224",
+          "entity_score": 0.7466,
+          "semantic_score": 0.5535,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.7267
+        },
+        {
+          "activity_id": "PIP-L5-013-022",
+          "activity_name": "HDD River Crossing Execution at KP 27+638",
+          "entity_score": 0.6759,
+          "semantic_score": 0.5707,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.693
+        },
+        {
+          "activity_id": "PIP-L5-024-023",
+          "activity_name": "HDD River Crossing Execution at KP 20+163",
+          "entity_score": 0.5267,
+          "semantic_score": 0.5892,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.6165
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-E61FB6F1A1-OBS-001",
+      "report_id": "API-E61FB6F1A1",
+      "raw_phrase": "150m HDD drilling finished near KP 24+600 at river site.",
+      "raw_quantity": 150.0,
+      "raw_unit": "m",
+      "normalized_quantity": 0.15,
+      "normalized_unit": "KM",
+      "conversion_applied": "Meters to KM (div 1000)",
+      "is_qa_clearance": false
+    }
+  },
+  "MATCH-5000": {
+    "decision": {
+      "match_id": "MATCH-5000",
+      "observation_id": "API-81FBD31D8E-OBS-001",
+      "selected_activity_id": "PIP-L5-044-036",
+      "entity_score": 0.8768,
+      "semantic_score": 0.593,
+      "quantity_score": 1.0,
+      "final_confidence_score": 0.8102,
+      "decision_type": "HUMAN_REVIEW",
+      "reasoning": "Top candidate PIP-L5-044-036 ('HDD River Crossing Execution at KP 25+755') scored 81.0% confidence (entity=87.7%, semantic=59.3%, quantity=100.0%) \u2014 above the 60% minimum but below the 85% auto-accept bar. Routed to the planner review queue for manual confirmation. (Runner-up: PIP-L5-036-062 at 75.4%.)",
+      "candidate_scores": [
+        {
+          "activity_id": "PIP-L5-044-036",
+          "activity_name": "HDD River Crossing Execution at KP 25+755",
+          "entity_score": 0.8768,
+          "semantic_score": 0.593,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.8102
+        },
+        {
+          "activity_id": "PIP-L5-036-062",
+          "activity_name": "HDD River Crossing Execution at KP 26+593",
+          "entity_score": 0.7874,
+          "semantic_score": 0.5684,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.7536
+        },
+        {
+          "activity_id": "PIP-L5-015-078",
+          "activity_name": "HDD River Crossing Execution at KP 22+224",
+          "entity_score": 0.7466,
+          "semantic_score": 0.5535,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.7267
+        },
+        {
+          "activity_id": "PIP-L5-013-022",
+          "activity_name": "HDD River Crossing Execution at KP 27+638",
+          "entity_score": 0.6759,
+          "semantic_score": 0.5707,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.693
+        },
+        {
+          "activity_id": "PIP-L5-024-023",
+          "activity_name": "HDD River Crossing Execution at KP 20+163",
+          "entity_score": 0.5267,
+          "semantic_score": 0.5892,
+          "quantity_score": 1.0,
+          "unit_match": true,
+          "final_score": 0.6165
+        }
+      ]
+    },
+    "observation": {
+      "observation_id": "API-81FBD31D8E-OBS-001",
+      "report_id": "API-81FBD31D8E",
+      "raw_phrase": "150m HDD drilling finished near KP 24+600 at river site.",
+      "raw_quantity": 150.0,
+      "raw_unit": "m",
+      "normalized_quantity": 0.15,
+      "normalized_unit": "KM",
+      "conversion_applied": "Meters to KM (div 1000)",
+      "is_qa_clearance": false
+    }
   }
 }
